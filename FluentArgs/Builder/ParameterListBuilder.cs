@@ -36,23 +36,23 @@
             return Finalize();
         }
 
-        public IConfigurableParameter<TArgsBuilder, P> WithDescription(string description)
+        public IConfigurableParameterWithExamples<TArgsBuilder, P> WithDescription(string description)
         {
             parameterList.Description = description;
             return this;
         }
 
-        public IConfigurableParameter<TArgsBuilder, P> WithExamples(P example, params P[] moreExamples)
+        public IConfigurableParameterWithParser<TArgsBuilder, P> WithExamples(P example, params P[] moreExamples)
         {
             throw new NotImplementedException();
         }
 
-        public IConfigurableParameter<TArgsBuilder, P> WithExamples(string example, params string[] moreExamples)
+        public IConfigurableParameterWithParser<TArgsBuilder, P> WithExamples(string example, params string[] moreExamples)
         {
             throw new NotImplementedException();
         }
 
-        public IConfigurableParameter<TArgsBuilder, P> WithParser(Func<string, P> parser)
+        public IConfigurableParameterWithRequirement<TArgsBuilder, P> WithParser(Func<string, P> parser)
         {
             parameterList.Parser = s => parser(s);
             return this;
