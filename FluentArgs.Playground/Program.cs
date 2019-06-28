@@ -31,7 +31,11 @@
 
             FluentArgsBuilder.New()
                 .ParameterList<int>("-n", "--numbers").IsRequired()
-                .Call(numbers =>
+                .Parameter<string>("--name")
+                    .WithDescription("")
+                    .WithExamples("")
+                    .IsRequired()
+                .Call(name => numbers =>
                 {
 
                 })
@@ -58,7 +62,6 @@
                 /* general settings / arguments */
                 .Parameter<string>("-k", "--apikey")
                     .WithDescription("the magic super expensive api key")
-                    .WithDescription("lol") //TODO: make this double assignment impossible by choosing better interfaces
                     .WithExamples("ABC", "123")
                     .IsRequired()
 
@@ -98,50 +101,6 @@
                     .ElseIgnore()
 
                 .ParseAsync(args);
-        }
-
-        void myFunc<T>()
-            where T : class
-        {
-
-        }
-    }
-
-    public class ParameterBuilder
-    {
-    }
-
-    public class ParameterCollection
-    {
-        public ParameterCollection<P1> Require<P1>(string name)
-        {
-            return null;
-        }
-
-        //public ParameterCollection<P1> Optional<P1>(string name)
-        //{
-        //    return null;
-        //}
-    }
-
-    public class ParameterCollection<P1>
-    {
-        public ParameterCollection<P1, P2> Require<P2>(string name)
-        {
-            return null;
-        }
-    }
-
-    public class ParameterCollection<P1, P2>
-    {
-        public void Call(Action<P1, P2> callback)
-        {
-
-        }
-
-        public Task Call(Func<P1, P2, Task> callback)
-        {
-            return callback(default, default);
         }
     }
 }

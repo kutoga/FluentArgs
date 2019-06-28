@@ -24,7 +24,6 @@
 
     public interface IFluentArgsBuilder<TFunc, TFuncAsync, TParam> :
         IParsable,
-        IConfigurableParameter<IFluentArgsBuilder<TFunc, TFuncAsync, TParam>, TParam>,
         IGivenAppliable<IFluentArgsBuilder<TFunc, TFuncAsync, TParam>>
     {
         IConfigurableParameter<IFluentArgsBuilder<Func<bool, TFunc>, Func<bool, TFuncAsync>, bool>, bool>

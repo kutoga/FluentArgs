@@ -56,7 +56,8 @@
         }
     }
 
-    internal class StepBuilder<TFunc, TFuncAsync, TParam> : IFluentArgsBuilder<TFunc, TFuncAsync, TParam>
+    internal class StepBuilder<TFunc, TFuncAsync, TParam> :
+        IFluentArgsBuilder<TFunc, TFuncAsync, TParam>
     {
         public Step Step { get; set; }
 
@@ -104,16 +105,6 @@
             throw new NotImplementedException();
         }
 
-        IFluentArgsBuilder<TFunc, TFuncAsync, TParam> IConfigurableParameter<IFluentArgsBuilder<TFunc, TFuncAsync, TParam>, TParam>.IsOptional()
-        {
-            throw new NotImplementedException();
-        }
-
-        IFluentArgsBuilder<TFunc, TFuncAsync, TParam> IConfigurableParameter<IFluentArgsBuilder<TFunc, TFuncAsync, TParam>, TParam>.IsRequired()
-        {
-            throw new NotImplementedException();
-        }
-
         IConfigurableParameter<IFluentArgsBuilder<Func<TNextParam, TFunc>, Func<TNextParam, TFuncAsync>, TNextParam>, TNextParam> IFluentArgsBuilder<TFunc, TFuncAsync, TParam>.Parameter<TNextParam>(string name, params string[] moreNames)
         {
             var nextBuilder = new StepBuilder<Func<TNextParam, TFunc>, Func<TNextParam, TFuncAsync>, TNextParam>();
@@ -125,16 +116,6 @@
         }
 
         IConfigurableParameter<IFluentArgsBuilder<Func<IReadOnlyList<TNextParam>, TFunc>, Func<IReadOnlyList<TNextParam>, TFuncAsync>, TNextParam>, TNextParam> IFluentArgsBuilder<TFunc, TFuncAsync, TParam>.ParameterList<TNextParam>(string name, params string[] moreNames)
-        {
-            throw new NotImplementedException();
-        }
-
-        IConfigurableParameter<IFluentArgsBuilder<TFunc, TFuncAsync, TParam>, TParam> IConfigurableParameter<IFluentArgsBuilder<TFunc, TFuncAsync, TParam>, TParam>.WithDescription(string description)
-        {
-            throw new NotImplementedException();
-        }
-
-        IConfigurableParameter<IFluentArgsBuilder<TFunc, TFuncAsync, TParam>, TParam> IConfigurableParameter<IFluentArgsBuilder<TFunc, TFuncAsync, TParam>, TParam>.WithExamples(string example, params string[] moreExamples)
         {
             throw new NotImplementedException();
         }
