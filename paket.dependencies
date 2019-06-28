@@ -1,0 +1,10 @@
+source https://www.nuget.org/api/v2
+nuget FluentAssertions
+nuget Microsoft.CodeAnalysis.FxCopAnalyzers
+nuget Microsoft.CodeQuality.Analyzers
+nuget StyleCop.Analyzers >= 1.1.0-beta
+nuget System.Collections.Immutable
+nuget Xunit.Core
+nuget Xunit.Runner.VisualStudio
+nuget Xbehave
+nuget FakeItEasy

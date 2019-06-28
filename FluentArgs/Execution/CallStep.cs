@@ -1,0 +1,33 @@
+﻿namespace FluentArgs.Execution
+{
+    using System;
+    using System.Threading.Tasks;
+    using FluentArgs.Description;
+
+    internal class CallStep : Step
+    {
+        private TargetFunction targetFunction;
+
+        public CallStep(Step previous, TargetFunction targetFunction)
+            : base(previous)
+        {
+            this.targetFunction = targetFunction;
+        }
+
+        public override Task Execute(State state)
+        {
+            var result = Reflection.Methods.Invoke(targetFunction.Target, state.GetParameters());
+            if (result is null)
+            {
+                return Task.CompletedTask;
+            }
+
+            if (result is Task task)
+            {
+                return task;
+            }
+
+            throw new Exception("TODO: invalid result type");
+        }
+    }
+}
