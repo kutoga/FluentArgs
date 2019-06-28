@@ -17,7 +17,7 @@ This can be implemented in this way:
     {
         static void Main(string[] args)
         {
-            FluentArgs.New()
+            FluentArgsBuilder.New()
                 .Parameter<string>("-f", "--file", "--anotheralias").IsRequired()
                 .Parameter<int>("-n", "--number").IsOptionalWithDefault(999)
                 .Parameter<string>("-k", "--key").IsRequired()
@@ -39,7 +39,7 @@ In a second way, you also might like to add more meta-data to the parameters:
     {
         static void Main(string[] args)
         {
-            FluentArgs.New()
+            FluentArgsBuilder.New()
                 .Parameter<string>("-f", "--file", "--anotheralias")
                     .WithDescription("Input file")
                     .WithExamples("my_file.txt", "another_file.txt")
@@ -78,7 +78,7 @@ configuration can be conducted with this code:
     {
         static void Main(string[] args)
         {
-            FluentArgs.New()
+            FluentArgsBuilder.New()
                 .Parameter<string>("-k", "--key")
                     .WithDescription("API key")
                     .IsRequired()
