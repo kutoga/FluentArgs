@@ -58,6 +58,7 @@
                 /* general settings / arguments */
                 .Parameter<string>("-k", "--apikey")
                     .WithDescription("the magic super expensive api key")
+                    .WithDescription("lol") //TODO: make this double assignment impossible by choosing better interfaces
                     .WithExamples("ABC", "123")
                     .IsRequired()
 
