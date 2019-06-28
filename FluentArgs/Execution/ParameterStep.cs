@@ -5,6 +5,7 @@
     using System.Threading.Tasks;
     using FluentArgs.Description;
     using FluentArgs.Parser;
+    using FluentArgs.Reflection;
 
     internal class ParameterStep : Step
     {
@@ -18,21 +19,40 @@
 
         public override Task Execute(State state)
         {
-            // TODO: Implement defaults
-            var parameterIndex = state.Arguments
+            var possibleParameterIndex = state.Arguments
                 .Select((a, i) => (argument: a, index: i))
                 .Where(p => parameter.Name.Names.Contains(p.argument))
                 .Select(p => (int?)p.index)
-                .FirstOrDefault() ?? throw new Exception("TODO");
+                .FirstOrDefault();
 
-            if (parameterIndex == state.Arguments.Count)
+            if (possibleParameterIndex == null)
             {
-                throw new Exception("TODO");
-            }
+                if (parameter.IsRequired)
+                {
+                    throw new Exception("TODO: parameter is required, but not given");
+                }
 
-            state = state
-                .AddParameter(Parse(state.Arguments[parameterIndex + 1]))
-                .RemoveArguments(parameterIndex, parameterIndex + 1);
+                if (parameter.HasDefaultValue)
+                {
+                    state = state.AddParameter(parameter.DefaultValue);
+                }
+                else
+                {
+                    state = state.AddParameter(Default.Instance(parameter.Type));
+                }
+            }
+            else
+            {
+                var parameterIndex = possibleParameterIndex.Value;
+                if (parameterIndex == state.Arguments.Count)
+                {
+                    throw new Exception("TODO");
+                }
+
+                state = state
+                    .AddParameter(Parse(state.Arguments[parameterIndex + 1]))
+                    .RemoveArguments(parameterIndex, parameterIndex + 1);
+            }
 
             return Next.Execute(state);
         }

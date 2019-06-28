@@ -6,10 +6,10 @@
 
     internal class State
     {
-        private IImmutableList<object> parameters;
+        private IImmutableList<object?> parameters;
         private IImmutableList<string> arguments;
 
-        private State(IImmutableList<object> parameters, IImmutableList<string> arguments)
+        private State(IImmutableList<object?> parameters, IImmutableList<string> arguments)
         {
             this.parameters = parameters;
             this.arguments = arguments;
@@ -19,10 +19,10 @@
 
         public static State InitialState(IEnumerable<string> arguments)
         {
-            return new State(ImmutableList<object>.Empty, arguments.ToImmutableList());
+            return new State(ImmutableList<object?>.Empty, arguments.ToImmutableList());
         }
 
-        public State AddParameter(object parameter)
+        public State AddParameter(object? parameter)
         {
             return new State(parameters.Add(parameter), arguments);
         }
@@ -44,7 +44,7 @@
             return new State(parameters, arguments);
         }
 
-        public IReadOnlyList<object> GetParameters()
+        public IReadOnlyList<object?> GetParameters()
         {
             return parameters;
         }
