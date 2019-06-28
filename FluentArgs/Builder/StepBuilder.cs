@@ -46,13 +46,8 @@
             return new ParameterBuilder<IFluentArgsBuilder<Action<TNextParam>, Func<TNextParam, Task>, TNextParam>, TNextParam>(
                 ParameterBuilt, nextBuilder, new Name(name, moreNames));
 
-            void ParameterBuilt(Parameter parameter)
-            {
+            void ParameterBuilt(Parameter parameter) =>
                 nextBuilder.Step = new ParameterStep(Step, parameter);
-            }
-
-            throw new NotImplementedException();
-            throw new NotImplementedException();
         }
 
         IConfigurableParameter<IFluentArgsBuilder<Action<IReadOnlyList<TParam1>>, Func<IReadOnlyList<TParam1>, Task>, TParam1>, TParam1> IFluentArgsBuilder.ParameterList<TParam1>(string name, params string[] moreNames)
@@ -121,7 +116,12 @@
 
         IConfigurableParameter<IFluentArgsBuilder<Func<TNextParam, TFunc>, Func<TNextParam, TFuncAsync>, TNextParam>, TNextParam> IFluentArgsBuilder<TFunc, TFuncAsync, TParam>.Parameter<TNextParam>(string name, params string[] moreNames)
         {
-            throw new NotImplementedException();
+            var nextBuilder = new StepBuilder<Func<TNextParam, TFunc>, Func<TNextParam, TFuncAsync>, TNextParam>();
+            return new ParameterBuilder<IFluentArgsBuilder<Func<TNextParam, TFunc>, Func<TNextParam, TFuncAsync>, TNextParam>, TNextParam>(
+                ParameterBuilt, nextBuilder, new Name(name, moreNames));
+
+            void ParameterBuilt(Parameter parameter) =>
+                nextBuilder.Step = new ParameterStep(Step, parameter);
         }
 
         IConfigurableParameter<IFluentArgsBuilder<Func<IReadOnlyList<TNextParam>, TFunc>, Func<IReadOnlyList<TNextParam>, TFuncAsync>, TNextParam>, TNextParam> IFluentArgsBuilder<TFunc, TFuncAsync, TParam>.ParameterList<TNextParam>(string name, params string[] moreNames)
