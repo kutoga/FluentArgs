@@ -25,88 +25,61 @@
             return new StepCaller(finalStep);
         }
 
-        public IConfigurableParameter<IFluentArgsBuilder<bool>, bool> Flag(string name, params string[] moreNames)
+        public void Parse(string[] args)
         {
             throw new NotImplementedException();
         }
 
-        public IConfigurableParameter<IFluentArgsBuilder<TParam1>, TParam1> Parameter<TParam1>(string name, params string[] moreNames)
+        public Task ParseAsync(string[] args)
         {
-            var nextBuilder = new StepBuilder<TParam1>();
-            return new ParameterBuilder<IFluentArgsBuilder<TParam1>, TParam1>(ParameterBuilt, nextBuilder, new Name(name, moreNames));
+            throw new NotImplementedException();
+        }
+
+        IConfigurableParameter<IFluentArgsBuilder<Action<bool>, Func<bool, Task>, bool>, bool> IFluentArgsBuilder.Flag(string name, params string[] moreNames)
+        {
+            throw new NotImplementedException();
+        }
+
+        IConfigurableParameter<IFluentArgsBuilder<Action<TNextParam>, Func<TNextParam, Task>, TNextParam>, TNextParam> IFluentArgsBuilder.Parameter<TNextParam>(string name, params string[] moreNames)
+        {
+            var nextBuilder = new StepBuilder<Action<TNextParam>, Func<TNextParam, Task>, TNextParam>();
+            return new ParameterBuilder<IFluentArgsBuilder<Action<TNextParam>, Func<TNextParam, Task>, TNextParam>, TNextParam>(
+                ParameterBuilt, nextBuilder, new Name(name, moreNames));
 
             void ParameterBuilt(Parameter parameter)
             {
                 nextBuilder.Step = new ParameterStep(Step, parameter);
             }
-        }
 
-        public IConfigurableParameter<IFluentArgsBuilder<IReadOnlyList<P1>>, P1> ParameterList<P1>(string name, params string[] moreNames)
-        {
-            throw new Exception();
-            //var nextBuilder = new StepBuilder<IReadOnlyList<P1>>();
-            //return new ParameterListBuilder<IFluentArgsBuilder<IReadOnlyList<P1>>, P1>(ParameterListBuilt, nextBuilder, new Name(name, moreNames));
-
-            //void ParameterListBuilt(ParameterList parameterList)
-            //{
-            //}
-        }
-
-        public void Parse(string[] args)
-        {
+            throw new NotImplementedException();
             throw new NotImplementedException();
         }
 
-        public Task ParseAsync(string[] args)
+        IConfigurableParameter<IFluentArgsBuilder<Action<IReadOnlyList<TParam1>>, Func<IReadOnlyList<TParam1>, Task>, TParam1>, TParam1> IFluentArgsBuilder.ParameterList<TParam1>(string name, params string[] moreNames)
         {
             throw new NotImplementedException();
         }
     }
 
-    internal class StepBuilder<TParam1> : IFluentArgsBuilder<TParam1>
+    internal class StepBuilder<TFunc, TFuncAsync, TParam> : IFluentArgsBuilder<TFunc, TFuncAsync, TParam>
     {
         public Step Step { get; set; }
 
-        IGiven<IFluentArgsBuilder<TParam1>> IGivenAppliable<IFluentArgsBuilder<TParam1>>.Given => throw new NotImplementedException();
+        public IGiven<IFluentArgsBuilder<TFunc, TFuncAsync, TParam>> Given => throw new NotImplementedException();
 
-        public IParsable Call(Action<TParam1> callback)
+        public IParsable Call(TFunc callback)
         {
             var finalStep = new CallStep(Step, new TargetFunction(callback));
             return new StepCaller(finalStep);
         }
 
-        public IParsable Call(Func<TParam1, Task> callback)
+        public IParsable Call(TFuncAsync callback)
         {
             var finalStep = new CallStep(Step, new TargetFunction(callback));
             return new StepCaller(finalStep);
         }
 
-        public IConfigurableParameter<IFluentArgsBuilder<TParam1, bool>, bool> Flag(string name, params string[] moreNames)
-        {
-            throw new NotImplementedException();
-        }
-
-        public IFluentArgsBuilder<TParam1> IsOptional()
-        {
-            throw new NotImplementedException();
-        }
-
-        public IFluentArgsBuilder<TParam1> IsOptionalWithDefault(TParam1 defaultValue)
-        {
-            throw new NotImplementedException();
-        }
-
-        public IFluentArgsBuilder<TParam1> IsRequired()
-        {
-            throw new NotImplementedException();
-        }
-
-        public IConfigurableParameter<IFluentArgsBuilder<TParam1, P2>, P2> Parameter<P2>(string name, params string[] moreNames)
-        {
-            throw new NotImplementedException();
-        }
-
-        public IConfigurableParameter<IFluentArgsBuilder<TParam1, IReadOnlyList<P2>>, P2> ParameterList<P2>(string name, params string[] moreNames)
+        public IFluentArgsBuilder<TFunc, TFuncAsync, TParam> IsOptionalWithDefault(TParam defaultValue)
         {
             throw new NotImplementedException();
         }
@@ -121,22 +94,47 @@
             throw new NotImplementedException();
         }
 
-        public IConfigurableParameter<IFluentArgsBuilder<TParam1>, TParam1> WithDescription(string description)
+        public IConfigurableParameter<IFluentArgsBuilder<TFunc, TFuncAsync, TParam>, TParam> WithExamples(TParam example, params TParam[] moreExamples)
         {
             throw new NotImplementedException();
         }
 
-        public IConfigurableParameter<IFluentArgsBuilder<TParam1>, TParam1> WithExamples(TParam1 example, params TParam1[] moreExamples)
+        public IConfigurableParameter<IFluentArgsBuilder<TFunc, TFuncAsync, TParam>, TParam> WithParser(Func<string, TParam> parser)
         {
             throw new NotImplementedException();
         }
 
-        public IConfigurableParameter<IFluentArgsBuilder<TParam1>, TParam1> WithExamples(string example, params string[] moreExamples)
+        IConfigurableParameter<IFluentArgsBuilder<Func<bool, TFunc>, Func<bool, TFuncAsync>, bool>, bool> IFluentArgsBuilder<TFunc, TFuncAsync, TParam>.Flag(string name, params string[] moreNames)
         {
             throw new NotImplementedException();
         }
 
-        public IConfigurableParameter<IFluentArgsBuilder<TParam1>, TParam1> WithParser(Func<string, TParam1> parser)
+        IFluentArgsBuilder<TFunc, TFuncAsync, TParam> IConfigurableParameter<IFluentArgsBuilder<TFunc, TFuncAsync, TParam>, TParam>.IsOptional()
+        {
+            throw new NotImplementedException();
+        }
+
+        IFluentArgsBuilder<TFunc, TFuncAsync, TParam> IConfigurableParameter<IFluentArgsBuilder<TFunc, TFuncAsync, TParam>, TParam>.IsRequired()
+        {
+            throw new NotImplementedException();
+        }
+
+        IConfigurableParameter<IFluentArgsBuilder<Func<TNextParam, TFunc>, Func<TNextParam, TFuncAsync>, TNextParam>, TNextParam> IFluentArgsBuilder<TFunc, TFuncAsync, TParam>.Parameter<TNextParam>(string name, params string[] moreNames)
+        {
+            throw new NotImplementedException();
+        }
+
+        IConfigurableParameter<IFluentArgsBuilder<Func<IReadOnlyList<TNextParam>, TFunc>, Func<IReadOnlyList<TNextParam>, TFuncAsync>, TNextParam>, TNextParam> IFluentArgsBuilder<TFunc, TFuncAsync, TParam>.ParameterList<TNextParam>(string name, params string[] moreNames)
+        {
+            throw new NotImplementedException();
+        }
+
+        IConfigurableParameter<IFluentArgsBuilder<TFunc, TFuncAsync, TParam>, TParam> IConfigurableParameter<IFluentArgsBuilder<TFunc, TFuncAsync, TParam>, TParam>.WithDescription(string description)
+        {
+            throw new NotImplementedException();
+        }
+
+        IConfigurableParameter<IFluentArgsBuilder<TFunc, TFuncAsync, TParam>, TParam> IConfigurableParameter<IFluentArgsBuilder<TFunc, TFuncAsync, TParam>, TParam>.WithExamples(string example, params string[] moreExamples)
         {
             throw new NotImplementedException();
         }

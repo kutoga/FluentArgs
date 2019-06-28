@@ -21,7 +21,7 @@ This can be implemented in this way:
                 .Parameter<string>("-f", "--file", "--anotheralias").IsRequired()
                 .Parameter<int>("-n", "--number").IsOptionalWithDefault(999)
                 .Parameter<string>("-k", "--key").IsRequired()
-                .Call((file, number, key) =>
+                .Call(key => number => file =>
                 {
                     // file is string
                     // number is int
@@ -50,7 +50,7 @@ In a second way, you also might like to add more meta-data to the parameters:
                 .Parameter<string>("-k", "--key")
                     .WithDescription("An API key")
                     .IsRequired()
-                .Call((file, number, key) =>
+                .Call(key => number => file =>
                 {
                     // file is string
                     // number is int
@@ -90,7 +90,7 @@ configuration can be conducted with this code:
                         .Parameter<string>("-t", "--target")
                             .WithDescription("Target file.")
                             .IsRequired()
-                        .Call((key, source, target) =>
+                        .Call(target => source => key =>
                         {
                             // key is string
                             // source is string
@@ -103,7 +103,7 @@ configuration can be conducted with this code:
                         .Parameter<int?>("-t", "--timeout")
                             .WithDescription("Timeout in seconds")
                             .IsOptional()
-                        .Call((key, file, timeout) =>
+                        .Call(timeout => file => key =>
                         {
                             // key is string
                             // file is string
