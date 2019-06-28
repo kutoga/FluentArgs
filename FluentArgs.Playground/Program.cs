@@ -10,7 +10,7 @@
 
             Console.WriteLine("Hello World!");
 
-            args = new[] { "-n", "beni" };
+            args = new[] { "-m", "-n", "beni" };
 
             FluentArgsBuilder.New()
                 //.Parameter<string>("-n", "--name").IsRequired()
@@ -41,9 +41,9 @@
                 .Given.Parameter("-c", "--command").WithValue("copy").Then(b => b
                     .Parameter<string>("-i", "--input").IsRequired()
                     .Parameter<int>("-b", "--blocksize").IsOptional()
-                    .Call(async (input, blockSize) =>
+                    .Call(blockSize => input =>
                     {
-
+                        return Task.CompletedTask;
                     }))
                 .Parse(args);
 
@@ -66,13 +66,13 @@
                     .HasValue("copy").Then(b => b
                         .Parameter<string>("-i", "--input").IsRequired()
                         .Parameter<int>("-b", "--blocksize").IsOptionalWithDefault(-1)
-                        .Call((key, i, b) =>
+                        .Call(b => i => key =>
                         {
 
                         }))
                     .HasValue("delete").Then(b => b
                         .Parameter<string>("-f", "--file").IsRequired()
-                        .Call((key, file) =>
+                        .Call(file => key =>
                         {
 
                         }))
@@ -89,7 +89,7 @@
                         .Given.Command("-c2")
                             .HasValue(2).Then(b => b
                                 .Parameter<double>("v").IsRequired()
-                                .Call((key, u, v) =>
+                                .Call(v => u => key =>
                                 {
 
                                 }))

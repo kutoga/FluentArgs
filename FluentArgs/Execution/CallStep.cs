@@ -16,7 +16,7 @@
 
         public override Task Execute(State state)
         {
-            var result = Reflection.Methods.Invoke(targetFunction.Target, state.GetParameters());
+            var result = Reflection.Methods.InvokeWrappedMethod(targetFunction.Target, state.GetParameters(), true);
             if (result is null)
             {
                 return Task.CompletedTask;
