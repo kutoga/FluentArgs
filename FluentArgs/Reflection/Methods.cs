@@ -19,7 +19,7 @@
             //TODO: use reduce / aggregate
             if (reversedArguments.Length > 0)
             {
-                foreach (string argument in arguments.Reverse())
+                foreach (var argument in arguments.Reverse())
                 {
                     currentValue = InvokeMethod(currentValue, new[] { argument });
                 }

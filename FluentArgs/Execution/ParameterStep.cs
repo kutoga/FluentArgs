@@ -4,6 +4,7 @@
     using System.Linq;
     using System.Threading.Tasks;
     using FluentArgs.Description;
+    using FluentArgs.Parser;
 
     internal class ParameterStep : Step
     {
@@ -43,9 +44,9 @@
                 return this.parameter.Parser(parameter);
             }
 
-            if (this.parameter.Type == typeof(string))
+            if (DefaultStringParsers.TryGetParser(this.parameter.Type, out var parser))
             {
-                return parameter;
+                return parser!(parameter);
             }
 
             throw new Exception("TODO: IMPLEMENT MORE DEFAULTS");
