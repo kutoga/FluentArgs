@@ -4,9 +4,7 @@
     using System.Collections.Generic;
     using System.Threading.Tasks;
 
-    public interface IFluentArgsBuilder :
-        IParsable, //TODO: FluentArgsBuilder.New().Parse() should not exist -> Remove IParsâble from all IFluentArgsBuilder
-        IGivenAppliable<IFluentArgsBuilder>
+    public interface IFluentArgsBuilder : IGivenAppliable<IFluentArgsBuilder>
     {
         IConfigurableParameter<IFluentArgsBuilder<Action<bool>, Func<bool, Task>, bool>, bool>
             Flag(string name, params string[] moreNames);
@@ -22,9 +20,7 @@
         IParsable Call(Func<Task> callback);
     }
 
-    public interface IFluentArgsBuilder<TFunc, TFuncAsync, TParam> :
-        IParsable,
-        IGivenAppliable<IFluentArgsBuilder<TFunc, TFuncAsync, TParam>>
+    public interface IFluentArgsBuilder<TFunc, TFuncAsync, TParam> : IGivenAppliable<IFluentArgsBuilder<TFunc, TFuncAsync, TParam>>
     {
         IConfigurableParameter<IFluentArgsBuilder<Func<bool, TFunc>, Func<bool, TFuncAsync>, bool>, bool>
             Flag(string name, params string[] moreNames);

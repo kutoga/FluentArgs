@@ -6,7 +6,7 @@
     using FluentArgs.Description;
     using FluentArgs.Execution;
 
-    internal class StepBuilder : IFluentArgsBuilder
+    internal class StepBuilder : IFluentArgsBuilder, IParsable
     {
         public Step Step { get; set; } = new InitialStep();
 
@@ -57,7 +57,7 @@
     }
 
     internal class StepBuilder<TFunc, TFuncAsync, TParam> :
-        IFluentArgsBuilder<TFunc, TFuncAsync, TParam>
+        IFluentArgsBuilder<TFunc, TFuncAsync, TParam>, IParsable
     {
         public Step Step { get; set; }
 
