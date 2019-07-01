@@ -14,7 +14,7 @@
             var args = new[] { "-a", "1337", "-b", "beni", "-c", "true" };
             var builder = FluentArgsBuilder.New()
                 .Parameter<long>("-a").IsRequired()
-                .Parameter<string>("-b").IsRequired()
+                .Parameter("-b").IsRequired()
                 .Parameter<bool>("-c").IsRequired()
                 .Call(c => b => a =>
                 {

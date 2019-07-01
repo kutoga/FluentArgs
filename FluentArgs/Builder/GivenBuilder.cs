@@ -17,7 +17,7 @@
             this.stepWrapper = stepWrapper;
         }
 
-        public IGivenCommand<TArgsBuilder> Command(string name, params string[] moreNames)
+        public IGivenCommandInitial<TArgsBuilder> Command(string name, params string[] moreNames)
         {
             throw new NotImplementedException();
         }

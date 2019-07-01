@@ -17,9 +17,9 @@
             args = new[] { "-m", "-n", "beni" };
 
             FluentArgsBuilder.New()
-                //.Parameter<string>("-n", "--name").IsRequired()
+                //.Parameter("-n", "--name").IsRequired()
                 .Given.Flag("-m").Then(b => b
-                    //   .Parameter<string>("-n").IsRequired()
+                    //   .Parameter("-n").IsRequired()
                     .Call(() => //name =>
                     {
                         Console.WriteLine($"Hello !");
@@ -35,7 +35,7 @@
 
             FluentArgsBuilder.New()
                 .ParameterList<int>("-n", "--numbers").IsRequired()
-                .Parameter<string>("--name")
+                .Parameter("--name")
                     .WithDescription("")
                     .WithExamples("")
                     .IsRequired()
@@ -47,7 +47,7 @@
 
             FluentArgsBuilder.New()
                 .Given.Parameter("-c", "--command").WithValue("copy").Then(b => b
-                    .Parameter<string>("-i", "--input").IsRequired()
+                    .Parameter("-i", "--input").IsRequired()
                     .Parameter<int>("-b", "--blocksize").IsOptional()
                     .Call(blockSize => input =>
                     {
@@ -65,7 +65,7 @@
                 }))
 
                 /* general settings / arguments */
-                .Parameter<string>("-k", "--apikey")
+                .Parameter("-k", "--apikey")
                     .WithDescription("the magic super expensive api key")
                     .WithExamples("ABC", "123")
                     .IsRequired()
@@ -73,14 +73,14 @@
                 /* switch like command parameters */
                 .Given.Command("-c", "--command")
                     .HasValue("copy").Then(b => b
-                        .Parameter<string>("-i", "--input").IsRequired()
+                        .Parameter("-i", "--input").IsRequired()
                         .Parameter<int>("-b", "--blocksize").IsOptionalWithDefault(-1)
                         .Call(b => i => key =>
                         {
 
                         }))
                     .HasValue("delete").Then(b => b
-                        .Parameter<string>("-f", "--file").IsRequired()
+                        .Parameter("-f", "--file").IsRequired()
                         .Call(file => key =>
                         {
 
@@ -102,10 +102,21 @@
                                 {
 
                                 }))
-                            .ElseIsInvalid())
+                            .ElseIsInvalid()
+                        .Invalid())
                     .ElseIgnore()
                 .Call(_ => throw new Exception("blabla"))
                 .ParseAsync(args);
+
+
+            /*
+             *TODO:
+             * .ConfigureDefaults() ->
+ 
+.WarnOnNonMinusStartingNames() // basiert auf RegisterOnBuiltCallback(Action<…>)
+.WarnOnDuplicateUsedNames() // nur im selben branch
+.ShowHelp("-h", "--help")
+*/
         }
     }
 }

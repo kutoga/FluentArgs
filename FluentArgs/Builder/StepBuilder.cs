@@ -25,6 +25,11 @@
             return new StepCaller(finalStep);
         }
 
+        public IParsable Invalid()
+        {
+            throw new NotImplementedException();
+        }
+
         public void Parse(string[] args)
         {
             throw new NotImplementedException();
@@ -59,9 +64,11 @@
     internal class StepBuilder<TFunc, TFuncAsync, TParam> :
         IFluentArgsBuilder<TFunc, TFuncAsync, TParam>, IParsable
     {
-        public Step Step { get; set; }
+        public Step Step { get; set; } = new InitialStep();
 
-        public IGiven<IFluentArgsBuilder<TFunc, TFuncAsync, TParam>> Given => throw new NotImplementedException();
+        public IGiven<IFluentArgsBuilder<TFunc, TFuncAsync, TParam>> Given =>
+                new GivenBuilder<IFluentArgsBuilder<TFunc, TFuncAsync, TParam>>(
+                    new StepBuilder<TFunc, TFuncAsync, TParam>(), Step, s => new StepBuilder<TFunc, TFuncAsync, TParam>() { Step = s });
 
         public IParsable Call(TFunc callback)
         {
@@ -73,6 +80,11 @@
         {
             var finalStep = new CallStep(Step, new TargetFunction(callback));
             return new StepCaller(finalStep);
+        }
+
+        public IParsable Invalid()
+        {
+            throw new NotImplementedException();
         }
 
         public IFluentArgsBuilder<TFunc, TFuncAsync, TParam> IsOptionalWithDefault(TParam defaultValue)

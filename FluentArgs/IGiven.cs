@@ -6,6 +6,6 @@
 
         IGivenParameter<TArgsBuilder> Parameter(string name, params string[] moreNames);
 
-        IGivenCommand<TArgsBuilder> Command(string name, params string[] moreNames);
+        IGivenCommandInitial<TArgsBuilder> Command(string name, params string[] moreNames);
     }
 }

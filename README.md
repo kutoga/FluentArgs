@@ -1,4 +1,4 @@
-﻿# FluentArgs V0.0.1-alpha
+﻿# FluentArgs v0.0.2-alpha
 
 **Very important: This repo is currently in a very instable state. Almost nothing
 is coded; therefore still much work has to be done (and will be done in the next
@@ -8,7 +8,7 @@ days).**
 Argument parsing is a quite usual task. There are tons of libraries out there, which already
 do it great. This library tries to solve this problem in a very fluent and type-safe way.
 
-Assuming you have a CLI whcih allows to use these parameters: `xyz -f file -n number --key apikey`
+Assuming you have a CLI which allows to use these parameters: `xyz -f file -n number --key apikey`
 
 This can be implemented in this way:
 
@@ -18,9 +18,9 @@ This can be implemented in this way:
         static void Main(string[] args)
         {
             FluentArgsBuilder.New()
-                .Parameter<string>("-f", "--file", "--anotheralias").IsRequired()
+                .Parameter("-f", "--file", "--anotheralias").IsRequired()
                 .Parameter<int>("-n", "--number").IsOptionalWithDefault(999)
-                .Parameter<string>("-k", "--key").IsRequired()
+                .Parameter("-k", "--key").IsRequired()
                 .Call(key => number => file =>
                 {
                     // file is string
@@ -40,14 +40,14 @@ In a second way, you also might like to add more meta-data to the parameters:
         static void Main(string[] args)
         {
             FluentArgsBuilder.New()
-                .Parameter<string>("-f", "--file", "--anotheralias")
+                .Parameter("-f", "--file", "--anotheralias")
                     .WithDescription("Input file")
                     .WithExamples("my_file.txt", "another_file.txt")
                     .IsRequired()
                 .Parameter<int>("-n", "--number")
                     .WithDescription("Just a test parameter")
                     .IsOptionalWithDefault(999)
-                .Parameter<string>("-k", "--key")
+                .Parameter("-k", "--key")
                     .WithDescription("An API key")
                     .IsRequired()
                 .Call(key => number => file =>
@@ -79,15 +79,15 @@ configuration can be conducted with this code:
         static void Main(string[] args)
         {
             FluentArgsBuilder.New()
-                .Parameter<string>("-k", "--key")
+                .Parameter("-k", "--key")
                     .WithDescription("API key")
                     .IsRequired()
                 .Given.Command("-c", "--command")
                     .HasValue("move").Then(b => b
-                        .Parameter<string>("-s", "--source")
+                        .Parameter("-s", "--source")
                             .WithDescription("Source file.")
                             .IsRequired()
-                        .Parameter<string>("-t", "--target")
+                        .Parameter("-t", "--target")
                             .WithDescription("Target file.")
                             .IsRequired()
                         .Call(target => source => key =>
@@ -97,7 +97,7 @@ configuration can be conducted with this code:
                             // target is string
                         }))
                     .HasValue("delete").Then(b => b
-                        .Parameter<string>("-f", "--file")
+                        .Parameter("-f", "--file")
                             .WithDescription("The file to delete")
                             .IsRequired()
                         .Parameter<int?>("-t", "--timeout")
