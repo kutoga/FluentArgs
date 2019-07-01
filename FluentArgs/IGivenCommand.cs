@@ -1,14 +1,10 @@
-﻿using System;
-
-namespace FluentArgs
+﻿namespace FluentArgs
 {
-    public interface IGivenCommand<TArgsBuilder>
+    using System;
+
+    public interface IGivenCommand<TArgsBuilder> : IGivenCommandInitial<TArgsBuilder>
     {
-        IGivenCommandValue<TArgsBuilder> HasValue<TParam>(TParam value, Func<string, TParam>? parser = null);
-
-        IGivenCommandValue<TArgsBuilder> Matches<TParam>(Func<TParam, bool> predicate, Func<string, TParam>? parser = null);
-
-        IParsable ElseIsInvalid();
+        TArgsBuilder ElseIsInvalid();
 
         TArgsBuilder ElseIgnore();
     }

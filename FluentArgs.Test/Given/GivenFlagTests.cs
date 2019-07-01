@@ -11,8 +11,7 @@
             bool? redirected = null;
             var args = new[] { "--anotherflag" };
             var builder = FluentArgsBuilder.New()
-                .Given.Flag("--silent").Then(b => b
-                    .Call(() => redirected = true))
+                .Given.Flag("--silent").Then(() => redirected = true)
                 .Call(() => redirected = false);
 
             builder.Parse(args);
@@ -26,8 +25,7 @@
             bool? redirected = null;
             var args = new[] { "--silent" };
             var builder = FluentArgsBuilder.New()
-                .Given.Flag("--silent").Then(b => b
-                    .Call(() => redirected = true))
+                .Given.Flag("--silent").Then(() => redirected = true)
                 .Call(() => redirected = false);
 
             builder.Parse(args);
@@ -45,12 +43,9 @@
             var args = new[] { $"--{branchName}" };
             string? calledBranch = null;
             var builder = FluentArgsBuilder.New()
-                .Given.Flag("--branch1").Then(b => b
-                    .Call(() => calledBranch = "branch1"))
-                .Given.Flag("--branch2").Then(b => b
-                    .Call(() => calledBranch = "branch2"))
-                .Given.Flag("--branch3").Then(b => b
-                    .Call(() => calledBranch = "branch3"))
+                .Given.Flag("--branch1").Then(() => calledBranch = "branch1")
+                .Given.Flag("--branch2").Then(() => calledBranch = "branch2")
+                .Given.Flag("--branch3").Then(() => calledBranch = "branch3")
                 .Call(() => calledBranch = "none");
 
             builder.Parse(args);
@@ -69,10 +64,8 @@
             string? calledBranch = null;
             var builder = FluentArgsBuilder.New()
                 .Given.Flag("--branch10").Then(b => b
-                    .Given.Flag("--branch11").Then(b => b
-                        .Call(() => calledBranch = "branch10_branch11"))
-                    .Given.Flag("--branch12").Then(b => b
-                        .Call(() => calledBranch = "branch10_branch12"))
+                    .Given.Flag("--branch11").Then(() => calledBranch = "branch10_branch11")
+                    .Given.Flag("--branch12").Then(() => calledBranch = "branch10_branch12")
                     .Call(() => calledBranch = "branch10_none"))
                 .Call(() => calledBranch = "none_none");
 
