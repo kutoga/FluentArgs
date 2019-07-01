@@ -1,11 +1,8 @@
-﻿using FluentAssertions;
-using System;
-using System.Collections.Generic;
-using System.Text;
-using Xunit;
-
-namespace FluentArgs.Test
+﻿namespace FluentArgs.Test
 {
+    using FluentAssertions;
+    using Xunit;
+
     public static class MultipleParametersTests
     {
         [Fact]

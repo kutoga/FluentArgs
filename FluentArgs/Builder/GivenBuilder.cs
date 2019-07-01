@@ -41,7 +41,7 @@
 
         public IGivenParameter<TArgsBuilder> Parameter(string name, params string[] moreNames)
         {
-            throw new NotImplementedException();
+            return new GivenParameterBuilder<TArgsBuilder>(new Name(name, moreNames), argsBuilder, previousStep, stepWrapper);
         }
     }
 }

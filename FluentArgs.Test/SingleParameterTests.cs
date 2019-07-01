@@ -1,6 +1,8 @@
 ﻿namespace FluentArgs.Test
 {
     using System;
+    using System.Globalization;
+    using System.Threading.Tasks;
     using FluentAssertions;
     using Xunit;
 
@@ -43,9 +45,22 @@
                 .Parameter<int>("--age").IsRequired()
                 .Call(age => { });
 
-            Action parse = () => builder.Parse(args);
+            Action parseAction = () => builder.Parse(args);
 
-            parse.Should().Throw<Exception>();
+            parseAction.Should().Throw<Exception>();
+        }
+
+        [Fact]
+        public static void GivenARequiredParameterWithoutAValue_ShouldThrow()
+        {
+            var args = new[] { "--name" };
+            var builder = FluentArgsBuilder.New()
+                .Parameter<string>("--name").IsRequired()
+                .Call(name => { });
+
+            Action parseAction = () => builder.Parse(args);
+
+            parseAction.Should().Throw<Exception>();
         }
 
         [Fact]
@@ -126,6 +141,42 @@
 
             done.Should().BeTrue();
             parsedAge.Should().Be(28);
+        }
+ 
+        [Fact]
+        public static void GivenAnAsyncCall_TheTaskShouldBeForwarded()
+        {
+            Task dummyTask = Task.FromResult("My special task");
+            var args = new[] { "--name", "joleene" };
+            var builder = FluentArgsBuilder.New()
+                .Parameter<string>("--name").IsRequired()
+                .Call(name => dummyTask);
+
+            var resultingTask = builder.ParseAsync(args);
+
+            resultingTask.Should().Be(dummyTask);
+        }
+
+        [Fact]
+        public static void GivenAParameterWithACustomParser_ShouldBeParsed()
+        {
+            var args = new[] { "--lowername", "beni" };
+            string? parsedName = default;
+            var done = false;
+            var builder = FluentArgsBuilder.New()
+                .Parameter<string>("--lowername")
+                    .WithParser(s => s.ToUpper(CultureInfo.InvariantCulture))
+                    .IsRequired()
+                .Call(name =>
+                {
+                    parsedName = name;
+                    done = true;
+                });
+
+            builder.Parse(args);
+
+            done.Should().BeTrue();
+            parsedName.Should().Be("BENI");
         }
     }
 }

@@ -7,6 +7,10 @@
     {
         static void Main(string[] args)
         {
+            //TODO: Given.Command(...) => if the comand is not present there should be a possibility to define this as invalid (the command is required)
+
+            //TODO: Call .Build().Parse(xxx) instead of .Parse(); BUT add an extension method or something which just does this for you
+            //TODO: IsOptionalWithDefault(...) -> IsOptional().WithDefault(...); vielleicht
 
             Console.WriteLine("Hello World!");
 
@@ -49,6 +53,7 @@
                     {
                         return Task.CompletedTask;
                     }))
+                .Call(() => throw new Exception("no flag given"))
                 .Parse(args);
 
             FluentArgsBuilder.New()
@@ -99,7 +104,7 @@
                                 }))
                             .ElseIsInvalid())
                     .ElseIgnore()
-
+                .Call(_ => throw new Exception("blabla"))
                 .ParseAsync(args);
         }
     }

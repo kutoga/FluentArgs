@@ -5,16 +5,17 @@
     using System.Threading.Tasks;
     using FluentArgs.Description;
     using FluentArgs.Parser;
-    using FluentArgs.Reflection;
 
-    internal class ParameterStep : Step
+    internal class GivenParameterStep : Step
     {
-        private Parameter parameter;
+        private readonly GivenParameter parameter;
+        private readonly IParsableFromState thenStep;
 
-        public ParameterStep(Step previous, Parameter parameter)
+        public GivenParameterStep(Step previous, GivenParameter parameter, IParsableFromState thenStep)
             : base(previous)
         {
             this.parameter = parameter;
+            this.thenStep = thenStep;
         }
 
         public override Task Execute(State state)
@@ -27,19 +28,7 @@
 
             if (possibleParameterIndex == null)
             {
-                if (parameter.IsRequired)
-                {
-                    throw new Exception("TODO: parameter is required, but not given");
-                }
-
-                if (parameter.HasDefaultValue)
-                {
-                    state = state.AddParameter(parameter.DefaultValue);
-                }
-                else
-                {
-                    state = state.AddParameter(Default.Instance(parameter.Type));
-                }
+                return Next.Execute(state);
             }
             else
             {
@@ -49,14 +38,26 @@
                     throw new Exception("TODO");
                 }
 
-                state = state
-                    .AddParameter(Parse(state.Arguments[parameterIndex + 1]))
-                    .RemoveArguments(parameterIndex, parameterIndex + 1);
-            }
+                if (!parameter.RequireExactValue)
+                {
+                    return thenStep.ParseFromState(state);
+                }
+                else
+                {
+                    var parameterValue = state.Arguments[parameterIndex + 1];
+                    state = state.RemoveArguments(parameterIndex, parameterIndex + 1);
 
-            return Next.Execute(state);
+                    if (object.Equals(Parse(parameterValue), parameter.RequiredValue))
+                    {
+                        return thenStep.ParseFromState(state);
+                    }
+
+                    return Next.Execute(state);
+                }
+            }
         }
 
+        //TODO: Remove duplicate code (see parametersetp.cs)
         private object Parse(string parameter)
         {
             if (this.parameter.Parser != null)
