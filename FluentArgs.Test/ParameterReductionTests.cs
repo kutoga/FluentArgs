@@ -1,9 +1,9 @@
-﻿using FluentAssertions;
-using System;
-using Xunit;
-
-namespace FluentArgs.Test
+﻿namespace FluentArgs.Test
 {
+    using System;
+    using FluentAssertions;
+    using Xunit;
+
     public static class ParameterReductionTests
     {
         [Fact]

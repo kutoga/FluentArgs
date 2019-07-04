@@ -10,6 +10,7 @@
 
     internal class GivenCommandStep : Step
     {
+        //TODO: Put the branches & the name in a GivenCommand description or something like that
         private readonly Name name;
         private readonly IImmutableList<(GivenCommandBranch branch, IParsableFromState then)> branches;
 
@@ -68,6 +69,7 @@
                     }
 
                     var (result, matches) = handler(state, parameterValue, branch.branch, branch.then);
+                    //TODO: EInfach Task? zurückgeben; falls dieser null ist, wars nicht ok (=matches ist false)
                     if (matches)
                     {
                         return result;
@@ -80,7 +82,12 @@
 
         private (Task? result, bool matches) ExecuteHasValue(State state, string parameterValue, GivenCommandBranch branch, IParsableFromState then)
         {
-            throw new NotImplementedException();
+            var value = Parse(parameterValue, branch.Parser, branch.ValueType);
+            if (object.Equals(value, branch.RequiredValue))
+            {
+                return (then.ParseFromState(state), true);
+            }
+            return (default, false);
         }
 
         private (Task? result, bool matches) ExecuteMatches(State state, string parameterValue, GivenCommandBranch branch, IParsableFromState then)
@@ -92,6 +99,7 @@
             {
                 result = then.ParseFromState(state);
             }
+
             return (result, matches);
         }
 

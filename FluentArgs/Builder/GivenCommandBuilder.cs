@@ -11,17 +11,17 @@
         IGivenThen<TArgsBuilder, IGivenCommand<TArgsBuilder>>
     {
         private readonly Name name;
-        private readonly TArgsBuilder argsBuilder;
+        private readonly Func<TArgsBuilder> argsBuilderFactory;
         private readonly Step previousStep;
         //private GivenCommandBranch currentBranch;
         private IList<(GivenCommandBranch branch, IParsableFromState then)> branches;
         private readonly Func<Step, TArgsBuilder> stepWrapper;
         private GivenCommandBranch currentBranch;
 
-        public GivenCommandBuilder(Name name, TArgsBuilder argsBuilder, Step previousStep, Func<Step, TArgsBuilder> stepWrapper)
+        public GivenCommandBuilder(Name name, Func<TArgsBuilder> argsBuilderFactory, Step previousStep, Func<Step, TArgsBuilder> stepWrapper)
         {
             this.name = name;
-            this.argsBuilder = argsBuilder;
+            this.argsBuilderFactory = argsBuilderFactory;
             this.previousStep = previousStep;
             this.stepWrapper = stepWrapper;
             this.branches = new List<(GivenCommandBranch branch, IParsableFromState then)>();
@@ -69,7 +69,7 @@
 
         public IGivenCommand<TArgsBuilder> Then(Func<TArgsBuilder, IParsable> argumentBuilder)
         {
-            branches.Add((currentBranch, argumentBuilder(argsBuilder) as IParsableFromState));
+            branches.Add((currentBranch, argumentBuilder(argsBuilderFactory()) as IParsableFromState));
             return this;
 
             //var result = argumentBuilder(argsBuilder);

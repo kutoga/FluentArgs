@@ -84,7 +84,7 @@
             var builder = FluentArgsBuilder.New()
                 .Given.Command("--type")
                     .HasValue("a").Then(() => { })
-                    .ElseIgnore()
+                    .ElseIsInvalid()
                 .Call(() => { });
 
             Action parseAction = () => builder.Parse(args);
@@ -93,20 +93,90 @@
         }
 
         [Theory]
-        [InlineData("1", "branch1")]
-        [InlineData("2.0", "branch2")]
+        [InlineData("2.0", "branch1")]
+        [InlineData("1", "branch2")]
         public static void GivenAMixedTypeCommandValue_ShouldBeRedirected(string value, string branch)
         {
             var args = new[] { "-x", value };
             string? calledBranch = default;
             var builder = FluentArgsBuilder.New()
                 .Given.Command("-x")
-                    .HasValue(1).Then(() => calledBranch = "branch1")
-                    .HasValue(2.0).Then(() => calledBranch = "branch2")
+                    .HasValue(2.0).Then(() => calledBranch = "branch1")
+                    .HasValue(1).Then(() => calledBranch = "branch2")
                     .ElseIsInvalid()
                 .Call(() => calledBranch = "none");
 
-            true.Should().BeFalse();
+            builder.Parse(args);
+
+            calledBranch.Should().Be(branch);
+        }
+
+        //TODO: What if HasValue<T> fails to parse the value? Go to the nest HasValue or ignore it?
+
+        [Theory]
+        [InlineData("v1", "v2", "v1v2")]
+        [InlineData("v1", "xx", "v1")]
+        [InlineData("a", "b", "none")]
+        [InlineData("a", "v2", "none")]
+        public static void NestedGivenCommand_ShouldbeHandledCorrect(string command1, string command2, string expectedBranch)
+        {
+            var args = new[] { "-c1", command1, "-c2", command2 };
+            string? calledBranch = default;
+            var builder = FluentArgsBuilder.New()
+                .Given.Command("-c1")
+                    .HasValue("v1").Then(b => b
+                        .Given.Command("-c2")
+                            .HasValue("v2").Then(() => calledBranch = "v1v2")
+                            .ElseIgnore()
+                        .Call(() => calledBranch = "v1"))
+                    .ElseIgnore()
+                .Call(() => calledBranch = "none");
+
+            builder.Parse(args);
+
+            calledBranch.Should().Be(expectedBranch);
+        }
+
+        //TODO: serial nested with same command should not work (the command is removed from args)
+        [Theory]
+        [InlineData("v1", "v2", "v1")]
+        [InlineData("v1", "xx", "v1")]
+        [InlineData("xx", "v2", "v2")]
+        [InlineData("xx", "xx", "none")]
+        public static void SerialGivenCommand_ShouldBeHandledCorrect(string command1, string command2, string expectedBranch)
+        {
+            var args = new[] { "-c1", command1, "-c2", command2 };
+            string? calledBranch = default;
+            var builder = FluentArgsBuilder.New()
+                .Given.Command("-c1")
+                    .HasValue("v1").Then(() => calledBranch = "v1")
+                    .ElseIgnore()
+                .Given.Command("-c2")
+                    .HasValue("v2").Then(() => calledBranch = "v2")
+                    .ElseIgnore()
+                .Call(() => calledBranch = "none");
+
+            builder.Parse(args);
+
+            calledBranch.Should().Be(expectedBranch);
+        }
+
+        public static void SerialGivenCommandWithTheSameCommand_ShouldIgnoreAllButTheFirstCall()
+        {
+            var args = new[] { "c1", "v1" };
+            bool? redirected = default;
+            var builder = FluentArgsBuilder.New()
+                .Given.Command("-c1")
+                    .HasValue("v1").Then(() => redirected = true)
+                    .ElseIgnore()
+                .Given.Command("-c1")
+                    .HasValue("v2").Then(b => b.Invalid())
+                    .ElseIgnore()
+                .Call(() => redirected = false);
+
+            builder.Parse(args);
+
+            redirected.Should().BeTrue();
         }
     }
 }

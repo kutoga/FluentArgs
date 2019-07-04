@@ -45,19 +45,19 @@
         public static IConfigurableParameter<IFluentArgsBuilder<Action<string>, Func<string, Task>, string>, string>
             Parameter(this IFluentArgsBuilder builder, string name, params string[] moreNames)
         {
-            return builder.Parameter(name, moreNames);
+            return builder.Parameter<string>(name, moreNames);
         }
 
         public static IConfigurableParameter<IFluentArgsBuilder<Action<IReadOnlyList<string>>, Func<IReadOnlyList<string>, Task>, string>, string>
             ParameterList(this IFluentArgsBuilder builder, string name, params string[] moreNames)
         {
-            return builder.ParameterList(name, moreNames);
+            return builder.ParameterList<string>(name, moreNames);
         }
 
         public static IConfigurableParameter<IFluentArgsBuilder<Func<string, TFunc>, Func<string, TFuncAsync>, string>, string>
             Parameter<TFunc, TFuncAsync, TParam>(this IFluentArgsBuilder<TFunc, TFuncAsync, TParam> builder, string name, params string[] moreNames)
         {
-            return builder.Parameter(name, moreNames);
+            return builder.Parameter<string>(name, moreNames);
         }
 
         public static IConfigurableParameter<IFluentArgsBuilder<Func<IReadOnlyList<string>, TFunc>, Func<IReadOnlyList<string>, TFuncAsync>, string>, string>

@@ -21,7 +21,7 @@
         {
             return new GivenCommandBuilder<TArgsBuilder>(
                 new Name(name, moreNames),
-                argsBuilderFactory(),
+                argsBuilderFactory,
                 previousStep,
                 stepWrapper);
         }
