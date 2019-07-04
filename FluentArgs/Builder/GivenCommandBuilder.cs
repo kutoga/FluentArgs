@@ -2,6 +2,7 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.Linq;
     using FluentArgs.Description;
     using FluentArgs.Execution;
 
@@ -13,30 +14,33 @@
         private readonly TArgsBuilder argsBuilder;
         private readonly Step previousStep;
         //private GivenCommandBranch currentBranch;
-        private IList<GivenCommandBranch> branches;
+        private IList<(GivenCommandBranch branch, IParsableFromState then)> branches;
+        private readonly Func<Step, TArgsBuilder> stepWrapper;
+        private GivenCommandBranch currentBranch;
 
-        public GivenCommandBuilder(Name name, TArgsBuilder argsBuilder, Step previousStep)
+        public GivenCommandBuilder(Name name, TArgsBuilder argsBuilder, Step previousStep, Func<Step, TArgsBuilder> stepWrapper)
         {
             this.name = name;
             this.argsBuilder = argsBuilder;
             this.previousStep = previousStep;
-            branches = new List<GivenCommandBranch>();
+            this.stepWrapper = stepWrapper;
+            this.branches = new List<(GivenCommandBranch branch, IParsableFromState then)>();
         }
 
         public TArgsBuilder ElseIgnore()
         {
             //currentBranch = GivenCommandBranch.Ignore;
-            branches.Add(GivenCommandBranch.Ignore);
-            var givenCommand = GetGivenCommand();
-            return argsBuilder;
+            branches.Add((GivenCommandBranch.Ignore, null));
+
+            return stepWrapper(new GivenCommandStep(previousStep, name, branches));
         }
 
         public TArgsBuilder ElseIsInvalid()
         {
             //currentBranch = GivenCommandBranch.Invalid;
-            branches.Add(GivenCommandBranch.Invalid);
-            var givenCommand = GetGivenCommand();
-            return argsBuilder;
+            branches.Add((GivenCommandBranch.Invalid, null));
+
+            return stepWrapper(new GivenCommandStep(previousStep, name, branches));
         }
 
         public IGivenThen<TArgsBuilder, IGivenCommand<TArgsBuilder>> HasValue<TParam>(TParam value, Func<string, TParam> parser = null)
@@ -47,7 +51,7 @@
                 strParser = s => parser(s);
             }
 
-            branches.Add(new GivenCommandBranch(GivenCommandBranchType.HasValue, value, typeof(TParam), strParser));
+            currentBranch = new GivenCommandBranch(GivenCommandBranchType.HasValue, value, typeof(TParam), strParser);
             return this;
         }
 
@@ -59,23 +63,21 @@
                 strParser = s => parser(s);
             }
 
-            branches.Add(new GivenCommandBranch(GivenCommandBranchType.Matches, default, typeof(TParam), strParser, o => predicate((TParam)o)));
+            currentBranch = new GivenCommandBranch(GivenCommandBranchType.Matches, default, typeof(TParam), strParser, o => predicate((TParam)o));
             return this;
         }
 
         public IGivenCommand<TArgsBuilder> Then(Func<TArgsBuilder, IParsable> argumentBuilder)
         {
-            var step = new GivenParameterStep(
-                    previousStep,
-                    GivenParameter.WithAnyValue(name),
-                    parsable as IParsableFromState ?? throw new Exception("TODO")))
+            branches.Add((currentBranch, argumentBuilder(argsBuilder) as IParsableFromState));
+            return this;
 
-            throw new NotImplementedException();
-        }
-
-        private GivenCommand GetGivenCommand()
-        {
-            return new GivenCommand(name, branches);
+            //var result = argumentBuilder(argsBuilder);
+            //var step = new GivenParameterStep(
+            //        previousStep,
+            //        GivenParameter.WithAnyValue(name),
+            //        result as IParsableFromState ?? throw new Exception("TODO"));
+            //return this;
         }
     }
 }

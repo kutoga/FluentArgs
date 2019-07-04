@@ -10,8 +10,9 @@
     {
         public Step Step { get; set; } = new InitialStep();
 
+        //TODO: public und interface prefix weg
         IGiven<IFluentArgsBuilder> IGivenAppliable<IFluentArgsBuilder>.Given =>
-                new GivenBuilder<IFluentArgsBuilder>(new StepBuilder(), Step, s => new StepBuilder() { Step = s });
+                new GivenBuilder<IFluentArgsBuilder>(() => new StepBuilder(), Step, s => new StepBuilder() { Step = s });
 
         public IParsable Call(Action callback)
         {
@@ -27,7 +28,8 @@
 
         public IParsable Invalid()
         {
-            throw new NotImplementedException();
+            var finalStep = new InvalidStep(Step);
+            return new StepCaller(finalStep);
         }
 
         public void Parse(string[] args)
@@ -68,7 +70,7 @@
 
         public IGiven<IFluentArgsBuilder<TFunc, TFuncAsync, TParam>> Given =>
                 new GivenBuilder<IFluentArgsBuilder<TFunc, TFuncAsync, TParam>>(
-                    new StepBuilder<TFunc, TFuncAsync, TParam>(), Step, s => new StepBuilder<TFunc, TFuncAsync, TParam>() { Step = s });
+                    () => new StepBuilder<TFunc, TFuncAsync, TParam>(), Step, s => new StepBuilder<TFunc, TFuncAsync, TParam>() { Step = s });
 
         public IParsable Call(TFunc callback)
         {
