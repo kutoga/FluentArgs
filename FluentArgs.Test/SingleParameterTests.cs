@@ -15,7 +15,7 @@
             var args = new[] { "--name", "beni" };
             string? parsedName = null;
             var builder = FluentArgsBuilder.New()
-                .Parameter<string>("--name").IsRequired()
+                .Parameter("--name").IsRequired()
                 .Call(name => parsedName = name);
 
             builder.Parse(args);
@@ -55,7 +55,7 @@
         {
             var args = new[] { "--name" };
             var builder = FluentArgsBuilder.New()
-                .Parameter<string>("--name").IsRequired()
+                .Parameter("--name").IsRequired()
                 .Call(name => { });
 
             Action parseAction = () => builder.Parse(args);
@@ -90,7 +90,7 @@
             string? parsedName = null;
             var done = false;
             var builder = FluentArgsBuilder.New()
-                .Parameter<string>("--name").IsOptional()
+                .Parameter("--name").IsOptional()
                 .Call(name =>
                 {
                     parsedName = name;
@@ -149,7 +149,7 @@
             Task dummyTask = Task.FromResult("My special task");
             var args = new[] { "--name", "joleene" };
             var builder = FluentArgsBuilder.New()
-                .Parameter<string>("--name").IsRequired()
+                .Parameter("--name").IsRequired()
                 .Call(name => dummyTask);
 
             var resultingTask = builder.ParseAsync(args);
@@ -164,7 +164,7 @@
             string? parsedName = default;
             var done = false;
             var builder = FluentArgsBuilder.New()
-                .Parameter<string>("--lowername")
+                .Parameter("--lowername")
                     .WithParser(s => s.ToUpper(CultureInfo.InvariantCulture))
                     .IsRequired()
                 .Call(name =>

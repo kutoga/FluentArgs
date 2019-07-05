@@ -21,6 +21,8 @@
 
         public IGivenThen<TArgsBuilder, TArgsBuilder> WithAnyValue()
         {
+            //TODO: Simplify: Why not implementing IGivenThen<TArgsBuilder, TArgsBuilder> in this class?
+
             TArgsBuilder result = default;
             return new GivenThenBuilder<TArgsBuilder, TArgsBuilder>(
                 ThenExpressionBuilt,

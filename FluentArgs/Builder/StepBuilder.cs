@@ -10,8 +10,9 @@
     {
         public Step Step { get; set; } = new InitialStep();
 
+        //TODO: public und interface prefix weg
         IGiven<IFluentArgsBuilder> IGivenAppliable<IFluentArgsBuilder>.Given =>
-                new GivenBuilder<IFluentArgsBuilder>(new StepBuilder(), Step, s => new StepBuilder() { Step = s });
+                new GivenBuilder<IFluentArgsBuilder>(() => new StepBuilder(), Step, s => new StepBuilder() { Step = s });
 
         public IParsable Call(Action callback)
         {
@@ -22,6 +23,12 @@
         public IParsable Call(Func<Task> callback)
         {
             var finalStep = new CallStep(Step, new TargetFunction(callback));
+            return new StepCaller(finalStep);
+        }
+
+        public IParsable Invalid()
+        {
+            var finalStep = new InvalidStep(Step);
             return new StepCaller(finalStep);
         }
 
@@ -59,9 +66,11 @@
     internal class StepBuilder<TFunc, TFuncAsync, TParam> :
         IFluentArgsBuilder<TFunc, TFuncAsync, TParam>, IParsable
     {
-        public Step Step { get; set; }
+        public Step Step { get; set; } = new InitialStep();
 
-        public IGiven<IFluentArgsBuilder<TFunc, TFuncAsync, TParam>> Given => throw new NotImplementedException();
+        public IGiven<IFluentArgsBuilder<TFunc, TFuncAsync, TParam>> Given =>
+                new GivenBuilder<IFluentArgsBuilder<TFunc, TFuncAsync, TParam>>(
+                    () => new StepBuilder<TFunc, TFuncAsync, TParam>(), Step, s => new StepBuilder<TFunc, TFuncAsync, TParam>() { Step = s });
 
         public IParsable Call(TFunc callback)
         {
@@ -73,6 +82,11 @@
         {
             var finalStep = new CallStep(Step, new TargetFunction(callback));
             return new StepCaller(finalStep);
+        }
+
+        public IParsable Invalid()
+        {
+            throw new NotImplementedException();
         }
 
         public IFluentArgsBuilder<TFunc, TFuncAsync, TParam> IsOptionalWithDefault(TParam defaultValue)

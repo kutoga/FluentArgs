@@ -31,7 +31,9 @@
 
             [typeof(DateTime)] = s => DateTime.Parse(s, CultureInfo.InvariantCulture),
             [typeof(DateTimeOffset)] = s => DateTimeOffset.Parse(s, CultureInfo.InvariantCulture),
-            [typeof(TimeSpan)] = s => TimeSpan.Parse(s, CultureInfo.InvariantCulture)
+            [typeof(TimeSpan)] = s => TimeSpan.Parse(s, CultureInfo.InvariantCulture),
+
+            [typeof(Uri)] = s => new Uri(s)
         };
 
         public static bool TryGetParser(Type targetType, out Func<string, object>? parser)

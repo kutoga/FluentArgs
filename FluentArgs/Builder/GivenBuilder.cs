@@ -6,20 +6,24 @@
 
     internal class GivenBuilder<TArgsBuilder> : IGiven<TArgsBuilder>
     {
-        private readonly TArgsBuilder argsBuilder;
+        private readonly Func<TArgsBuilder> argsBuilderFactory;
         private readonly Step previousStep;
         private readonly Func<Step, TArgsBuilder> stepWrapper;
 
-        public GivenBuilder(TArgsBuilder argsBuilder, Step previous, Func<Step, TArgsBuilder> stepWrapper)
+        public GivenBuilder(Func<TArgsBuilder> argsBuilderFactory, Step previous, Func<Step, TArgsBuilder> stepWrapper)
         {
-            this.argsBuilder = argsBuilder;
+            this.argsBuilderFactory = argsBuilderFactory;
             this.previousStep = previous;
             this.stepWrapper = stepWrapper;
         }
 
-        public IGivenCommand<TArgsBuilder> Command(string name, params string[] moreNames)
+        public IGivenCommandInitial<TArgsBuilder> Command(string name, params string[] moreNames)
         {
-            throw new NotImplementedException();
+            return new GivenCommandBuilder<TArgsBuilder>(
+                new Name(name, moreNames),
+                argsBuilderFactory,
+                previousStep,
+                stepWrapper);
         }
 
         public IGivenThen<TArgsBuilder, TArgsBuilder> Flag(string name, params string[] moreNames)
@@ -27,7 +31,7 @@
             TArgsBuilder result = default;
             return new GivenThenBuilder<TArgsBuilder, TArgsBuilder>(
                 ThenExpressionBuilt,
-                argsBuilder, //TODO: new builder inside the resulting givenstep
+                argsBuilderFactory(), //TODO: new builder inside the resulting givenstep
                 () => result);
 
             void ThenExpressionBuilt(IParsable parsable)
@@ -41,7 +45,7 @@
 
         public IGivenParameter<TArgsBuilder> Parameter(string name, params string[] moreNames)
         {
-            return new GivenParameterBuilder<TArgsBuilder>(new Name(name, moreNames), argsBuilder, previousStep, stepWrapper);
+            return new GivenParameterBuilder<TArgsBuilder>(new Name(name, moreNames), argsBuilderFactory(), previousStep, stepWrapper);
         }
     }
 }
