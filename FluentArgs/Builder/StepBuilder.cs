@@ -42,9 +42,9 @@
             throw new NotImplementedException();
         }
 
-        IConfigurableParameter<IFluentArgsBuilder<Action<bool>, Func<bool, Task>, bool>, bool> IFluentArgsBuilder.Flag(string name, params string[] moreNames)
+        IConfigurableFlagWithOptionalDescription IFluentArgsBuilder.Flag(string name, params string[] moreNames)
         {
-            throw new NotImplementedException();
+            return new FlagBuilder(s => new StepBuilder<Action<bool>, Func<bool, Task>, bool>() { Step = s }, Step, new Flag(new Name(name, moreNames)));
         }
 
         IConfigurableParameter<IFluentArgsBuilder<Action<TNextParam>, Func<TNextParam, Task>, TNextParam>, TNextParam> IFluentArgsBuilder.Parameter<TNextParam>(string name, params string[] moreNames)
@@ -114,9 +114,9 @@
             throw new NotImplementedException();
         }
 
-        IConfigurableParameter<IFluentArgsBuilder<Func<bool, TFunc>, Func<bool, TFuncAsync>, bool>, bool> IFluentArgsBuilder<TFunc, TFuncAsync, TParam>.Flag(string name, params string[] moreNames)
+        IConfigurableFlagWithOptionalDescription<TFunc, TFuncAsync, TParam> IFluentArgsBuilder<TFunc, TFuncAsync, TParam>.Flag(string name, params string[] moreNames)
         {
-            throw new NotImplementedException();
+            return new FlagBuilder<TFunc, TFuncAsync, TParam>(s => new StepBuilder<Func<bool, TFunc>, Func<bool, TFuncAsync>, bool>() { Step = s }, Step, new Flag(new Name(name, moreNames)));
         }
 
         IConfigurableParameter<IFluentArgsBuilder<Func<TNextParam, TFunc>, Func<TNextParam, TFuncAsync>, TNextParam>, TNextParam> IFluentArgsBuilder<TFunc, TFuncAsync, TParam>.Parameter<TNextParam>(string name, params string[] moreNames)

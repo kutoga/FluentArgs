@@ -6,7 +6,7 @@
 
     public interface IFluentArgsBuilder : IGivenAppliable<IFluentArgsBuilder>
     {
-        IConfigurableParameter<IFluentArgsBuilder<Action<bool>, Func<bool, Task>, bool>, bool>
+        IConfigurableFlagWithOptionalDescription
             Flag(string name, params string[] moreNames);
 
         IConfigurableParameter<IFluentArgsBuilder<Action<TParam>, Func<TParam, Task>, TParam>, TParam>
@@ -24,7 +24,7 @@
 
     public interface IFluentArgsBuilder<TFunc, TFuncAsync, TParam> : IGivenAppliable<IFluentArgsBuilder<TFunc, TFuncAsync, TParam>>
     {
-        IConfigurableParameter<IFluentArgsBuilder<Func<bool, TFunc>, Func<bool, TFuncAsync>, bool>, bool>
+        IConfigurableFlagWithOptionalDescription<TFunc, TFuncAsync, TParam>
             Flag(string name, params string[] moreNames);
 
         IConfigurableParameter<IFluentArgsBuilder<Func<TNextParam, TFunc>, Func<TNextParam, TFuncAsync>, TNextParam>, TNextParam>
