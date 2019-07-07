@@ -9,7 +9,7 @@
     {
     }
 
-    public interface IConfigurableFlagWithOptionalDescription<TFunc, TFuncAsync, TParam> :
+    public interface IConfigurableFlagWithOptionalDescription<TFunc, TFuncAsync> :
         IFluentArgsBuilder<Func<bool, TFunc>, Func<bool, TFuncAsync>, bool>,
         IConfigurableFlag<IFluentArgsBuilder<Func<bool, TFunc>, Func<bool, TFuncAsync>, bool>>
     {

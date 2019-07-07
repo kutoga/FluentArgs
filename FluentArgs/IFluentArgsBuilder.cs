@@ -12,7 +12,7 @@
         IConfigurableParameter<IFluentArgsBuilder<Action<TParam>, Func<TParam, Task>, TParam>, TParam>
             Parameter<TParam>(string name, params string[] moreNames);
 
-        IConfigurableParameter<IFluentArgsBuilder<Action<IReadOnlyList<TParam>>, Func<IReadOnlyList<TParam>, Task>, TParam>, TParam>
+        IConfigurableParameterList<IFluentArgsBuilder<Action<IReadOnlyList<TParam>>, Func<IReadOnlyList<TParam>, Task>, TParam>, TParam>
             ParameterList<TParam>(string name, params string[] moreNames);
 
         IParsable Call(Action callback);
@@ -24,13 +24,13 @@
 
     public interface IFluentArgsBuilder<TFunc, TFuncAsync, TParam> : IGivenAppliable<IFluentArgsBuilder<TFunc, TFuncAsync, TParam>>
     {
-        IConfigurableFlagWithOptionalDescription<TFunc, TFuncAsync, TParam>
+        IConfigurableFlagWithOptionalDescription<TFunc, TFuncAsync>
             Flag(string name, params string[] moreNames);
 
         IConfigurableParameter<IFluentArgsBuilder<Func<TNextParam, TFunc>, Func<TNextParam, TFuncAsync>, TNextParam>, TNextParam>
             Parameter<TNextParam>(string name, params string[] moreNames);
 
-        IConfigurableParameter<IFluentArgsBuilder<Func<IReadOnlyList<TNextParam>, TFunc>, Func<IReadOnlyList<TNextParam>, TFuncAsync>, TNextParam>, TNextParam>
+        IConfigurableParameterList<IFluentArgsBuilder<Func<IReadOnlyList<TNextParam>, TFunc>, Func<IReadOnlyList<TNextParam>, TFuncAsync>, TNextParam>, TNextParam>
             ParameterList<TNextParam>(string name, params string[] moreNames);
 
         IParsable Call(TFunc callback);
@@ -48,7 +48,7 @@
             return builder.Parameter<string>(name, moreNames);
         }
 
-        public static IConfigurableParameter<IFluentArgsBuilder<Action<IReadOnlyList<string>>, Func<IReadOnlyList<string>, Task>, string>, string>
+        public static IConfigurableParameterList<IFluentArgsBuilder<Action<IReadOnlyList<string>>, Func<IReadOnlyList<string>, Task>, string>, string>
             ParameterList(this IFluentArgsBuilder builder, string name, params string[] moreNames)
         {
             return builder.ParameterList<string>(name, moreNames);
@@ -60,7 +60,7 @@
             return builder.Parameter<string>(name, moreNames);
         }
 
-        public static IConfigurableParameter<IFluentArgsBuilder<Func<IReadOnlyList<string>, TFunc>, Func<IReadOnlyList<string>, TFuncAsync>, string>, string>
+        public static IConfigurableParameterList<IFluentArgsBuilder<Func<IReadOnlyList<string>, TFunc>, Func<IReadOnlyList<string>, TFuncAsync>, string>, string>
             ParameterList<TFunc, TFuncAsync, TParam>(this IFluentArgsBuilder<TFunc, TFuncAsync, TParam> builder, string name, params string[] moreNames)
         {
             return builder.ParameterList<string>(name, moreNames);

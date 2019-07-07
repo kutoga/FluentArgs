@@ -57,7 +57,7 @@
                 nextBuilder.Step = new ParameterStep(Step, parameter);
         }
 
-        IConfigurableParameter<IFluentArgsBuilder<Action<IReadOnlyList<TParam1>>, Func<IReadOnlyList<TParam1>, Task>, TParam1>, TParam1> IFluentArgsBuilder.ParameterList<TParam1>(string name, params string[] moreNames)
+        IConfigurableParameterList<IFluentArgsBuilder<Action<IReadOnlyList<TParam1>>, Func<IReadOnlyList<TParam1>, Task>, TParam1>, TParam1> IFluentArgsBuilder.ParameterList<TParam1>(string name, params string[] moreNames)
         {
             throw new NotImplementedException();
         }
@@ -104,17 +104,17 @@
             throw new NotImplementedException();
         }
 
-        public IConfigurableParameter<IFluentArgsBuilder<TFunc, TFuncAsync, TParam>, TParam> WithExamples(TParam example, params TParam[] moreExamples)
+        public IConfigurableParameterList<IFluentArgsBuilder<TFunc, TFuncAsync, TParam>, TParam> WithExamples(TParam example, params TParam[] moreExamples)
         {
             throw new NotImplementedException();
         }
 
-        public IConfigurableParameter<IFluentArgsBuilder<TFunc, TFuncAsync, TParam>, TParam> WithParser(Func<string, TParam> parser)
+        public IConfigurableParameterList<IFluentArgsBuilder<TFunc, TFuncAsync, TParam>, TParam> WithParser(Func<string, TParam> parser)
         {
             throw new NotImplementedException();
         }
 
-        IConfigurableFlagWithOptionalDescription<TFunc, TFuncAsync, TParam> IFluentArgsBuilder<TFunc, TFuncAsync, TParam>.Flag(string name, params string[] moreNames)
+        IConfigurableFlagWithOptionalDescription<TFunc, TFuncAsync> IFluentArgsBuilder<TFunc, TFuncAsync, TParam>.Flag(string name, params string[] moreNames)
         {
             return new FlagBuilder<TFunc, TFuncAsync, TParam>(s => new StepBuilder<Func<bool, TFunc>, Func<bool, TFuncAsync>, bool>() { Step = s }, Step, new Flag(new Name(name, moreNames)));
         }
@@ -129,7 +129,7 @@
                 nextBuilder.Step = new ParameterStep(Step, parameter);
         }
 
-        IConfigurableParameter<IFluentArgsBuilder<Func<IReadOnlyList<TNextParam>, TFunc>, Func<IReadOnlyList<TNextParam>, TFuncAsync>, TNextParam>, TNextParam> IFluentArgsBuilder<TFunc, TFuncAsync, TParam>.ParameterList<TNextParam>(string name, params string[] moreNames)
+        IConfigurableParameterList<IFluentArgsBuilder<Func<IReadOnlyList<TNextParam>, TFunc>, Func<IReadOnlyList<TNextParam>, TFuncAsync>, TNextParam>, TNextParam> IFluentArgsBuilder<TFunc, TFuncAsync, TParam>.ParameterList<TNextParam>(string name, params string[] moreNames)
         {
             throw new NotImplementedException();
         }

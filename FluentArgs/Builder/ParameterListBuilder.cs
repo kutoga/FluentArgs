@@ -1,9 +1,11 @@
 ﻿namespace FluentArgs.Builder
 {
     using System;
+    using System.Collections.Immutable;
+    using System.Linq;
     using FluentArgs.Description;
 
-    internal class ParameterListBuilder<TArgsBuilder, TParam> : IConfigurableParameter<TArgsBuilder, TParam>
+    internal class ParameterListBuilder<TArgsBuilder, TParam> : IConfigurableParameterList<TArgsBuilder, TParam>
     {
         private readonly Action<ParameterList> parameterListBuilt;
         private readonly ParameterList parameterList;
@@ -55,6 +57,12 @@
         public IConfigurableParameterWithRequirement<TArgsBuilder, TParam> WithParser(Func<string, TParam> parser)
         {
             parameterList.Parser = s => parser(s);
+            return this;
+        }
+
+        public IConfigurableParameterList<TArgsBuilder, TParam> WithSeparator(string separator, params string[] moreSeparators)
+        {
+            parameterList.Separators = new[] { separator }.Concat(moreSeparators).ToImmutableHashSet();
             return this;
         }
 

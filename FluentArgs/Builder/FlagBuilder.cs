@@ -32,7 +32,7 @@
             return Build().Call(callback);
         }
 
-        public IConfigurableFlagWithOptionalDescription<Action<bool>, Func<bool, Task>, bool> Flag(string name, params string[] moreNames)
+        public IConfigurableFlagWithOptionalDescription<Action<bool>, Func<bool, Task>> Flag(string name, params string[] moreNames)
         {
             return Build().Flag(name, moreNames);
         }
@@ -47,7 +47,7 @@
             return Build().Parameter<TNextParam>(name, moreNames);
         }
 
-        public IConfigurableParameter<IFluentArgsBuilder<Func<IReadOnlyList<TNextParam>, Action<bool>>, Func<IReadOnlyList<TNextParam>, Func<bool, Task>>, TNextParam>, TNextParam> ParameterList<TNextParam>(string name, params string[] moreNames)
+        public IConfigurableParameterList<IFluentArgsBuilder<Func<IReadOnlyList<TNextParam>, Action<bool>>, Func<IReadOnlyList<TNextParam>, Func<bool, Task>>, TNextParam>, TNextParam> ParameterList<TNextParam>(string name, params string[] moreNames)
         {
             return Build().ParameterList<TNextParam>(name, moreNames);
         }
@@ -64,7 +64,7 @@
         }
     }
 
-    internal class FlagBuilder<TFunc, TFuncAsync, TParam> : IConfigurableFlagWithOptionalDescription<TFunc, TFuncAsync, TParam>
+    internal class FlagBuilder<TFunc, TFuncAsync, TParam> : IConfigurableFlagWithOptionalDescription<TFunc, TFuncAsync>
     {
         private readonly Func<Step, IFluentArgsBuilder<Func<bool, TFunc>, Func<bool, TFuncAsync>, bool>> stepWrapper;
         private readonly Step previousStep;
@@ -89,7 +89,7 @@
             return Build().Call(callback);
         }
 
-        public IConfigurableFlagWithOptionalDescription<Func<bool, TFunc>, Func<bool, TFuncAsync>, bool> Flag(string name, params string[] moreNames)
+        public IConfigurableFlagWithOptionalDescription<Func<bool, TFunc>, Func<bool, TFuncAsync>> Flag(string name, params string[] moreNames)
         {
             return Build().Flag(name, moreNames);
         }
@@ -104,7 +104,7 @@
             return Build().Parameter<TNextParam>(name, moreNames);
         }
 
-        public IConfigurableParameter<IFluentArgsBuilder<Func<IReadOnlyList<TNextParam>, Func<bool, TFunc>>, Func<IReadOnlyList<TNextParam>, Func<bool, TFuncAsync>>, TNextParam>, TNextParam> ParameterList<TNextParam>(string name, params string[] moreNames)
+        public IConfigurableParameterList<IFluentArgsBuilder<Func<IReadOnlyList<TNextParam>, Func<bool, TFunc>>, Func<IReadOnlyList<TNextParam>, Func<bool, TFuncAsync>>, TNextParam>, TNextParam> ParameterList<TNextParam>(string name, params string[] moreNames)
         {
             return Build().ParameterList<TNextParam>(name, moreNames);
         }

@@ -2,9 +2,8 @@
 {
     internal class Flag
     {
-        public Flag(Name name, string? description = null)
+        public Flag(Name name)
         {
-            Description = description;
             Name = name;
         }
 
