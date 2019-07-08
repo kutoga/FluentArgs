@@ -1,11 +1,29 @@
 ﻿namespace FluentArgs
 {
+    using System;
+    using System.Collections.Generic;
     using System.Globalization;
     using System.Linq;
 
-    public interface IConfigurableParameterList<TArgsBuilder, TParam> : IConfigurableParameter<TArgsBuilder, TParam>
+    public interface IConfigurableParameterList<TArgsBuilder, TParam>
     {
+        IConfigurableParameterList<TArgsBuilder, TParam> WithDescription(string description);
+
+        IConfigurableParameterList<TArgsBuilder, TParam> WithExamples(IReadOnlyCollection<TParam> example, params IReadOnlyCollection<TParam>[] moreExamples);
+
+        IConfigurableParameterList<TArgsBuilder, TParam> WithExamples(string example, params string[] moreExamples);
+
+        IConfigurableParameterList<TArgsBuilder, TParam> WithParser(Func<string, TParam> parser);
+
+        TArgsBuilder IsOptional();
+
+        TArgsBuilder IsOptionalWithDefault(IReadOnlyCollection<TParam> defaultValue);
+
+        TArgsBuilder IsRequired();
+
         IConfigurableParameterList<TArgsBuilder, TParam> WithSeparator(string separator, params string[] moreSeparators);
+
+        TArgsBuilder IsOptionalWithEmptyDefault();
     }
 
     public static class IConfigurableParameterListExtensions

@@ -105,7 +105,11 @@
                             .ElseIsInvalid()
                         .Invalid())
                     .ElseIgnore()
-                .Call(_ => throw new Exception("blabla"))
+                .Call(_ =>
+                {
+                    throw new Exception("blabla");
+                    return;
+                })
                 .ParseAsync(args);
 
 

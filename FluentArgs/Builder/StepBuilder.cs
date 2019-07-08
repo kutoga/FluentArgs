@@ -16,13 +16,25 @@
 
         public IParsable Call(Action callback)
         {
-            var finalStep = new CallStep(Step, new TargetFunction(callback));
+            var finalStep = new CallStep(Step, new TargetFunction(callback, false));
             return new StepCaller(finalStep);
         }
 
         public IParsable Call(Func<Task> callback)
         {
-            var finalStep = new CallStep(Step, new TargetFunction(callback));
+            var finalStep = new CallStep(Step, new TargetFunction(callback, false));
+            return new StepCaller(finalStep);
+        }
+
+        public IParsable Call(Action<IReadOnlyList<string>> callbackWithAdditionalArgs)
+        {
+            var finalStep = new CallStep(Step, new TargetFunction(callbackWithAdditionalArgs, true));
+            return new StepCaller(finalStep);
+        }
+
+        public IParsable Call(Func<IReadOnlyList<string>, Task> callbackWithAdditionalArgs)
+        {
+            var finalStep = new CallStep(Step, new TargetFunction(callbackWithAdditionalArgs, true));
             return new StepCaller(finalStep);
         }
 
@@ -57,9 +69,14 @@
                 nextBuilder.Step = new ParameterStep(Step, parameter);
         }
 
-        IConfigurableParameterList<IFluentArgsBuilder<Action<IReadOnlyList<TParam1>>, Func<IReadOnlyList<TParam1>, Task>>, TParam1> IFluentArgsBuilder.ParameterList<TParam1>(string name, params string[] moreNames)
+        IConfigurableParameterList<IFluentArgsBuilder<Action<IReadOnlyList<TNextParam>>, Func<IReadOnlyList<TNextParam>, Task>>, TNextParam> IFluentArgsBuilder.ParameterList<TNextParam>(string name, params string[] moreNames)
         {
-            throw new NotImplementedException();
+            var nextBuilder = new StepBuilder<Action<IReadOnlyList<TNextParam>>, Func<IReadOnlyList<TNextParam>, Task>>();
+            return new ParameterListBuilder<IFluentArgsBuilder<Action<IReadOnlyList<TNextParam>>, Func<IReadOnlyList<TNextParam>, Task>>, TNextParam>(
+                ParameterListBuilt, nextBuilder, new Name(name, moreNames));
+
+            void ParameterListBuilt(ParameterList parameterList) =>
+                nextBuilder.Step = new ParameterListStep(Step, parameterList);
         }
     }
 
@@ -74,13 +91,25 @@
 
         public IParsable Call(TFunc callback)
         {
-            var finalStep = new CallStep(Step, new TargetFunction(callback));
+            var finalStep = new CallStep(Step, new TargetFunction(callback, false));
             return new StepCaller(finalStep);
         }
 
         public IParsable Call(TFuncAsync callback)
         {
-            var finalStep = new CallStep(Step, new TargetFunction(callback));
+            var finalStep = new CallStep(Step, new TargetFunction(callback, false));
+            return new StepCaller(finalStep);
+        }
+
+        public IParsable Call(Func<IReadOnlyList<string>, TFunc> callbackWithAdditionalArgs)
+        {
+            var finalStep = new CallStep(Step, new TargetFunction(callbackWithAdditionalArgs, true));
+            return new StepCaller(finalStep);
+        }
+
+        public IParsable Call(Func<IReadOnlyList<string>, TFuncAsync> callbackWithAdditionalArgs)
+        {
+            var finalStep = new CallStep(Step, new TargetFunction(callbackWithAdditionalArgs, true));
             return new StepCaller(finalStep);
         }
 

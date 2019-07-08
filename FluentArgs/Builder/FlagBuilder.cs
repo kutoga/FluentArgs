@@ -32,6 +32,16 @@
             return Build().Call(callback);
         }
 
+        public IParsable Call(Func<IReadOnlyList<string>, Action<bool>> callbackWithAdditionalArgs)
+        {
+            return Build().Call(callbackWithAdditionalArgs);
+        }
+
+        public IParsable Call(Func<IReadOnlyList<string>, Func<bool, Task>> callbackWithAdditionalArgs)
+        {
+            return Build().Call(callbackWithAdditionalArgs);
+        }
+
         public IConfigurableFlagWithOptionalDescription<Action<bool>, Func<bool, Task>> Flag(string name, params string[] moreNames)
         {
             return Build().Flag(name, moreNames);
@@ -87,6 +97,16 @@
         public IParsable Call(Func<bool, TFuncAsync> callback)
         {
             return Build().Call(callback);
+        }
+
+        public IParsable Call(Func<IReadOnlyList<string>, Func<bool, TFunc>> callbackWithAdditionalArgs)
+        {
+            return Build().Call(callbackWithAdditionalArgs);
+        }
+
+        public IParsable Call(Func<IReadOnlyList<string>, Func<bool, TFuncAsync>> callbackWithAdditionalArgs)
+        {
+            return Build().Call(callbackWithAdditionalArgs);
         }
 
         public IConfigurableFlagWithOptionalDescription<Func<bool, TFunc>, Func<bool, TFuncAsync>> Flag(string name, params string[] moreNames)

@@ -17,7 +17,11 @@
 
         IParsable Call(Action callback);
 
+        IParsable Call(Action<IReadOnlyList<string>> callbackWithAdditionalArgs);
+
         IParsable Call(Func<Task> callback);
+
+        IParsable Call(Func<IReadOnlyList<string>, Task> callbackWithAdditionalArgs);
 
         IParsable Invalid();
     }
@@ -35,7 +39,11 @@
 
         IParsable Call(TFunc callback);
 
+        IParsable Call(Func<IReadOnlyList<string>, TFunc> callbackWithAdditionalArgs);
+
         IParsable Call(TFuncAsync callback);
+
+        IParsable Call(Func<IReadOnlyList<string>, TFuncAsync> callbackWithAdditionalArgs);
 
         IParsable Invalid();
     }

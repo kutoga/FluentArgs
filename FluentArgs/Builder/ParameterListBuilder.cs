@@ -1,6 +1,7 @@
 ﻿namespace FluentArgs.Builder
 {
     using System;
+    using System.Collections.Generic;
     using System.Collections.Immutable;
     using System.Linq;
     using FluentArgs.Description;
@@ -24,11 +25,19 @@
             return Finalize();
         }
 
-        public TArgsBuilder IsOptionalWithDefault(TParam defaultValue)
+        public TArgsBuilder IsOptionalWithDefault(IReadOnlyCollection<TParam> defaultValue)
         {
             parameterList.IsRequired = false;
             parameterList.HasDefaultValue = true;
             parameterList.DefaultValue = defaultValue;
+            return Finalize();
+        }
+
+        public TArgsBuilder IsOptionalWithEmptyDefault()
+        {
+            parameterList.IsRequired = false;
+            parameterList.HasDefaultValue = true;
+            parameterList.DefaultValue = Array.CreateInstance(parameterList.Type, 0);
             return Finalize();
         }
 
@@ -38,23 +47,23 @@
             return Finalize();
         }
 
-        public IConfigurableParameter<TArgsBuilder, TParam> WithDescription(string description)
+        public IConfigurableParameterList<TArgsBuilder, TParam> WithDescription(string description)
         {
             parameterList.Description = description;
             return this;
         }
 
-        public IConfigurableParameter<TArgsBuilder, TParam> WithExamples(TParam example, params TParam[] moreExamples)
+        public IConfigurableParameterList<TArgsBuilder, TParam> WithExamples(IReadOnlyCollection<TParam> example, params IReadOnlyCollection<TParam>[] moreExamples)
         {
             throw new NotImplementedException();
         }
 
-        public IConfigurableParameter<TArgsBuilder, TParam> WithExamples(string example, params string[] moreExamples)
+        public IConfigurableParameterList<TArgsBuilder, TParam> WithExamples(string example, params string[] moreExamples)
         {
             throw new NotImplementedException();
         }
 
-        public IConfigurableParameter<TArgsBuilder, TParam> WithParser(Func<string, TParam> parser)
+        public IConfigurableParameterList<TArgsBuilder, TParam> WithParser(Func<string, TParam> parser)
         {
             parameterList.Parser = s => parser(s);
             return this;

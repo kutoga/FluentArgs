@@ -3,7 +3,7 @@
     using System.Collections.Generic;
     using System.Linq;
 
-    internal static class Methods
+    internal static class Method
     {
         private static object InvokeMethod(object targetMethod, IEnumerable<object> arguments)
         {
