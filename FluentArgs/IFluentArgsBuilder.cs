@@ -4,7 +4,9 @@
     using System.Collections.Generic;
     using System.Threading.Tasks;
 
-    public interface IFluentArgsBuilder : IGivenAppliable<IFluentArgsBuilder>
+    public interface IFluentArgsBuilder :
+        IGivenAppliable<IFluentArgsBuilder>,
+        ICallable<Action, Func<Task>>
     {
         IConfigurableFlagWithOptionalDescription
             Flag(string name, params string[] moreNames);
@@ -15,18 +17,14 @@
         IConfigurableParameterList<IFluentArgsBuilder<Action<IReadOnlyList<TParam>>, Func<IReadOnlyList<TParam>, Task>>, TParam>
             ParameterList<TParam>(string name, params string[] moreNames);
 
-        IParsable Call(Action callback);
-
-        IParsable Call(Action<IReadOnlyList<string>> callbackWithAdditionalArgs);
-
-        IParsable Call(Func<Task> callback);
-
-        IParsable Call(Func<IReadOnlyList<string>, Task> callbackWithAdditionalArgs);
+        IConfigurableRemainingArguments<Action<IReadOnlyList<TParam>>, Func<IReadOnlyList<TParam>, Task>, TParam> LoadRemainingArguments<TParam>();
 
         IParsable Invalid();
     }
 
-    public interface IFluentArgsBuilder<TFunc, TFuncAsync> : IGivenAppliable<IFluentArgsBuilder<TFunc, TFuncAsync>>
+    public interface IFluentArgsBuilder<TFunc, TFuncAsync> :
+        IGivenAppliable<IFluentArgsBuilder<TFunc, TFuncAsync>>,
+        ICallable<TFunc, TFuncAsync>
     {
         IConfigurableFlagWithOptionalDescription<TFunc, TFuncAsync>
             Flag(string name, params string[] moreNames);
@@ -37,13 +35,7 @@
         IConfigurableParameterList<IFluentArgsBuilder<Func<IReadOnlyList<TNextParam>, TFunc>, Func<IReadOnlyList<TNextParam>, TFuncAsync>>, TNextParam>
             ParameterList<TNextParam>(string name, params string[] moreNames);
 
-        IParsable Call(TFunc callback);
-
-        IParsable Call(Func<IReadOnlyList<string>, TFunc> callbackWithAdditionalArgs);
-
-        IParsable Call(TFuncAsync callback);
-
-        IParsable Call(Func<IReadOnlyList<string>, TFuncAsync> callbackWithAdditionalArgs);
+        IConfigurableRemainingArguments<Func<IReadOnlyList<TParam>, TFunc>, Func<IReadOnlyList<TParam>, TFuncAsync>, TParam> LoadRemainingArguments<TParam>();
 
         IParsable Invalid();
     }
@@ -62,6 +54,12 @@
             return builder.ParameterList<string>(name, moreNames);
         }
 
+        public static IConfigurableRemainingArguments<Action<IReadOnlyList<string>>, Func<IReadOnlyList<string>, Task>, string>
+            LoadRemainingArguments(this IFluentArgsBuilder builder)
+        {
+            return builder.LoadRemainingArguments<string>();
+        }
+
         public static IConfigurableParameter<IFluentArgsBuilder<Func<string, TFunc>, Func<string, TFuncAsync>>, string>
             Parameter<TFunc, TFuncAsync>(this IFluentArgsBuilder<TFunc, TFuncAsync> builder, string name, params string[] moreNames)
         {
@@ -72,6 +70,12 @@
             ParameterList<TFunc, TFuncAsync>(this IFluentArgsBuilder<TFunc, TFuncAsync> builder, string name, params string[] moreNames)
         {
             return builder.ParameterList<string>(name, moreNames);
+        }
+
+        public static IConfigurableRemainingArguments<Func<IReadOnlyList<string>, TFunc>, Func<IReadOnlyList<string>, TFuncAsync>, string>
+            LoadRemainingArguments<TFunc, TFuncAsync>(this IFluentArgsBuilder<TFunc, TFuncAsync> builder)
+        {
+            return builder.LoadRemainingArguments<string>();
         }
     }
 }
