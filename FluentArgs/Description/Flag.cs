@@ -7,6 +7,8 @@
             Name = name;
         }
 
+        public string? Description { get; set; }
+
         public Name Name { get; }
     }
 }

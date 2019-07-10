@@ -25,28 +25,28 @@
         }
 
         public static TGiven Then<TGiven, TParam>(
-            this IGivenThen<IFluentArgsBuilder<Action<TParam>, Func<TParam, Task>, TParam>, TGiven> givenThen,
+            this IGivenThen<IFluentArgsBuilder<Action<TParam>, Func<TParam, Task>>, TGiven> givenThen,
             Action<TParam> callback)
         {
             return givenThen.Then(b => b.Call(callback));
         }
 
         public static TGiven Then<TGiven, TParam>(
-            this IGivenThen<IFluentArgsBuilder<Action<TParam>, Func<TParam, Task>, TParam>, TGiven> givenThen,
+            this IGivenThen<IFluentArgsBuilder<Action<TParam>, Func<TParam, Task>>, TGiven> givenThen,
             Func<TParam, Task> callback)
         {
             return givenThen.Then(b => b.Call(callback));
         }
 
         public static TGiven Then<TGiven, TNextParam, TFunc, TFuncAsync>(
-            this IGivenThen<IFluentArgsBuilder<Func<TNextParam, TFunc>, Func<TNextParam, TFuncAsync>, TNextParam>,TGiven> givenThen,
+            this IGivenThen<IFluentArgsBuilder<Func<TNextParam, TFunc>, Func<TNextParam, TFuncAsync>>, TGiven> givenThen,
             Func<TNextParam, TFunc> callback)
         {
             return givenThen.Then(b => b.Call(callback));
         }
 
         public static TGiven Then<TGiven, TNextParam, TFunc, TFuncAsync>(
-            this IGivenThen<IFluentArgsBuilder<Func<TNextParam, TFunc>, Func<TNextParam, TFuncAsync>, TNextParam>, TGiven> givenThen,
+            this IGivenThen<IFluentArgsBuilder<Func<TNextParam, TFunc>, Func<TNextParam, TFuncAsync>>, TGiven> givenThen,
             Func<TNextParam, TFuncAsync> callback)
         {
             return givenThen.Then(b => b.Call(callback));

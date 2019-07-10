@@ -1,6 +1,7 @@
 ﻿namespace FluentArgs.Execution
 {
     using System;
+    using System.Linq;
     using System.Threading.Tasks;
     using FluentArgs.Description;
 
@@ -16,7 +17,15 @@
 
         public override Task Execute(State state)
         {
-            var result = Reflection.Methods.InvokeWrappedMethod(targetFunction.Target, state.GetParameters(), true);
+            var parameters = state.GetParameters();
+            if (targetFunction.CallWithAdditionalArgs)
+            {
+                parameters = parameters
+                    .Concat(new[] { state.Arguments.ToArray() })
+                    .ToList();
+            }
+
+            var result = Reflection.Method.InvokeWrappedMethod(targetFunction.Target, parameters, true);
             if (result is null)
             {
                 return Task.CompletedTask;
