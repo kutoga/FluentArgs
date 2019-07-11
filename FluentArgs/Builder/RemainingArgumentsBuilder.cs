@@ -1,24 +1,43 @@
 ﻿namespace FluentArgs.Builder
 {
     using System;
-    using System.Collections.Generic;
-    using System.Text;
+    using FluentArgs.Description;
+    using FluentArgs.Execution;
 
     internal class RemainingArgumentsBuilder<TFunc, TFuncAsync, TParam> : IConfigurableRemainingArguments<TFunc, TFuncAsync, TParam>
     {
-        public IParsable Call(TFunc callback)
+        private readonly Func<Step, ICallable<TFunc, TFuncAsync>> stepWrapper;
+        private readonly Step previousStep;
+        private readonly RemainingArguments remainingArguments;
+
+        public RemainingArgumentsBuilder(Func<Step, ICallable<TFunc, TFuncAsync>> stepWrapper, Step previousStep) //TODO: inconsistent naming previous vs previousStep
         {
+            this.stepWrapper = stepWrapper;
+            this.previousStep = previousStep;
+            remainingArguments = new RemainingArguments(typeof(TParam));
+        }
+
+        private ICallable<TFunc, TFuncAsync> Finalize()
+        {
+            var step = new RemainingArgumentsStep(previousStep, remainingArguments);
+            return stepWrapper(step);
+        }
+
+        public IBuildable Call(TFunc callback)
+        {
+            return Finalize().Call(callback);
             throw new NotImplementedException();
         }
 
-        public IParsable Call(TFuncAsync callback)
+        public IBuildable Call(TFuncAsync callback)
         {
-            throw new NotImplementedException();
+            return Finalize().Call(callback);
         }
 
         public IConfigurableRemainingArguments<TFunc, TFuncAsync, TParam> WithDescription(string description)
         {
-            throw new NotImplementedException();
+            remainingArguments.Description = description;
+            return this;
         }
 
         public IConfigurableRemainingArguments<TFunc, TFuncAsync, TParam> WithExamples(TParam example, params TParam[] moreExamples)
@@ -33,7 +52,8 @@
 
         public IConfigurableRemainingArguments<TFunc, TFuncAsync, TParam> WithParser(Func<string, TParam> parser)
         {
-            throw new NotImplementedException();
+            remainingArguments.Parser = s => parser(s);
+            return this;
         }
     }
 }

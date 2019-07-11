@@ -3,24 +3,13 @@
     using System.Threading.Tasks;
     using FluentArgs.Execution;
 
-    internal class StepCaller : IParsableFromState
+    internal class FluentArgsDefinition : IParsableFromState
     {
-        private readonly Step step;
+        private readonly Step initialStep;
 
-        public StepCaller(Step step)
+        public FluentArgsDefinition(Step initialStep)
         {
-            this.step = step;
-        }
-
-        private Step GetInitialStep()
-        {
-            var step = this.step;
-            while (step.Previous != null)
-            {
-                step = step.Previous;
-            }
-
-            return step;
+            this.initialStep = initialStep;
         }
 
         public void Parse(string[] args)
@@ -35,7 +24,6 @@
 
         public Task ParseFromState(State state)
         {
-            var initialStep = GetInitialStep();
             return initialStep.Execute(state);
         }
     }

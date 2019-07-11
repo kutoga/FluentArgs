@@ -1,9 +1,11 @@
-﻿namespace FluentArgs
+﻿using System.Threading.Tasks;
+
+namespace FluentArgs
 {
     public interface ICallable<TFunc, TFuncAsync>
     {
-        IParsable Call(TFunc callback);
+        IBuildable Call(TFunc callback);
 
-        IParsable Call(TFuncAsync callback);
+        IBuildable Call(TFuncAsync callback);
     }
 }

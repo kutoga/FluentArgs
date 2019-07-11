@@ -15,9 +15,9 @@
             this.result = result;
         }
 
-        public TGiven Then(Func<TArgsBuilder, IParsable> argumentBuilder)
+        public TGiven Then(Func<TArgsBuilder, IBuildable> argumentBuilder)
         {
-            thenExpressionBuilt(argumentBuilder(argsBuilder));
+            thenExpressionBuilt(argumentBuilder(argsBuilder).Build());
             return result();
         }
     }

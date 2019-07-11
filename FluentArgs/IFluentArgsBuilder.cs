@@ -19,7 +19,7 @@
 
         IConfigurableRemainingArguments<Action<IReadOnlyList<TParam>>, Func<IReadOnlyList<TParam>, Task>, TParam> LoadRemainingArguments<TParam>();
 
-        IParsable Invalid();
+        IBuildable Invalid();
     }
 
     public interface IFluentArgsBuilder<TFunc, TFuncAsync> :
@@ -37,7 +37,7 @@
 
         IConfigurableRemainingArguments<Func<IReadOnlyList<TParam>, TFunc>, Func<IReadOnlyList<TParam>, TFuncAsync>, TParam> LoadRemainingArguments<TParam>();
 
-        IParsable Invalid();
+        IBuildable Invalid();
     }
 
     public static class IFluentArgsBuilderExtensions
