@@ -6,7 +6,7 @@
     using FluentArgs.Description;
     using FluentArgs.Execution;
 
-    internal class StepBuilder : IFluentArgsBuilder
+    internal class StepBuilder : IInitialFluentArgsBuilder
     {
         public Step Step { get; set; } = new InitialStep();
 
@@ -33,6 +33,26 @@
         {
             return new RemainingArgumentsBuilder<Action<IReadOnlyList<TParam>>, Func<IReadOnlyList<TParam>, Task>, TParam>(
                 s => new StepBuilder<Action<IReadOnlyList<TParam>>, Func<IReadOnlyList<TParam>, Task>> { Step = s }, Step);
+        }
+
+        public IInitialFluentArgsBuilder RegisterHelpFlag(string name, params string[] moreNames)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IInitialFluentArgsBuilder WarnOnDuplicateNames()
+        {
+            throw new NotImplementedException();
+        }
+
+        public IInitialFluentArgsBuilder WarnOnNonMinusStartingNames()
+        {
+            throw new NotImplementedException();
+        }
+
+        public IInitialFluentArgsBuilder WithApplicationDescription(string description)
+        {
+            throw new NotImplementedException();
         }
 
         IConfigurableFlagWithOptionalDescription IFluentArgsBuilder.Flag(string name, params string[] moreNames)
