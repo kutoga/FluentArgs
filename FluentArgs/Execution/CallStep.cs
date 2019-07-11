@@ -17,15 +17,7 @@
 
         public override Task Execute(State state)
         {
-            var parameters = state.GetParameters();
-            if (targetFunction.CallWithAdditionalArgs)
-            {
-                parameters = parameters
-                    .Concat(new[] { state.Arguments.ToArray() })
-                    .ToList();
-            }
-
-            var result = Reflection.Method.InvokeWrappedMethod(targetFunction.Target, parameters, true);
+            var result = Reflection.Method.InvokeWrappedMethod(targetFunction.Target, state.GetParameters(), true);
             if (result is null)
             {
                 return Task.CompletedTask;

@@ -6,7 +6,7 @@
     using FluentArgs.Description;
     using FluentArgs.Execution;
 
-    internal class StepBuilder : IFluentArgsBuilder, IParsable
+    internal class StepBuilder : IFluentArgsBuilder
     {
         public Step Step { get; set; } = new InitialStep();
 
@@ -14,49 +14,30 @@
         IGiven<IFluentArgsBuilder> IGivenAppliable<IFluentArgsBuilder>.Given =>
                 new GivenBuilder<IFluentArgsBuilder>(() => new StepBuilder(), Step, s => new StepBuilder() { Step = s });
 
-        public IParsable Call(Action callback)
+        public IBuildable Call(Action callback)
         {
-            var finalStep = new CallStep(Step, new TargetFunction(callback, false));
-            return new StepCaller(finalStep);
+            return new FinalBuilder(new CallStep(Step, new TargetFunction(callback)));
         }
 
-        public IParsable Call(Func<Task> callback)
+        public IBuildable Call(Func<Task> callback)
         {
-            var finalStep = new CallStep(Step, new TargetFunction(callback, false));
-            return new StepCaller(finalStep);
+            return new FinalBuilder(new CallStep(Step, new TargetFunction(callback)));
         }
 
-        public IParsable Call(Action<IReadOnlyList<string>> callbackWithAdditionalArgs)
-        {
-            var finalStep = new CallStep(Step, new TargetFunction(callbackWithAdditionalArgs, true));
-            return new StepCaller(finalStep);
-        }
-
-        public IParsable Call(Func<IReadOnlyList<string>, Task> callbackWithAdditionalArgs)
-        {
-            var finalStep = new CallStep(Step, new TargetFunction(callbackWithAdditionalArgs, true));
-            return new StepCaller(finalStep);
-        }
-
-        public IParsable Invalid()
-        {
-            var finalStep = new InvalidStep(Step);
-            return new StepCaller(finalStep);
-        }
-
-        public void Parse(string[] args)
+        public IBuildable Invalid()
         {
             throw new NotImplementedException();
         }
 
-        public Task ParseAsync(string[] args)
+        public IConfigurableRemainingArguments<Action<IReadOnlyList<TParam>>, Func<IReadOnlyList<TParam>, Task>, TParam> LoadRemainingArguments<TParam>()
         {
-            throw new NotImplementedException();
+            return new RemainingArgumentsBuilder<Action<IReadOnlyList<TParam>>, Func<IReadOnlyList<TParam>, Task>, TParam>(
+                s => new StepBuilder<Action<IReadOnlyList<TParam>>, Func<IReadOnlyList<TParam>, Task>> { Step = s }, Step);
         }
 
         IConfigurableFlagWithOptionalDescription IFluentArgsBuilder.Flag(string name, params string[] moreNames)
         {
-            return new FlagBuilder(s => new StepBuilder<Action<bool>, Func<bool, Task>>() { Step = s }, Step, new Flag(new Name(name, moreNames)));
+            return new FlagBuilder(s => new StepBuilder<Action<bool>, Func<bool, Task>> { Step = s }, Step, new Flag(new Name(name, moreNames)));
         }
 
         IConfigurableParameter<IFluentArgsBuilder<Action<TNextParam>, Func<TNextParam, Task>>, TNextParam> IFluentArgsBuilder.Parameter<TNextParam>(string name, params string[] moreNames)
@@ -80,8 +61,7 @@
         }
     }
 
-    internal class StepBuilder<TFunc, TFuncAsync> :
-        IFluentArgsBuilder<TFunc, TFuncAsync>, IParsable
+    internal class StepBuilder<TFunc, TFuncAsync> : IFluentArgsBuilder<TFunc, TFuncAsync>
     {
         public Step Step { get; set; } = new InitialStep();
 
@@ -89,33 +69,25 @@
                 new GivenBuilder<IFluentArgsBuilder<TFunc, TFuncAsync>>(
                     () => new StepBuilder<TFunc, TFuncAsync>(), Step, s => new StepBuilder<TFunc, TFuncAsync>() { Step = s });
 
-        public IParsable Call(TFunc callback)
+        public IBuildable Call(TFunc callback)
         {
-            var finalStep = new CallStep(Step, new TargetFunction(callback, false));
-            return new StepCaller(finalStep);
+            return new FinalBuilder(new CallStep(Step, new TargetFunction(callback)));
         }
 
-        public IParsable Call(TFuncAsync callback)
+        public IBuildable Call(TFuncAsync callback)
         {
-            var finalStep = new CallStep(Step, new TargetFunction(callback, false));
-            return new StepCaller(finalStep);
+            return new FinalBuilder(new CallStep(Step, new TargetFunction(callback)));
         }
 
-        public IParsable Call(Func<IReadOnlyList<string>, TFunc> callbackWithAdditionalArgs)
-        {
-            var finalStep = new CallStep(Step, new TargetFunction(callbackWithAdditionalArgs, true));
-            return new StepCaller(finalStep);
-        }
-
-        public IParsable Call(Func<IReadOnlyList<string>, TFuncAsync> callbackWithAdditionalArgs)
-        {
-            var finalStep = new CallStep(Step, new TargetFunction(callbackWithAdditionalArgs, true));
-            return new StepCaller(finalStep);
-        }
-
-        public IParsable Invalid()
+        public IBuildable Invalid()
         {
             throw new NotImplementedException();
+        }
+
+        public IConfigurableRemainingArguments<Func<IReadOnlyList<TParam>, TFunc>, Func<IReadOnlyList<TParam>, TFuncAsync>, TParam> LoadRemainingArguments<TParam>()
+        {
+            return new RemainingArgumentsBuilder<Func<IReadOnlyList<TParam>, TFunc>, Func<IReadOnlyList<TParam>, TFuncAsync>, TParam>(
+                s => new StepBuilder<Func<IReadOnlyList<TParam>, TFunc>, Func<IReadOnlyList<TParam>, TFuncAsync>> { Step = s }, Step);
         }
 
         public void Parse(string[] args)
@@ -130,7 +102,12 @@
 
         IConfigurableFlagWithOptionalDescription<TFunc, TFuncAsync> IFluentArgsBuilder<TFunc, TFuncAsync>.Flag(string name, params string[] moreNames)
         {
-            return new FlagBuilder<TFunc, TFuncAsync>(s => new StepBuilder<Func<bool, TFunc>, Func<bool, TFuncAsync>>() { Step = s }, Step, new Flag(new Name(name, moreNames)));
+            return new FlagBuilder<TFunc, TFuncAsync>(s => new StepBuilder<Func<bool, TFunc>, Func<bool, TFuncAsync>> { Step = s }, Step, new Flag(new Name(name, moreNames)));
+        }
+
+        IBuildable IFluentArgsBuilder<TFunc, TFuncAsync>.Invalid()
+        {
+            throw new NotImplementedException();
         }
 
         IConfigurableParameter<IFluentArgsBuilder<Func<TNextParam, TFunc>, Func<TNextParam, TFuncAsync>>, TNextParam> IFluentArgsBuilder<TFunc, TFuncAsync>.Parameter<TNextParam>(string name, params string[] moreNames)

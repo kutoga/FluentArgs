@@ -2,14 +2,11 @@
 {
     internal class TargetFunction
     {
-        public TargetFunction(object target, bool callWithAdditionalArgs)
+        public TargetFunction(object target)
         {
             Target = target;
-            CallWithAdditionalArgs = callWithAdditionalArgs; //TODO: bad naming
         }
 
         public object Target { get; }
-
-        public bool CallWithAdditionalArgs { get; }
     }
 }

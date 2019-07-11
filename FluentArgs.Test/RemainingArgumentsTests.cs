@@ -5,14 +5,15 @@
     using FluentAssertions;
     using Xunit;
 
-    public static class CallWithAdditionalArgumentsTests
+    public static class RemainingArgumentsTests
     {
         [Fact]
-        public static void GivenNoParametersAreDefined_AllParametersShouldBeAdditionalArguments()
+        public static void GivenNoParametersAreDefined_AllParametersShouldBeRemainingArguments()
         {
             var args = new[] { "-x", "a", "-y", "b" };
             IReadOnlyList<string>? parsedArgs = default;
             var builder = FluentArgsBuilder.New()
+                .LoadRemainingArguments()
                 .Call(args => parsedArgs = args);
 
             builder.Parse(args);
@@ -21,11 +22,12 @@
         }
 
         [Fact]
-        public static void GivenNoParametersAreDefined_AllParametersShouldBeAdditionalArgumentsWhenCalledAsync()
+        public static void GivenNoParametersAreDefined_AllParametersShouldBeRemainingArgumentsWhenCalledAsync()
         {
             var args = new[] { "-x", "a", "-y", "b" };
             IReadOnlyList<string>? parsedArgs = default;
             var builder = FluentArgsBuilder.New()
+                .LoadRemainingArguments()
                 .Call(async args => parsedArgs = args);
 
             builder.Parse(args);
@@ -40,6 +42,7 @@
             IReadOnlyList<string>? parsedArgs = default;
             var builder = FluentArgsBuilder.New()
                 .Parameter<int>("-x").IsRequired()
+                .LoadRemainingArguments()
                 .Call(args => _ => parsedArgs = args);
 
             builder.Parse(args);
@@ -54,6 +57,7 @@
             IReadOnlyList<string>? parsedArgs = default;
             var builder = FluentArgsBuilder.New()
                 .Parameter<int>("-x").IsRequired()
+                .LoadRemainingArguments()
                 .Call(args => _ =>
                 {
                     parsedArgs = args;
@@ -63,6 +67,21 @@
             builder.Parse(args);
 
             parsedArgs.Should().BeEquivalentTo(new[] { "a", "b", "c" });
+        }
+
+        [Fact]
+        public static void GivenACustomParserIsUsedForRemainingArguments_SHouldBeHandledCorrent()
+        {
+            var args = new[] { "1", "2", "-1", "2" };
+            IReadOnlyList<int>? parsedArgs = default;
+            var builder = FluentArgsBuilder.New()
+                .LoadRemainingArguments<int>()
+                    .WithParser(s => int.Parse(s) * 2)
+                .Call(args => parsedArgs = args);
+
+            builder.Parse(args);
+
+            parsedArgs.Should().BeEquivalentTo(new[] { 2, 4, -2, 4 });
         }
     }
 }

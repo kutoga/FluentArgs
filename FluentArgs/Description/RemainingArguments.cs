@@ -4,11 +4,9 @@
 
     internal class RemainingArguments
     {
-        public RemainingArguments(string description, Type type, Func<string, object> parser)
+        public RemainingArguments(Type type)
         {
-            Description = description;
             Type = type;
-            Parser = parser;
         }
 
         public string? Description { get; set; }

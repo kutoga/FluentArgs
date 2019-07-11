@@ -1,5 +1,6 @@
 ﻿namespace FluentArgs.Execution
 {
+    using System;
     using System.Threading.Tasks;
 
     internal class InitialStep : Step
@@ -8,7 +9,8 @@
         {
             if (Next == null)
             {
-                return Task.CompletedTask;
+                throw new Exception("TODO: Good message");
+                //return Task.CompletedTask;
             }
 
             return Next.Execute(state);

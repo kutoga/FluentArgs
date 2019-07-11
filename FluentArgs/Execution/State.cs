@@ -44,6 +44,11 @@
             return new State(parameters, arguments);
         }
 
+        public State RemoveAllArguments()
+        {
+            return new State(parameters, ImmutableList<string>.Empty);
+        }
+
         public IReadOnlyList<object?> GetParameters()
         {
             return parameters;

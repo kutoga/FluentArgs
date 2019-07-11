@@ -5,7 +5,7 @@
 
     public interface IGivenThen<TArgsBuilder, TGiven>
     {
-        TGiven Then(Func<TArgsBuilder, IParsable> argumentBuilder);
+        TGiven Then(Func<TArgsBuilder, IBuildable> argumentBuilder);
     }
 
     public static class IGivenThenExtensions

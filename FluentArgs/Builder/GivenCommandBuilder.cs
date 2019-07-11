@@ -67,7 +67,7 @@
             return this;
         }
 
-        public IGivenCommand<TArgsBuilder> Then(Func<TArgsBuilder, IParsable> argumentBuilder)
+        public IGivenCommand<TArgsBuilder> Then(Func<TArgsBuilder, IBuildable> argumentBuilder)
         {
             branches.Add((currentBranch, argumentBuilder(argsBuilderFactory()) as IParsableFromState));
             return this;
