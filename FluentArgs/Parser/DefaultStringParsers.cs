@@ -2,7 +2,9 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.Collections.Immutable;
     using System.Globalization;
+    using System.Linq;
 
     internal static class DefaultStringParsers
     {
@@ -36,11 +38,46 @@
             [typeof(Uri)] = s => new Uri(s)
         };
 
+        private static bool TryGetEnumParser(Type enumType, out Func<string, object>? parser)
+        {
+            if (!enumType.IsSubclassOf(typeof(Enum)))
+            {
+                parser = default;
+                return false;
+            }
+
+            var names = Enum.GetNames(enumType).ToImmutableHashSet();
+            object Parse(string name)
+            {
+                if (names.Contains(name))
+                {
+                    return Enum.Parse(enumType, name);
+                }
+
+                var upperName = name.ToUpperInvariant();
+                var caseInsensitiveMatchingNames = names.Where(n => n.ToUpperInvariant() == upperName).ToList();
+                if (caseInsensitiveMatchingNames.Count == 1)
+                {
+                    return Enum.Parse(enumType, caseInsensitiveMatchingNames[0]);
+                }
+
+                throw new ArgumentException($"Invalid value '{name}' for the type '{enumType.Name}'!");
+            }
+
+            parser = Parse;
+            return true;
+        }
+
         public static bool TryGetParser(Type targetType, out Func<string, object>? parser)
         {
             if (Parsers.ContainsKey(targetType))
             {
                 parser = Parsers[targetType];
+                return true;
+            }
+
+            if (TryGetEnumParser(targetType, out parser))
+            {
                 return true;
             }
 

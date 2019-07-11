@@ -1,15 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace FluentArgs.Description
+﻿namespace FluentArgs.Description
 {
+    using System;
+
     internal class GivenCommandBranch
     {
-        public GivenCommandBranch(GivenCommandBranchType type, object requiredValue, Type valueType, Func<string, object>? parser, Func<object, bool>? predicate = null)
+        public GivenCommandBranch(GivenCommandBranchType type, object[] possibleValues, Type valueType, Func<string, object>? parser, Func<object, bool>? predicate = null)
         {
             Type = type;
-            RequiredValue = requiredValue;
+            PossibleValues = possibleValues;
             ValueType = valueType;
             Parser = parser;
             Predicate = predicate;
@@ -21,7 +19,7 @@ namespace FluentArgs.Description
 
         public GivenCommandBranchType Type { get; }
 
-        public object RequiredValue { get; }
+        public object[] PossibleValues { get; }
 
         public Type ValueType { get; }
 

@@ -43,7 +43,7 @@
             return stepWrapper(new GivenCommandStep(previousStep, name, branches));
         }
 
-        public IGivenThen<TArgsBuilder, IGivenCommand<TArgsBuilder>> HasValue<TParam>(TParam value, Func<string, TParam> parser = null)
+        public IGivenThen<TArgsBuilder, IGivenCommand<TArgsBuilder>> HasValue<TParam>(TParam[] values, Func<string, TParam> parser = null)
         {
             Func<string, object>? strParser = default; //TODO: Naming & Func<str, T> -> Func<str, obj>
             if (parser != null)
@@ -51,7 +51,7 @@
                 strParser = s => parser(s);
             }
 
-            currentBranch = new GivenCommandBranch(GivenCommandBranchType.HasValue, value, typeof(TParam), strParser);
+            currentBranch = new GivenCommandBranch(GivenCommandBranchType.HasValue, values.Cast<object>().ToArray(), typeof(TParam), strParser);
             return this;
         }
 
@@ -69,7 +69,7 @@
 
         public IGivenCommand<TArgsBuilder> Then(Func<TArgsBuilder, IBuildable> argumentBuilder)
         {
-            branches.Add((currentBranch, argumentBuilder(argsBuilderFactory()) as IParsableFromState));
+            branches.Add((currentBranch, (IParsableFromState)argumentBuilder(argsBuilderFactory()).Build()));
             return this;
 
             //var result = argumentBuilder(argsBuilder);

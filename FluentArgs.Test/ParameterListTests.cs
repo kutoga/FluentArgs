@@ -119,7 +119,7 @@ namespace FluentArgs.Test
         public static void GivenAParameterListWithACustomParser_ShouldBeHandledCorrect()
         {
             var args = new[] { "-s", "a,b" };
-            IReadOnlyList<string> parsedS = default;
+            IReadOnlyList<string>? parsedS = default;
             var builder = FluentArgsBuilder.New()
                 .ParameterList("-s")
                     .WithParser(s => s.ToUpperInvariant())
@@ -129,6 +129,27 @@ namespace FluentArgs.Test
             builder.Parse(args);
 
             parsedS.Should().BeEquivalentTo(new[] { "A", "B" }); //TODO: SHould().be(...)
+        }
+
+        [Fact]
+        public static void GivenMultipleParameterLists_ShouldBeHandledCorrect()
+        {
+            var args = new[] { "-a", "1,2,3", "-b", "3,4,5" };
+            IReadOnlyList<int>? parsedA = default;
+            IReadOnlyList<int>? parsedB = default;
+            var builder = FluentArgsBuilder.New()
+                .ParameterList<int>("-a").IsRequired()
+                .ParameterList<int>("-b").IsRequired()
+                .Call(b => a =>
+                {
+                    parsedA = a;
+                    parsedB = b;
+                });
+
+            builder.Parse(args);
+
+            parsedA.Should().BeEquivalentTo(1, 2, 3);
+            parsedB.Should().BeEquivalentTo(3, 4, 5);
         }
     }
 }

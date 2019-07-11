@@ -83,10 +83,11 @@
         private (Task? result, bool matches) ExecuteHasValue(State state, string parameterValue, GivenCommandBranch branch, IParsableFromState then)
         {
             var value = Parse(parameterValue, branch.Parser, branch.ValueType);
-            if (object.Equals(value, branch.RequiredValue))
+            if (branch.PossibleValues.Any(p => object.Equals(value, p)))
             {
                 return (then.ParseFromState(state), true);
             }
+
             return (default, false);
         }
 
