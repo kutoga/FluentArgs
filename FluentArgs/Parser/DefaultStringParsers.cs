@@ -25,7 +25,7 @@
             [typeof(decimal)] = s => decimal.Parse(s, CultureInfo.InvariantCulture),
 
             //TODO: Does parsing 1, 0 usw. work?
-            [typeof(bool)] = s => bool.Parse(s),
+            [typeof(bool)] = s => ParseBool(s), //bool.Parse(s),
 
             //TODO: Add date types etc.
 
@@ -66,6 +66,27 @@
 
             parser = Parse;
             return true;
+        }
+
+        private static bool ParseBool(string s)
+        {
+            var sLower = s.ToLowerInvariant();
+            if (bool.TryParse(sLower, out bool result))
+            {
+                return result;
+            }
+
+            if (sLower == "yes" || sLower == "y" || sLower == "1" || sLower == "true")
+            {
+                return true;
+            }
+
+            if (sLower == "no" || sLower == "n" || sLower == "0" || sLower == "false")
+            {
+                return false;
+            }
+
+            throw new ArgumentException($"Cannot parse boolean '{s}'!");
         }
 
         public static bool TryGetParser(Type targetType, out Func<string, object>? parser)
