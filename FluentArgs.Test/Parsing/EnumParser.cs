@@ -1,4 +1,4 @@
-﻿namespace FluentArgs.Test
+﻿namespace FluentArgs.Test.Parsing
 {
     using FluentAssertions;
     using System;

@@ -1,4 +1,4 @@
-﻿namespace FluentArgs.Test.Given
+﻿namespace FluentArgs.Test.Parsing.Given
 {
     using System;
     using System.Collections.Generic;
@@ -114,16 +114,16 @@
         [Fact]
         public static void GivenAParameterWithoutAValue_ShouldThrow()
         {
-             var args = new[] { "--param" };
-             var builder = FluentArgsBuilder.New()
-                 .Given.Parameter("--param")
-                    .WithAnyValue()
-                    .Then(() => { })
-                 .Call(() => { });
+            var args = new[] { "--param" };
+            var builder = FluentArgsBuilder.New()
+                .Given.Parameter("--param")
+                   .WithAnyValue()
+                   .Then(() => { })
+                .Call(() => { });
 
-             Action parseAction = () => builder.Parse(args);
+            Action parseAction = () => builder.Parse(args);
 
-             parseAction.Should().Throw<Exception>();
+            parseAction.Should().Throw<Exception>();
         }
 
         [Fact]

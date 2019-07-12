@@ -1,4 +1,4 @@
-﻿namespace FluentArgs.Test.Given
+﻿namespace FluentArgs.Test.Parsing.Given
 {
     using FluentAssertions;
     using System.Threading.Tasks;
@@ -72,7 +72,8 @@
             var builder = FluentArgsBuilder.New()
                 .Parameter<int>("-p1").IsRequired()
                 .Parameter<double>("-p2").IsRequired()
-                .Given.Flag("-f").Then(p2 => p1 => {
+                .Given.Flag("-f").Then(p2 => p1 =>
+                {
                     redirected = true;
                     return Task.CompletedTask;
                 })

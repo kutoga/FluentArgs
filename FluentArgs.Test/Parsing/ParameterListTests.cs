@@ -1,10 +1,10 @@
-﻿using FluentAssertions;
-using System;
-using System.Collections.Generic;
-using Xunit;
-
-namespace FluentArgs.Test
+﻿namespace FluentArgs.Test.Parsing
 {
+    using System;
+    using System.Collections.Generic;
+    using FluentAssertions;
+    using Xunit;
+
     public class ParameterListTests
     {
         //TODO: pack all parameter configs into a single interface
@@ -98,8 +98,8 @@ namespace FluentArgs.Test
         [Theory]
         [InlineData("1,2;3", ";", new[] { "1,2", "3" })]
         [InlineData("1,2;3", ",", new[] { "1", "2;3" })]
-        [InlineData(",", ",", new[] { "", ""})]
-        [InlineData("eigenartig", "i", new[] { "e", "genart", "g"})]
+        [InlineData(",", ",", new[] { "", "" })]
+        [InlineData("eigenartig", "i", new[] { "e", "genart", "g" })]
         public static void GivenAParameterListWithCustomSeparators_ShouldBeHandledCorrect(string sArg, string separator, string[] expectedValues)
         {
             var args = new[] { "-s", sArg };
