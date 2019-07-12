@@ -2,6 +2,7 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.IO;
     using System.Threading.Tasks;
     using FluentArgs.Description;
     using FluentArgs.Execution;
@@ -36,6 +37,11 @@
         }
 
         public IInitialFluentArgsBuilder RegisterHelpFlag(string name, params string[] moreNames)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IInitialFluentArgsBuilder RegisterOutputStreams(Stream output, Stream error)
         {
             throw new NotImplementedException();
         }

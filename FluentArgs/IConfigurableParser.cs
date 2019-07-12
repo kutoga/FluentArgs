@@ -1,4 +1,6 @@
-﻿namespace FluentArgs
+﻿using System.IO;
+
+namespace FluentArgs
 {
     public interface IConfigurableParser<TArgsParser>
         where TArgsParser : IConfigurableParser<TArgsParser> //TODO: überall wo möglich so reinmachen
@@ -6,6 +8,8 @@
         TArgsParser WithApplicationDescription(string description);
 
         TArgsParser RegisterHelpFlag(string name, params string[] moreNames);
+
+        TArgsParser RegisterOutputStreams(Stream output, Stream error);
 
         TArgsParser WarnOnDuplicateNames();
 
