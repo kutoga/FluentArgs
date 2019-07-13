@@ -3,6 +3,7 @@
     using System;
     using System.Collections.Generic;
     using System.Globalization;
+    using FluentArgs.Test.Helpers;
     using FluentAssertions;
     using Xunit;
 
@@ -88,7 +89,7 @@
 
             builder.Parse(args);
 
-            calledBranches.Should().BeEquivalentTo(new[] { "param1" });
+            calledBranches.Should().BeEquivalentWithSameOrdering(new[] { "param1" });
         }
 
         [Fact]

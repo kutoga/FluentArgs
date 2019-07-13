@@ -2,6 +2,7 @@
 {
     using System;
     using System.Collections.Generic;
+    using FluentArgs.Test.Helpers;
     using FluentAssertions;
     using Xunit;
 
@@ -22,7 +23,7 @@
 
             builder.Parse(args);
 
-            parsedN.Should().BeEquivalentTo(new[] { 1, 2, 3 });
+            parsedN.Should().BeEquivalentWithSameOrdering(new[] { 1, 2, 3 });
         }
 
         [Fact]
@@ -78,7 +79,7 @@
 
             builder.Parse(args);
 
-            parsedN.Should().BeEquivalentTo(new[] { 1, 2, 4 }); //TODO: SHould().be(...)
+            parsedN.Should().BeEquivalentWithSameOrdering(new[] { 1, 2, 4 }); //TODO: SHould().be(...)
         }
 
         [Fact]
@@ -92,7 +93,7 @@
 
             builder.Parse(args);
 
-            parsedN.Should().BeEquivalentTo(new[] { 1, 2, 3, 1, 44, 1337 }); //TODO: SHould().be(...)
+            parsedN.Should().BeEquivalentWithSameOrdering(new[] { 1, 2, 3, 1, 44, 1337 }); //TODO: SHould().be(...)
         }
 
         [Theory]
@@ -112,7 +113,7 @@
 
             builder.Parse(args);
 
-            parsedS.Should().BeEquivalentTo(expectedValues); //TODO: SHould().be(...)
+            parsedS.Should().BeEquivalentWithSameOrdering(expectedValues); //TODO: SHould().be(...)
         }
 
         [Fact]
@@ -128,7 +129,7 @@
 
             builder.Parse(args);
 
-            parsedS.Should().BeEquivalentTo(new[] { "A", "B" }); //TODO: SHould().be(...)
+            parsedS.Should().BeEquivalentWithSameOrdering(new[] { "A", "B" }); //TODO: SHould().be(...)
         }
 
         [Fact]
@@ -148,8 +149,8 @@
 
             builder.Parse(args);
 
-            parsedA.Should().BeEquivalentTo(1, 2, 3);
-            parsedB.Should().BeEquivalentTo(3, 4, 5);
+            parsedA.Should().BeEquivalentWithSameOrdering(1, 2, 3);
+            parsedB.Should().BeEquivalentWithSameOrdering(3, 4, 5);
         }
     }
 }

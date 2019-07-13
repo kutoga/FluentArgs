@@ -1,10 +1,10 @@
-﻿using FluentAssertions;
-using System;
-using System.IO;
-using Xunit;
-
-namespace FluentArgs.Test.Help
+﻿namespace FluentArgs.Test.Help
 {
+    using System;
+    using System.IO;
+    using FluentAssertions;
+    using Xunit;
+
     public static class Configuration
     {
         [Fact]
