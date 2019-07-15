@@ -7,12 +7,12 @@
 
     internal class ArgumentList
     {
-        private readonly IImmutableList<string> arguments;
-
         public ArgumentList(IImmutableList<string> arguments)
         {
-            this.arguments = arguments;
+            this.Arguments = arguments;
         }
+
+        public IImmutableList<string> Arguments { get; }
 
         public IEnumerable<DetectedArguments> DetectArgument(string firstArgument, int followingNumberOfArguments)
         {
@@ -21,16 +21,26 @@
                 throw new Exception($"{nameof(followingNumberOfArguments)} must be non-negative!");
             }
 
-            var possibelIndices = arguments
+            var possibleIndices = Arguments
                 .Select((a, i) => (argument: a, index: i))
-                .Where(a => a.argument == firstArgument && (a.index + followingNumberOfArguments) < arguments.Count)
-                .Select(a => a.index)
-                .ToImmutableList();
+                .Where(a => a.argument == firstArgument)
+                .ToImmutableList(); //TODO: Use ToList (instead of ToImmutableList) everywhere (where possible)
+            var invalidIndices = possibleIndices
+                .Where(a => (a.index + followingNumberOfArguments) >= Arguments.Count)
+                .ToList();
+            if (invalidIndices.Count > 0)
+            {
+                throw new Exception($"Found argument '{firstArgument}', but its parameters are not present!");
+            }
 
-            return possibelIndices.Select(i => new DetectedArguments(
-                arguments.Skip(i).Take(1 + followingNumberOfArguments).ToImmutableList(),
-                arguments.Take(i).ToImmutableList(),
-                arguments.Skip(i + 1 + followingNumberOfArguments).ToImmutableList()));
+            var validIndices = possibleIndices
+                .Select(a => a.index)
+                .ToList();
+
+            return validIndices.Select(i => new DetectedArguments(
+                Arguments.Skip(i).Take(1 + followingNumberOfArguments).ToImmutableList(),
+                Arguments.Take(i).ToImmutableList(),
+                Arguments.Skip(i + 1 + followingNumberOfArguments).ToImmutableList()));
         }
     }
 }

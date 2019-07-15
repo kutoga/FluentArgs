@@ -18,13 +18,7 @@
 
         public override Task Execute(State state)
         {
-            var possibleParameterIndex = state.Arguments
-                .Select((a, i) => (argument: a, index: i))
-                .Where(p => parameterList.Name.Names.Contains(p.argument))
-                .Select(p => (int?)p.index)
-                .FirstOrDefault();
-
-            if (possibleParameterIndex == null)
+            if (!state.TryExtractArguments(parameterList.Name.Names, out var arguments, out var newState, 1))
             {
                 if (parameterList.IsRequired)
                 {
@@ -42,15 +36,7 @@
             }
             else
             {
-                var parameterIndex = possibleParameterIndex.Value;
-                if (parameterIndex == state.Arguments.Count - 1)
-                {
-                    throw new Exception("TODO");
-                }
-
-                state = state
-                    .AddParameter(Parse(state.Arguments[parameterIndex + 1]))
-                    .RemoveArguments(parameterIndex, parameterIndex + 1);
+                state = newState.AddParameter(Parse(arguments[1]));
             }
 
             return Next.Execute(state);

@@ -5,21 +5,36 @@
     using System.Collections.Immutable;
     using System.Linq;
 
-    internal class ArgumentExtractor
+    internal class ArgumentExtractor : IArgumentExtractor
     {
-        private IImmutableList<ArgumentList> argumentGroups;
+        private readonly IImmutableList<ArgumentList> argumentGroups;
 
-        public ArgumentExtractor(string[] arguments)
+        public ArgumentExtractor(IEnumerable<string> arguments)
+            : this(new[] { new ArgumentList(arguments.ToImmutableList()) })
         {
-            argumentGroups = ImmutableList<ArgumentList>.Empty.Add(new ArgumentList(arguments.ToImmutableList()));
         }
 
-        public bool TryExtract(string firstArgument, out IImmutableList<string> arguments, int followingArgumentsToInclude = 0)
+        private ArgumentExtractor(IEnumerable<ArgumentList> argumentLists)
         {
-            return TryExtract(new[] { firstArgument }, out arguments, followingArgumentsToInclude);
+            argumentGroups = argumentLists.ToImmutableList();
         }
 
-        public bool TryExtract(IEnumerable<string> firstArgumentPossibilities, out IImmutableList<string> arguments, int followingArgumentsToInclude = 0)
+        public static ArgumentExtractor Empty { get; } = new ArgumentExtractor(Enumerable.Empty<string>());
+
+        public bool TryExtract(
+            string firstArgument,
+            out IImmutableList<string> arguments,
+            out IArgumentExtractor newArgumentExtractor,
+            int followingArgumentsToInclude = 0)
+        {
+            return TryExtract(new[] { firstArgument }, out arguments, out newArgumentExtractor, followingArgumentsToInclude);
+        }
+
+        public bool TryExtract(
+            IEnumerable<string> firstArgumentPossibilities,
+            out IImmutableList<string> arguments,
+            out IArgumentExtractor newArgumentExtractor,
+            int followingArgumentsToInclude = 0)
         {
             var detectedArgumentsPossibilities = firstArgumentPossibilities
                 .SelectMany(firstArgument => DetectArguments(firstArgument, followingArgumentsToInclude))
@@ -28,22 +43,29 @@
             if (detectedArgumentsPossibilities.Count == 0)
             {
                 arguments = default;
+                newArgumentExtractor = default;
                 return false;
             }
 
             if (detectedArgumentsPossibilities.Count > 1)
             {
                 arguments = default; //How to propagate this error to the outside world? 
+                newArgumentExtractor = default;
                 return false;
             }
 
             var foundArguments = detectedArgumentsPossibilities[0];
-            foundArguments.splitArgumentList();
+            newArgumentExtractor = new ArgumentExtractor(foundArguments.splitArgumentList());
             arguments = foundArguments.arguments;
             return true;
         }
 
-        private IEnumerable<(IImmutableList<string> arguments, Action splitArgumentList)> DetectArguments(
+        public IEnumerable<string> GetRemainingArguments()
+        {
+            return argumentGroups.SelectMany(g => g.Arguments);
+        }
+
+        private IEnumerable<(IImmutableList<string> arguments, Func<IEnumerable<ArgumentList>> splitArgumentList)> DetectArguments(
             string firstArgument,
             int followingArgumentsToInclude)
         {
@@ -51,11 +73,11 @@
                 .SelectMany(g => g.DetectArgument(firstArgument, followingArgumentsToInclude)
                     .Select(a =>
                     {
-                        Action splitArgumentList = () => SplitArgumentList(g, a);
+                        Func<IEnumerable<ArgumentList>> splitArgumentList = () => SplitArgumentList(g, a);
                         return (arguments: a.Arguments, splitArgumentList);
                     }));
 
-            void SplitArgumentList(ArgumentList arguments, DetectedArguments detectedArguments)
+            IEnumerable<ArgumentList> SplitArgumentList(ArgumentList arguments, DetectedArguments detectedArguments)
             {
                 var listToRemoveIndex = argumentGroups.IndexOf(arguments);
                 var listsToInsert = new[] { detectedArguments.LeftSideArguments, detectedArguments.RightSideArguments }
@@ -63,11 +85,10 @@
                     .Select(a => new ArgumentList(a))
                     .ToImmutableList(); //TODO: in the complete project: whenever possible, use immutable data structures
 
-                argumentGroups = argumentGroups
+                return argumentGroups
                     .Take(listToRemoveIndex)
                     .Concat(listsToInsert)
-                    .Concat(argumentGroups.Skip(listToRemoveIndex + 1))
-                    .ToImmutableList();
+                    .Concat(argumentGroups.Skip(listToRemoveIndex + 1));
             }
         }
     }

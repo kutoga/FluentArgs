@@ -2,20 +2,24 @@
 {
     using System.Collections.Generic;
     using System.Collections.Immutable;
-    using System.Linq;
+    using FluentArgs.ArgumentExtraction;
 
     internal class State
     {
-        private IImmutableList<object?> parameters;
-        private IImmutableList<string> arguments;
+        private readonly IImmutableList<object?> parameters;
+        private readonly IArgumentExtractor argumentExtractor;
+
+        private State(IImmutableList<object?> parameters, IArgumentExtractor argumentExtractor)
+        {
+            this.parameters = parameters;
+            this.argumentExtractor = argumentExtractor;
+        }
 
         private State(IImmutableList<object?> parameters, IImmutableList<string> arguments)
         {
             this.parameters = parameters;
-            this.arguments = arguments;
+            this.argumentExtractor = new ArgumentExtractor(arguments);
         }
-
-        public IReadOnlyList<string> Arguments => arguments;
 
         public static State InitialState(IEnumerable<string> arguments)
         {
@@ -24,29 +28,28 @@
 
         public State AddParameter(object? parameter)
         {
-            return new State(parameters.Add(parameter), arguments);
+            return new State(parameters.Add(parameter), argumentExtractor);
         }
 
-        public State RemoveArguments(int index, params int[] moreIndices)
+        public bool TryExtractArguments(IEnumerable<string> firstArgumentPossibilities, out IImmutableList<string> arguments, out State newState, int followingArgumentsToInclude = 0)
         {
-            //TODO: when arguments are removed, then the simple join of the other arguments is invalid!
-            // -> fix
-            var arguments = this.arguments;
-            var indicesDesc = moreIndices
-                .Concat(new[] { index })
-                .OrderByDescending(i => i);
-
-            foreach (var i in indicesDesc)
+            var result = argumentExtractor.TryExtract(firstArgumentPossibilities, out arguments, out var newArgumentExtractor, followingArgumentsToInclude);
+            if (result)
             {
-                arguments = arguments.RemoveAt(i);
+                newState = new State(parameters, newArgumentExtractor);
+            }
+            else
+            {
+                newState = default;
             }
 
-            return new State(parameters, arguments);
+            return result;
         }
 
-        public State RemoveAllArguments()
+        public IEnumerable<string> GetRemainingArguments(out State newState)
         {
-            return new State(parameters, ImmutableList<string>.Empty);
+            newState = new State(parameters, ArgumentExtractor.Empty);
+            return argumentExtractor.GetRemainingArguments();
         }
 
         public IReadOnlyList<object?> GetParameters()

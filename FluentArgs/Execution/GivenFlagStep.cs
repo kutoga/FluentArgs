@@ -18,20 +18,13 @@
 
         public override Task Execute(State state)
         {
-            var flagIndex = state.Arguments
-                .Select((a, i) => (argument: a, index: i))
-                .Where(p => flag.Name.Names.Contains(p.argument))
-                .Select(p => (int?)p.index)
-                .FirstOrDefault();
-
-            if (flagIndex == null)
+            if (!state.TryExtractArguments(flag.Name.Names, out var _, out var newState))
             {
                 return Next.Execute(state);
             }
             else
             {
-                state = state.RemoveArguments(flagIndex.Value);
-                return thenStep.ParseFromState(state);
+                return thenStep.ParseFromState(newState);
             }
         }
     }
