@@ -1,10 +1,11 @@
-﻿using FluentAssertions;
-using System;
-using System.Collections.Generic;
-using Xunit;
-
-namespace FluentArgs.Test
+﻿namespace FluentArgs.Test.Parsing
 {
+    using System;
+    using System.Collections.Generic;
+    using FluentArgs.Test.Helpers;
+    using FluentAssertions;
+    using Xunit;
+
     public class ParameterListTests
     {
         //TODO: pack all parameter configs into a single interface
@@ -22,7 +23,7 @@ namespace FluentArgs.Test
 
             builder.Parse(args);
 
-            parsedN.Should().BeEquivalentTo(new[] { 1, 2, 3 });
+            parsedN.Should().BeEquivalentWithSameOrdering(new[] { 1, 2, 3 });
         }
 
         [Fact]
@@ -78,7 +79,7 @@ namespace FluentArgs.Test
 
             builder.Parse(args);
 
-            parsedN.Should().BeEquivalentTo(new[] { 1, 2, 4 }); //TODO: SHould().be(...)
+            parsedN.Should().BeEquivalentWithSameOrdering(new[] { 1, 2, 4 }); //TODO: SHould().be(...)
         }
 
         [Fact]
@@ -92,14 +93,14 @@ namespace FluentArgs.Test
 
             builder.Parse(args);
 
-            parsedN.Should().BeEquivalentTo(new[] { 1, 2, 3, 1, 44, 1337 }); //TODO: SHould().be(...)
+            parsedN.Should().BeEquivalentWithSameOrdering(new[] { 1, 2, 3, 1, 44, 1337 }); //TODO: SHould().be(...)
         }
 
         [Theory]
         [InlineData("1,2;3", ";", new[] { "1,2", "3" })]
         [InlineData("1,2;3", ",", new[] { "1", "2;3" })]
-        [InlineData(",", ",", new[] { "", ""})]
-        [InlineData("eigenartig", "i", new[] { "e", "genart", "g"})]
+        [InlineData(",", ",", new[] { "", "" })]
+        [InlineData("eigenartig", "i", new[] { "e", "genart", "g" })]
         public static void GivenAParameterListWithCustomSeparators_ShouldBeHandledCorrect(string sArg, string separator, string[] expectedValues)
         {
             var args = new[] { "-s", sArg };
@@ -112,7 +113,7 @@ namespace FluentArgs.Test
 
             builder.Parse(args);
 
-            parsedS.Should().BeEquivalentTo(expectedValues); //TODO: SHould().be(...)
+            parsedS.Should().BeEquivalentWithSameOrdering(expectedValues); //TODO: SHould().be(...)
         }
 
         [Fact]
@@ -128,7 +129,7 @@ namespace FluentArgs.Test
 
             builder.Parse(args);
 
-            parsedS.Should().BeEquivalentTo(new[] { "A", "B" }); //TODO: SHould().be(...)
+            parsedS.Should().BeEquivalentWithSameOrdering(new[] { "A", "B" }); //TODO: SHould().be(...)
         }
 
         [Fact]
@@ -148,8 +149,8 @@ namespace FluentArgs.Test
 
             builder.Parse(args);
 
-            parsedA.Should().BeEquivalentTo(1, 2, 3);
-            parsedB.Should().BeEquivalentTo(3, 4, 5);
+            parsedA.Should().BeEquivalentWithSameOrdering(1, 2, 3);
+            parsedB.Should().BeEquivalentWithSameOrdering(3, 4, 5);
         }
     }
 }

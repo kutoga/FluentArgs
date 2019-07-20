@@ -18,10 +18,9 @@
 
         public override Task Execute(State state)
         {
-            var remainingArguments = state.Arguments;
+            var remainingArguments = state.GetRemainingArguments(out state);
             var parameter = Reflection.Array.Create(this.remainingArguments.Type, remainingArguments.Select(a => Parse(a)).ToArray());
-
-            state = state.AddParameter(parameter).RemoveAllArguments();
+            state = state.AddParameter(parameter);
             return Next.Execute(state);
         }
 

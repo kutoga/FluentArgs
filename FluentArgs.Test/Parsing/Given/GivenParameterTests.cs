@@ -1,8 +1,9 @@
-﻿namespace FluentArgs.Test.Given
+﻿namespace FluentArgs.Test.Parsing.Given
 {
     using System;
     using System.Collections.Generic;
     using System.Globalization;
+    using FluentArgs.Test.Helpers;
     using FluentAssertions;
     using Xunit;
 
@@ -88,7 +89,7 @@
 
             builder.Parse(args);
 
-            calledBranches.Should().BeEquivalentTo(new[] { "param1" });
+            calledBranches.Should().BeEquivalentWithSameOrdering(new[] { "param1" });
         }
 
         [Fact]
@@ -112,18 +113,19 @@
         }
 
         [Fact]
-        public static void GivenAParameterWithoutAValue_ShouldThrow()
+        public static void GivenAParameterWithoutAValue_ShouldNotRedirect()
         {
-             var args = new[] { "--param" };
-             var builder = FluentArgsBuilder.New()
-                 .Given.Parameter("--param")
-                    .WithAnyValue()
-                    .Then(() => { })
-                 .Call(() => { });
+            var args = new[] { "--param" };
+            bool? redirected = null;
+            var builder = FluentArgsBuilder.New()
+                .Given.Parameter("--param")
+                   .WithAnyValue()
+                   .Then(() => redirected = true)
+                .Call(() => redirected = false);
 
-             Action parseAction = () => builder.Parse(args);
+            builder.Parse(args);
 
-             parseAction.Should().Throw<Exception>();
+            redirected.Should().BeFalse();
         }
 
         [Fact]

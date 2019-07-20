@@ -1,7 +1,8 @@
-﻿namespace FluentArgs.Test
+﻿namespace FluentArgs.Test.Parsing
 {
     using System.Collections.Generic;
     using System.Threading.Tasks;
+    using FluentArgs.Test.Helpers;
     using FluentAssertions;
     using Xunit;
 
@@ -18,7 +19,7 @@
 
             builder.Parse(args);
 
-            parsedArgs.Should().BeEquivalentTo(new[] { "-x", "a", "-y", "b" });
+            parsedArgs.Should().BeEquivalentWithSameOrdering(new[] { "-x", "a", "-y", "b" });
         }
 
         [Fact]
@@ -32,7 +33,7 @@
 
             builder.Parse(args);
 
-            parsedArgs.Should().BeEquivalentTo(new[] { "-x", "a", "-y", "b" });
+            parsedArgs.Should().BeEquivalentWithSameOrdering(new[] { "-x", "a", "-y", "b" });
         }
 
         [Fact]
@@ -47,7 +48,7 @@
 
             builder.Parse(args);
 
-            parsedArgs.Should().BeEquivalentTo(new[] { "a", "b", "c" });
+            parsedArgs.Should().BeEquivalentWithSameOrdering(new[] { "a", "b", "c" });
         }
 
         [Fact]
@@ -66,7 +67,7 @@
 
             builder.Parse(args);
 
-            parsedArgs.Should().BeEquivalentTo(new[] { "a", "b", "c" });
+            parsedArgs.Should().BeEquivalentWithSameOrdering(new[] { "a", "b", "c" });
         }
 
         [Fact]
@@ -81,7 +82,7 @@
 
             builder.Parse(args);
 
-            parsedArgs.Should().BeEquivalentTo(new[] { 2, 4, -2, 4 });
+            parsedArgs.Should().BeEquivalentWithSameOrdering(new[] { 2, 4, -2, 4 });
         }
     }
 }

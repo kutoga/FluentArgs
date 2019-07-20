@@ -1,4 +1,4 @@
-﻿namespace FluentArgs.Test
+﻿namespace FluentArgs.Test.Parsing
 {
     using System;
     using System.Globalization;
@@ -142,7 +142,7 @@
             done.Should().BeTrue();
             parsedAge.Should().Be(28);
         }
- 
+
         [Fact]
         public static void GivenAnAsyncCall_TheTaskShouldBeForwarded()
         {

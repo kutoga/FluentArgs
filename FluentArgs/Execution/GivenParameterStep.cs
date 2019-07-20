@@ -20,34 +20,22 @@
 
         public override Task Execute(State state)
         {
-            var possibleParameterIndex = state.Arguments
-                .Select((a, i) => (argument: a, index: i))
-                .Where(p => parameter.Name.Names.Contains(p.argument))
-                .Select(p => (int?)p.index)
-                .FirstOrDefault();
-
-            if (possibleParameterIndex == null)
+            if (!state.TryExtractArguments(parameter.Name.Names, out var arguments, out var newState, 1))
             {
                 return Next.Execute(state);
             }
             else
             {
-                var parameterIndex = possibleParameterIndex.Value;
-                if (parameterIndex == state.Arguments.Count - 1)
-                {
-                    throw new Exception("TODO");
-                }
-
                 if (!parameter.RequireExactValue)
                 {
+                    //TODO: Do we really want to work here with the old state? -> create a test
                     return thenStep.ParseFromState(state);
                 }
                 else
                 {
-                    var parameterValue = state.Arguments[parameterIndex + 1];
-                    state = state.RemoveArguments(parameterIndex, parameterIndex + 1);
+                    state = newState;
 
-                    if (object.Equals(Parse(parameterValue), parameter.RequiredValue))
+                    if (object.Equals(Parse(arguments[1]), parameter.RequiredValue))
                     {
                         return thenStep.ParseFromState(state);
                     }

@@ -3,11 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.28803.156
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FluentArgs", "FluentArgs\FluentArgs.csproj", "{7085426C-F533-4E9B-A152-3A55AA0C9ED2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FluentArgs", "FluentArgs\FluentArgs.csproj", "{7085426C-F533-4E9B-A152-3A55AA0C9ED2}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FluentArgs.Test.Quality", "FluentArgs.Test.Quality\FluentArgs.Test.Quality.csproj", "{33ED20E2-2826-4DF4-B8D6-08C79FFF618F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FluentArgs.Test", "FluentArgs.Test\FluentArgs.Test.csproj", "{4B7B23EC-7445-49FA-B08D-BDA731A65250}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FluentArgs.Test", "FluentArgs.Test\FluentArgs.Test.csproj", "{4B7B23EC-7445-49FA-B08D-BDA731A65250}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{60AE99DE-AA20-42CF-8ECE-5B4C78C90FEA}"
 	ProjectSection(SolutionItems) = preProject
@@ -16,7 +16,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		README.md = README.md
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FluentArgs.Playground", "FluentArgs.Playground\FluentArgs.Playground.csproj", "{D13B0894-EBC4-4BDA-9037-43A0B253DA3E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FluentArgs.Playground", "FluentArgs.Playground\FluentArgs.Playground.csproj", "{D13B0894-EBC4-4BDA-9037-43A0B253DA3E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FluentArgs.Test.Helpers", "FluentArgs.Test.Helpers\FluentArgs.Test.Helpers.csproj", "{CA2DC929-1330-4A22-B476-9BEBCC46F8B7}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -40,6 +42,10 @@ Global
 		{D13B0894-EBC4-4BDA-9037-43A0B253DA3E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D13B0894-EBC4-4BDA-9037-43A0B253DA3E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D13B0894-EBC4-4BDA-9037-43A0B253DA3E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CA2DC929-1330-4A22-B476-9BEBCC46F8B7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CA2DC929-1330-4A22-B476-9BEBCC46F8B7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CA2DC929-1330-4A22-B476-9BEBCC46F8B7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CA2DC929-1330-4A22-B476-9BEBCC46F8B7}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

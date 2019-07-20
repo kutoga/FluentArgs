@@ -1,4 +1,4 @@
-﻿namespace FluentArgs.Test.Given
+﻿namespace FluentArgs.Test.Parsing.Given
 {
     using FluentAssertions;
     using Xunit;

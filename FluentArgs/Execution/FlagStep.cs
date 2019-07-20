@@ -1,12 +1,8 @@
-﻿using FluentArgs.Description;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace FluentArgs.Execution
+﻿namespace FluentArgs.Execution
 {
+    using System.Threading.Tasks;
+    using FluentArgs.Description;
+
     internal class FlagStep : Step
     {
         private readonly Flag flag;
@@ -19,21 +15,13 @@ namespace FluentArgs.Execution
 
         public override Task Execute(State state)
         {
-            var flagIndex = state.Arguments
-                .Select((a, i) => (argument: a, index: i))
-                .Where(p => flag.Name.Names.Contains(p.argument))
-                .Select(p => (int?)p.index)
-                .FirstOrDefault();
-
-            if (flagIndex == null)
+            if (state.TryExtractArguments(flag.Name.Names, out var arguments, out var newState))
             {
-                state = state.AddParameter(false);
+                state = newState.AddParameter(true);
             }
             else
             {
-                state = state
-                    .RemoveArguments(flagIndex.Value)
-                    .AddParameter(true);
+                state = state.AddParameter(false);
             }
 
             return Next.Execute(state);

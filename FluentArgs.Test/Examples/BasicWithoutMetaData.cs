@@ -1,6 +1,7 @@
 ﻿namespace FluentArgs.Test.Examples
 {
     using System;
+    using FluentArgs.Test.Helpers;
     using FluentAssertions;
     using Xunit;
 
@@ -21,7 +22,7 @@
             argumentParser.Parse(new[] { "--apikey", "secret", "--action", "copy", "--source", "/source/file", "--target", "/target/file" });
 
             dummyClient.ApiKey.Should().Be("secret");
-            dummyClient.CopyFileCalls.Should().BeEquivalentTo(("/source/file", "/target/file"));
+            dummyClient.CopyFileCalls.Should().BeEquivalentWithSameOrdering(("/source/file", "/target/file"));
         }
 
         [Fact]
@@ -30,7 +31,7 @@
             argumentParser.Parse(new[] { "-k", "secret", "--act", "delete", "--file", "/file" });
 
             dummyClient.ApiKey.Should().Be("secret");
-            dummyClient.DeleteFileCalls.Should().BeEquivalentTo("/file");
+            dummyClient.DeleteFileCalls.Should().BeEquivalentWithSameOrdering("/file");
         }
 
         [Fact]
@@ -39,7 +40,7 @@
             argumentParser.Parse(new[] { "--apikey", "secret", "-a", "reset" });
 
             dummyClient.ApiKey.Should().Be("secret");
-            dummyClient.ResetAccountCalls.Should().BeEquivalentTo(new object[] { null });
+            dummyClient.ResetAccountCalls.Should().BeEquivalentWithSameOrdering(new object[] { null });
         }
 
         [Fact]

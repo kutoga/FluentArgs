@@ -23,25 +23,14 @@
 
         public override Task Execute(State state)
         {
-            var possibleParameterIndex = state.Arguments
-                .Select((a, i) => (argument: a, index: i))
-                .Where(p => name.Names.Contains(p.argument))
-                .Select(p => (int?)p.index)
-                .FirstOrDefault();
-
-            if (possibleParameterIndex == null)
+            if (!state.TryExtractArguments(name.Names, out var arguments, out var newState, 1))
             {
                 return Next.Execute(state);
             }
             else
             {
-                var parameterIndex = possibleParameterIndex.Value;
-                if (parameterIndex == state.Arguments.Count - 1)
-                {
-                    throw new Exception("TODO");
-                }
-                var parameterValue = state.Arguments[parameterIndex + 1];
-                state = state.RemoveArguments(parameterIndex, parameterIndex + 1);
+                var parameterValue = arguments[1];
+                state = newState;
 
                 foreach (var branch in branches)
                 {
