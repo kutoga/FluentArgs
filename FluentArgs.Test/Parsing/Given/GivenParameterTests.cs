@@ -113,18 +113,19 @@
         }
 
         [Fact]
-        public static void GivenAParameterWithoutAValue_ShouldThrow()
+        public static void GivenAParameterWithoutAValue_ShouldNotRedirect()
         {
             var args = new[] { "--param" };
+            bool? redirected = null;
             var builder = FluentArgsBuilder.New()
                 .Given.Parameter("--param")
                    .WithAnyValue()
-                   .Then(() => { })
-                .Call(() => { });
+                   .Then(() => redirected = true)
+                .Call(() => redirected = false);
 
-            Action parseAction = () => builder.Parse(args);
+            builder.Parse(args);
 
-            parseAction.Should().Throw<Exception>();
+            redirected.Should().BeFalse();
         }
 
         [Fact]
