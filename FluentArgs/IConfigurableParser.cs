@@ -9,7 +9,7 @@ namespace FluentArgs
 
         TArgsParser RegisterHelpFlag(string name, params string[] moreNames);
 
-        TArgsParser RegisterOutputStreams(Stream output, Stream error);
+        TArgsParser RegisterHelpPrinter(IHelpPrinter helpPrinter);
 
         TArgsParser WarnOnDuplicateNames();
 

@@ -6,10 +6,14 @@
     using System.Threading.Tasks;
     using FluentArgs.Description;
     using FluentArgs.Execution;
+    using FluentArgs.Help;
 
     internal class StepBuilder : IInitialFluentArgsBuilder
     {
-        public Step Step { get; set; } = new InitialStep();
+        public Step Step { get; set; } = new InitialStep()
+        {
+            ParserSettings = new ParserSettings(new SimpleHelpPrinter(Console.Out, Console.Error))
+        };
 
         //TODO: public und interface prefix weg
         IGiven<IFluentArgsBuilder> IGivenAppliable<IFluentArgsBuilder>.Given =>
@@ -41,24 +45,28 @@
             throw new NotImplementedException();
         }
 
-        public IInitialFluentArgsBuilder RegisterOutputStreams(Stream output, Stream error)
+        public IInitialFluentArgsBuilder RegisterHelpPrinter(IHelpPrinter helpPrinter)
         {
-            throw new NotImplementedException();
+            ((InitialStep)Step).ParserSettings.HelpPrinter = helpPrinter;
+            return this;
         }
 
         public IInitialFluentArgsBuilder WarnOnDuplicateNames()
         {
-            throw new NotImplementedException();
+            ((InitialStep)Step).ParserSettings.WarnOnDuplicateNames = true;
+            return this;
         }
 
         public IInitialFluentArgsBuilder WarnOnNonMinusStartingNames()
         {
-            throw new NotImplementedException();
+            ((InitialStep)Step).ParserSettings.WarnOnNonMinusStartingNames = true;
+            return this;
         }
 
         public IInitialFluentArgsBuilder WithApplicationDescription(string description)
         {
-            throw new NotImplementedException();
+            ((InitialStep)Step).ParserSettings.ApplicationDescription = description;
+            return this;
         }
 
         IConfigurableFlagWithOptionalDescription IFluentArgsBuilder.Flag(string name, params string[] moreNames)
