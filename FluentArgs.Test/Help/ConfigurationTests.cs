@@ -19,9 +19,9 @@
                 .RegisterHelpPrinter(new SimpleHelpPrinter(textOutput, textOutput))
                 .Invalid();
 
-            Action parseAction = () => builder.Parse(args);
+            builder.Parse(args);
 
-            parseAction.Should().NotThrow<Exception>();
+            dummyOutput.ToArray().Should().NotBeEmpty();
         }
     }
 }

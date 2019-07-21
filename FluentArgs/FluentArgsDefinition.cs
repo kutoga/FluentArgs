@@ -5,9 +5,9 @@
 
     internal class FluentArgsDefinition : IParsableFromState
     {
-        private readonly Step initialStep;
+        private readonly InitialStep initialStep;
 
-        public FluentArgsDefinition(Step initialStep)
+        public FluentArgsDefinition(InitialStep initialStep)
         {
             this.initialStep = initialStep;
         }

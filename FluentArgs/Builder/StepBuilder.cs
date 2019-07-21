@@ -42,7 +42,8 @@
 
         public IInitialFluentArgsBuilder RegisterHelpFlag(string name, params string[] moreNames)
         {
-            throw new NotImplementedException();
+            ((InitialStep)Step).ParserSettings.HelpFlag = new Name(name, moreNames);
+            return this;
         }
 
         public IInitialFluentArgsBuilder RegisterHelpPrinter(IHelpPrinter helpPrinter)
