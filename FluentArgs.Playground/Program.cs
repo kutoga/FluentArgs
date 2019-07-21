@@ -46,7 +46,7 @@
                 .Parse(args);
 
             FluentArgsBuilder.New()
-                .Given.Parameter("-c", "--command").WithValue("copy").Then(b => b
+                .Given.Parameter("-c", "--command").HasValue("copy").Then(b => b
                     .Parameter("-i", "--input").IsRequired()
                     .Parameter<int>("-b", "--blocksize").IsOptional()
                     .Call(blockSize => input =>

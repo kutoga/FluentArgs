@@ -4,8 +4,8 @@
 
     public interface IGivenParameter<TArgsBuilder>
     {
-        IGivenThen<TArgsBuilder, TArgsBuilder> WithValue<TParam>(TParam value, Func<string, TParam>? parser = null);
+        IGivenThen<TArgsBuilder, TArgsBuilder> HasValue<TParam>(TParam value, Func<string, TParam>? parser = null);
 
-        IGivenThen<TArgsBuilder, TArgsBuilder> WithAnyValue();
+        IGivenThen<TArgsBuilder, TArgsBuilder> Exists();
     }
 }

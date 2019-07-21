@@ -25,12 +25,12 @@
 
         public Func<string, object>? Parser { get; set; }
 
-        public static GivenParameter WithAnyValue(Name name)
+        public static GivenParameter Exists(Name name)
         {
             return new GivenParameter(name, typeof(string), false, default, default);
         }
 
-        public static GivenParameter WithExactValue(Name name, Type type, object requiredValue, Func<string, object>? parser = null)
+        public static GivenParameter HasValue(Name name, Type type, object requiredValue, Func<string, object>? parser = null)
         {
             return new GivenParameter(name, type, true, requiredValue, parser);
         }
