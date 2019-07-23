@@ -15,6 +15,11 @@
             this.targetFunction = targetFunction;
         }
 
+        public override Task Accept(IStepVisitor visitor)
+        {
+            return visitor.Visit(this);
+        }
+
         public override Task Execute(State state)
         {
             var result = Reflection.Method.InvokeWrappedMethod(targetFunction.Target, state.GetParameters(), true);

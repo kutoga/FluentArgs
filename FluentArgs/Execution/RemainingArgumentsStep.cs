@@ -16,6 +16,11 @@
             this.remainingArguments = remainingArguments;
         }
 
+        public override Task Accept(IStepVisitor visitor)
+        {
+            return visitor.Visit(this);
+        }
+
         public override Task Execute(State state)
         {
             var remainingArguments = state.GetRemainingArguments(out state);

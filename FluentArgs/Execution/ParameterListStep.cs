@@ -8,26 +8,31 @@
 
     internal class ParameterListStep : Step
     {
-        private ParameterList parameterList; //TODO: rename to "description" (everywhere)
+        public ParameterList Description { get; } //TODO: rename to "description" (everywhere)
 
         public ParameterListStep(Step previous, ParameterList parameterList)
             : base(previous)
         {
-            this.parameterList = parameterList;
+            this.Description = parameterList;
+        }
+
+        public override Task Accept(IStepVisitor visitor)
+        {
+            return visitor.Visit(this);
         }
 
         public override Task Execute(State state)
         {
-            if (!state.TryExtractArguments(parameterList.Name.Names, out var arguments, out var newState, 1))
+            if (!state.TryExtractArguments(Description.Name.Names, out var arguments, out var newState, 1))
             {
-                if (parameterList.IsRequired)
+                if (Description.IsRequired)
                 {
                     throw new Exception("TODO: parameter is required, but not given");
                 }
 
-                if (parameterList.HasDefaultValue)
+                if (Description.HasDefaultValue)
                 {
-                    state = state.AddParameter(parameterList.DefaultValue);
+                    state = state.AddParameter(Description.DefaultValue);
                 }
                 else
                 {
@@ -44,14 +49,14 @@
 
         private object Parse(string parameter)
         {
-            var splitParameters = parameter.Split(parameterList.Separators.ToArray(), StringSplitOptions.None);
+            var splitParameters = parameter.Split(Description.Separators.ToArray(), StringSplitOptions.None);
 
-            if (parameterList.Parser != null)
+            if (Description.Parser != null)
             {
-                return ParseWithParser(parameterList.Parser); //TODO: parseWithParser sounds stupid
+                return ParseWithParser(Description.Parser); //TODO: parseWithParser sounds stupid
             }
 
-            if (DefaultStringParsers.TryGetParser(parameterList.Type, out var parser))
+            if (DefaultStringParsers.TryGetParser(Description.Type, out var parser))
             {
                 return ParseWithParser(parser);
             }
@@ -60,7 +65,7 @@
 
             object ParseWithParser(Func<string, object?> parser)
             {
-                return Reflection.Array.Create(parameterList.Type, splitParameters.Select(p => parser(p)).ToArray());
+                return Reflection.Array.Create(Description.Type, splitParameters.Select(p => parser(p)).ToArray());
             }
         }
     }

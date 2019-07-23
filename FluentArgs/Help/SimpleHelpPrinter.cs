@@ -17,12 +17,12 @@
 
         public TextWriter ErrorWriter { get; }
 
-        public Task WriteDescription(string description)
+        public Task WriteApplicationDescription(string description)
         {
             throw new NotImplementedException();
         }
 
-        public Task WriteTitle(string title)
+        public Task WriteParameterInfos(string[] aliases, string description, bool optional, object defaultValue, object[] examples)
         {
             throw new NotImplementedException();
         }

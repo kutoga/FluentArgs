@@ -21,6 +21,11 @@
             this.branches = branches.ToImmutableList();
         }
 
+        public override Task Accept(IStepVisitor visitor)
+        {
+            return visitor.Visit(this);
+        }
+
         public override Task Execute(State state)
         {
             if (!state.TryExtractArguments(name.Names, out var arguments, out var newState, 1))

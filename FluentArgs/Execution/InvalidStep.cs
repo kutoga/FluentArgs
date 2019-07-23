@@ -12,6 +12,11 @@
         {
         }
 
+        public override Task Accept(IStepVisitor visitor)
+        {
+            return visitor.Visit(this);
+        }
+
         public override Task Execute(State state)
         {
             throw new Exception("TODO: Invalid state: show helP");

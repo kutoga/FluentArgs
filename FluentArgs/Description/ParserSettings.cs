@@ -13,8 +13,10 @@
 
         public IHelpPrinter HelpPrinter { get; set; }
 
+        //TODO: Write Visitor
         public bool WarnOnDuplicateNames { get; set; }
 
+        //TODO: Write Visitor
         public bool WarnOnNonMinusStartingNames { get; set; }
     }
 }

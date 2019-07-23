@@ -26,5 +26,7 @@
         }
 
         public abstract Task Execute(State state);
+
+        public abstract Task Accept(IStepVisitor visitor);
     }
 }

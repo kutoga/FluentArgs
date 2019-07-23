@@ -4,15 +4,23 @@
     using System.Linq;
     using System.Threading.Tasks;
     using FluentArgs.Description;
+    using FluentArgs.Help;
 
     internal class InitialStep : Step
     {
         public ParserSettings? ParserSettings { get; set; }
 
+        public override Task Accept(IStepVisitor visitor)
+        {
+            return visitor.Visit(this);
+        }
+
         public override Task Execute(State state)
         {
             if (ShowHelp(state))
             {
+                var helpGenerator = new HelpGenerator(this);
+                return helpGenerator.Write();
                 throw new Exception("TODO: show help");
             }
 
