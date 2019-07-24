@@ -61,8 +61,11 @@
                 parameterList.Name.Names,
                 parameterList.Description,
                 !parameterList.IsRequired,
-                parameterList.Separators.ToArray(),
-                ...);
+                parameterList.Separators,
+                parameterList.HasDefaultValue,
+                parameterList.DefaultValue,
+                parameterList.Examples).ConfigureAwait(false);
+            await step.Next.Accept(this).ConfigureAwait(false);
         }
 
         public async Task Visit(ParameterStep step)
@@ -73,7 +76,8 @@
                 parameter.Description,
                 !parameter.IsRequired,
                 parameter.HasDefaultValue,
-                parameter.Examples ?? Array.Empty<object>()).ConfigureAwait(false);
+                parameter.DefaultValue,
+                parameter.Examples ?? Array.Empty<string>()).ConfigureAwait(false);
             await step.Next.Accept(this).ConfigureAwait(false);
         }
 

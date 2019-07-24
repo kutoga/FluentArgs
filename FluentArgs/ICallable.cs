@@ -1,6 +1,4 @@
-﻿using System.Threading.Tasks;
-
-namespace FluentArgs
+﻿namespace FluentArgs
 {
     public interface ICallable<TFunc, TFuncAsync>
     {

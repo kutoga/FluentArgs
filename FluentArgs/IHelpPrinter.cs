@@ -11,6 +11,7 @@
             IReadOnlyCollection<string> aliases,
             string? description,
             bool optional,
+            bool hasDefaultValue,
             object? defaultValue,
             IReadOnlyCollection<string> examples);
 
@@ -19,7 +20,8 @@
             string? description,
             bool optional,
             IReadOnlyCollection<string> separators,
-            IReadOnlyCollection<object>? defaultValue,
+            bool hasDefaultValue,
+            object? defaultValue,
             IReadOnlyCollection<string> examples);
     }
 }
