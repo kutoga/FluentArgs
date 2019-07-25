@@ -12,12 +12,12 @@
             this.initialStep = initialStep;
         }
 
-        public void Parse(string[] args)
+        public void Parse(params string[] args)
         {
             ParseAsync(args).Wait();
         }
 
-        public Task ParseAsync(string[] args)
+        public Task ParseAsync(params string[] args)
         {
             return ParseFromState(State.InitialState(args));
         }

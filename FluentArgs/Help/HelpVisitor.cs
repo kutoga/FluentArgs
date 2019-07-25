@@ -15,7 +15,7 @@
 
         public Task Visit(CallStep step)
         {
-            throw new System.NotImplementedException();
+            return Task.CompletedTask;
         }
 
         public Task Visit(FlagStep step)

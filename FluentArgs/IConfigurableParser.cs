@@ -35,7 +35,7 @@ namespace FluentArgs
                 .WarnOnNonMinusStartingNames();
         }
 
-        public static TArgsParser DefaultWithApplicationDescription<TArgsParser>(
+        public static TArgsParser DefaultConfigsWithAppDescription<TArgsParser>(
             this IConfigurableParser<TArgsParser> configurableParser, string description)
             where TArgsParser : IConfigurableParser<TArgsParser>
         {

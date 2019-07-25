@@ -7,6 +7,23 @@
     {
         static void Main(string[] args)
         {
+            FluentArgsBuilder.New()
+                .DefaultConfigs()
+                .DefaultConfigsWithAppDescription("This application was just developed for testing purposes. It has no real-life application.")
+                .Parameter<int>("-n", "--number")
+                    .WithDescription("Just a number")
+                    .IsOptional()
+                .Parameter("-k", "--key")
+                    .WithDescription("A very secret key")
+                    .IsOptionalWithDefault("DEFAULT_KEY")
+                .Call(key => n =>
+                {
+                    Console.WriteLine($"n={n}");
+                })
+                .Parse("--help");
+            Console.ReadLine();
+            return;
+
             //TODO: Given.Command(...) => if the comand is not present there should be a possibility to define this as invalid (the command is required)
 
             //TODO: Call .Build().Parse(xxx) instead of .Parse(); BUT add an extension method or something which just does this for you
