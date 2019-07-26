@@ -5,6 +5,13 @@
 
     class Program
     {
+        enum MyEnum
+        {
+            Pikachu,
+            Glurak,
+            Randomon
+        }
+
         static void Main(string[] args)
         {
             FluentArgsBuilder.New()
@@ -16,7 +23,10 @@
                 .Parameter("-k", "--key")
                     .WithDescription("A very secret key")
                     .IsOptionalWithDefault("DEFAULT_KEY")
-                .Call(key => n =>
+                .Parameter<MyEnum>("-e", "--e")
+                    .WithDescription("Choose your pokemon")
+                    .IsRequired()
+                .Call(e => key => n =>
                 {
                     Console.WriteLine($"n={n}");
                 })

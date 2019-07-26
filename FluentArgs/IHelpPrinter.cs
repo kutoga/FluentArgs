@@ -1,5 +1,6 @@
 ﻿namespace FluentArgs
 {
+    using System;
     using System.Collections.Generic;
     using System.Threading.Tasks;
 
@@ -10,6 +11,7 @@
         Task WriteParameterInfos(
             IReadOnlyCollection<string> aliases,
             string? description,
+            Type type,
             bool optional,
             bool hasDefaultValue,
             object? defaultValue,
@@ -18,6 +20,7 @@
         Task WriteParameterListInfos(
             IReadOnlyCollection<string> aliases,
             string? description,
+            Type type,
             bool optional,
             IReadOnlyCollection<string> separators,
             bool hasDefaultValue,

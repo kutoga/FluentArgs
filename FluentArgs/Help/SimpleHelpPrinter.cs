@@ -30,7 +30,7 @@
             await OutputWriter.WriteLine(string.Empty).ConfigureAwait(false);
         }
 
-        public async Task WriteParameterInfos(IReadOnlyCollection<string> aliases, string description, bool optional, bool hasDefaultValue, object defaultValue, IReadOnlyCollection<string> examples)
+        public async Task WriteParameterInfos(IReadOnlyCollection<string> aliases, string description, Type type, bool optional, bool hasDefaultValue, object defaultValue, IReadOnlyCollection<string> examples)
         {
             var aliasStr = string.Join("|", aliases.OrderBy(a => a.Length).ThenBy(a => a));
             await OutputWriter.WriteLines(SplitLine($" {aliasStr}", MaxLineLength)).ConfigureAwait(false);
@@ -51,7 +51,19 @@
                     }
                 }
 
-                if (description != null) {
+                if (type.IsEnum)
+                {
+                    await OutputWriter.WriteLine("Possible values:").ConfigureAwait(false);
+                    using (AddTab())
+                    {
+                        await OutputWriter.WriteLines(Enum.GetValues(type)
+                            .Cast<object>()
+                            .Select(t => t.ToString())).ConfigureAwait(false);
+                    }
+                }
+
+                if (description != null)
+                {
                     await OutputWriter.WriteLines(SplitLine(description, MaxLineLength)).ConfigureAwait(false);
                 }
 
@@ -59,7 +71,7 @@
             }
         }
 
-        public Task WriteParameterListInfos(IReadOnlyCollection<string> aliases, string description, bool optional, IReadOnlyCollection<string> separators, bool hasDefaultValue, object defaultValue, IReadOnlyCollection<string> examples)
+        public Task WriteParameterListInfos(IReadOnlyCollection<string> aliases, string description, Type type, bool optional, IReadOnlyCollection<string> separators, bool hasDefaultValue, object defaultValue, IReadOnlyCollection<string> examples)
         {
             throw new NotImplementedException();
         }

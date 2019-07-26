@@ -60,6 +60,7 @@
             await helpPrinter.WriteParameterListInfos(
                 parameterList.Name.Names,
                 parameterList.Description,
+                parameterList.Type,
                 !parameterList.IsRequired,
                 parameterList.Separators,
                 parameterList.HasDefaultValue,
@@ -74,6 +75,7 @@
             await helpPrinter.WriteParameterInfos(
                 parameter.Name.Names,
                 parameter.Description,
+                parameter.Type,
                 !parameter.IsRequired,
                 parameter.HasDefaultValue,
                 parameter.DefaultValue,
