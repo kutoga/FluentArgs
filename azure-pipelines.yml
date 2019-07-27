@@ -1,0 +1,37 @@
+pool:
+  vmImage: 'Ubuntu 16.04'
+
+trigger:
+  batch: true
+  branches:
+    include: ['master']
+  
+variables:
+  buildConfiguration: 'Release'
+  workingDirectory: '$(Build.SourcesDirectory)'
+
+steps:
+- script: dotnet restore ./FluentArgs.sln
+  displayName: Restore
+  workingDirectory: $(workingDirectory)
+
+- script: dotnet build ./FluentArgs.sln --configuration $(buildConfiguration)
+  displayName: Build
+  workingDirectory: $(workingDirectory)
+
+- script: dotnet test ./FluentArgs.sln --configuration $(buildConfiguration) --logger trx
+  displayName: Test
+  workingDirectory: $(workingDirectory)
+
+- task: PublishTestResults@2
+  displayName: Publish Test Results
+  condition: succeededOrFailed()
+  inputs:
+    testRunner: VSTest
+    testResultsFiles: '**/*.trx'
+
+- script: dotnet publish ./FluentArgs --configuration $(buildConfiguration) --output $(Build.ArtifactStagingDirectory)
+  displayName: Publish
+  workingDirectory: $(workingDirectory)
+  
+- task: PublishBuildArtifacts@1
