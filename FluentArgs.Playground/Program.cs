@@ -28,7 +28,10 @@
                     .IsRequired()
                 .Parameter("--name")
                     .IsRequired()
-                .Call(name => e => key => n =>
+                .ParameterList<MyEnum>("--drink")
+                    .WithDescription("What are your favourite drinks?")
+                    .IsOptional()
+                .Call(drinks => name => e => key => n =>
                 {
                     Console.WriteLine($"n={n}");
                 })
