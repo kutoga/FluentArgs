@@ -26,5 +26,7 @@
             bool hasDefaultValue,
             object? defaultValue,
             IReadOnlyCollection<string> examples);
+
+        Task Finalize();
     }
 }

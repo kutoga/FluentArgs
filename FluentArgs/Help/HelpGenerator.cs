@@ -12,10 +12,11 @@
             this.initialStep = initialStep;
         }
 
-        public Task Write()
+        public async Task Write()
         {
             var visitor = new HelpVisitor(initialStep.ParserSettings.HelpPrinter);
-            return visitor.Visit(initialStep);
+            await visitor.Visit(initialStep).ConfigureAwait(false);
+            await initialStep.ParserSettings.HelpPrinter.Finalize().ConfigureAwait(false);
         }
     }
 }

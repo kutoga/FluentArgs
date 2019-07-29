@@ -12,7 +12,7 @@
         private const int MaxLineLength = 80;
         private readonly Stack<ILineWriter> outputWriters;
         private readonly Stack<ILineWriter> errorWriters;
-        private readonly IList<(string parameterName, string descriptions)> parameters;
+        private readonly IList<(string parameterName, string description)> parameters;
 
         private ILineWriter OutputWriter => outputWriters.Peek();
         private ILineWriter ErrorWriter => errorWriters.Peek();
@@ -32,45 +32,43 @@
             await OutputWriter.WriteLine(string.Empty).ConfigureAwait(false);
         }
 
-        public async Task WriteParameterInfos(IReadOnlyCollection<string> aliases, string description, Type type, bool optional, bool hasDefaultValue, object defaultValue, IReadOnlyCollection<string> examples)
+        public Task WriteParameterInfos(IReadOnlyCollection<string> aliases, string description, Type type, bool optional, bool hasDefaultValue, object defaultValue, IReadOnlyCollection<string> examples)
         {
             var aliasStr = string.Join("|", aliases.OrderBy(a => a.Length).ThenBy(a => a));
-            await OutputWriter.WriteLines(SplitLine($" {aliasStr}", MaxLineLength)).ConfigureAwait(false);
-            using (AddTab())
+            var descriptionStr = "";
+            if (optional)
             {
-                await OutputWriter.WriteLine($"Optional: {(optional ? "yes" : "no")}").ConfigureAwait(false);
                 if (hasDefaultValue)
                 {
-                    await OutputWriter.WriteLine($"Default value: {defaultValue}").ConfigureAwait(false);
+                    descriptionStr = $"Optional with default '{defaultValue}'. ";
                 }
-
-                if (examples.Count > 0)
+                else
                 {
-                    await OutputWriter.WriteLine("Example values:").ConfigureAwait(false);
-                    using (AddTab())
-                    {
-                        await OutputWriter.WriteLines(examples.Select(e => $"{e}")).ConfigureAwait(false);
-                    }
+                    descriptionStr = "Optional. ";
                 }
-
-                if (type.IsEnum)
-                {
-                    await OutputWriter.WriteLine("Possible values:").ConfigureAwait(false);
-                    using (AddTab())
-                    {
-                        await OutputWriter.WriteLines(Enum.GetValues(type)
-                            .Cast<object>()
-                            .Select(t => t.ToString())).ConfigureAwait(false);
-                    }
-                }
-
-                if (description != null)
-                {
-                    await OutputWriter.WriteLines(SplitLine(description, MaxLineLength)).ConfigureAwait(false);
-                }
-
-                //TODO: Write all enum values if the parameter type is enum
             }
+
+            if (description != null)
+            {
+                descriptionStr += description + " ";
+            }
+            else
+            {
+                descriptionStr += $"Type: {type.Name} ";
+            }
+
+            if (examples.Count > 0)
+            {
+                descriptionStr += "Examples: " + string.Join(", ", examples);
+            }
+            else if (type.IsEnum)
+            {
+                descriptionStr += "Possible values: " + string.Join(", ", Enum.GetValues(type).Cast<object>().ToArray());
+            }
+
+            parameters.Add((aliasStr, descriptionStr));
+
+            return Task.CompletedTask;
         }
 
         public Task WriteParameterListInfos(IReadOnlyCollection<string> aliases, string description, Type type, bool optional, IReadOnlyCollection<string> separators, bool hasDefaultValue, object defaultValue, IReadOnlyCollection<string> examples)
@@ -108,6 +106,29 @@
         private IDisposable AddTab()
         {
             return new TabPrefixContext(this);
+        }
+
+        public async Task Finalize()
+        {
+            if (parameters.Count == 0)
+            {
+                return;
+            }
+
+            var maxNameLength = parameters.Max(p => p.parameterName.Length);
+            if (maxNameLength > 25)
+            {
+                foreach (var parameter in parameters)
+                {
+                    await OutputWriter.WriteLines(SplitLine(parameter.parameterName, MaxLineLength)).ConfigureAwait(false);
+                    await OutputWriter.WriteLines(SplitLine(parameter.description, MaxLineLength - Tab.Length).Select(l => $"{Tab}{l}")).ConfigureAwait(false);
+                }
+            }
+            else
+            {
+                var separator = " ";
+                var descriptionLength = MaxLineLength - maxNameLength - separator.Length;
+            }
         }
 
         private class TabPrefixContext : IDisposable
