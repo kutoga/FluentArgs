@@ -5,11 +5,11 @@
 
     internal class FluentArgsDefinition : IParsableFromState
     {
-        private readonly InitialStep initialStep;
+        public InitialStep InitialStep { get; }
 
         public FluentArgsDefinition(InitialStep initialStep)
         {
-            this.initialStep = initialStep;
+            this.InitialStep = initialStep;
         }
 
         public void Parse(params string[] args)
@@ -24,7 +24,7 @@
 
         public Task ParseFromState(State state)
         {
-            return initialStep.Execute(state);
+            return InitialStep.Execute(state);
         }
     }
 }

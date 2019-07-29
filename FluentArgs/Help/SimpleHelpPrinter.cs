@@ -15,6 +15,7 @@
         private readonly IList<(string parameterName, string description)> parameters;
 
         private ILineWriter OutputWriter => outputWriters.Peek();
+
         private ILineWriter ErrorWriter => errorWriters.Peek();
 
         public SimpleHelpPrinter(TextWriter outputWriter, TextWriter errorWriter)

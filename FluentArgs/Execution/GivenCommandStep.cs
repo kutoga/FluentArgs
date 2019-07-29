@@ -11,14 +11,14 @@
     internal class GivenCommandStep : Step
     {
         //TODO: Put the branches & the name in a GivenCommand description or something like that
-        private readonly Name name;
-        private readonly IImmutableList<(GivenCommandBranch branch, IParsableFromState then)> branches;
+        public Name Name { get; }
+        public IImmutableList<(GivenCommandBranch branch, IParsableFromState then)> Branches { get; }
 
         public GivenCommandStep(Step previousStep, Name name, IEnumerable<(GivenCommandBranch branch, IParsableFromState then)> branches)
             : base(previousStep)
         {
-            this.name = name;
-            this.branches = branches.ToImmutableList();
+            Name = name;
+            Branches = branches.ToImmutableList();
         }
 
         public override Task Accept(IStepVisitor visitor)
@@ -28,7 +28,7 @@
 
         public override Task Execute(State state)
         {
-            if (!state.TryExtractArguments(name.Names, out var arguments, out var newState, 1))
+            if (!state.TryExtractArguments(Name.Names, out var arguments, out var newState, 1))
             {
                 return Next.Execute(state);
             }
@@ -37,7 +37,7 @@
                 var parameterValue = arguments[1];
                 state = newState;
 
-                foreach (var branch in branches)
+                foreach (var branch in Branches)
                 {
                     Func<State, string, GivenCommandBranch, IParsableFromState, (Task? result, bool matches)> handler;
                     switch (branch.branch.Type)

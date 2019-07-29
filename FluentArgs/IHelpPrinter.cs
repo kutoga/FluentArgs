@@ -8,6 +8,10 @@
     {
         Task WriteApplicationDescription(string description);
 
+        Task WriteFlagInfos(
+            IReadOnlyCollection<string> aliases,
+            string? description);
+
         Task WriteParameterInfos(
             IReadOnlyCollection<string> aliases,
             string? description,

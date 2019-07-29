@@ -1,8 +1,10 @@
 ﻿namespace FluentArgs.Help
 {
     using System;
+    using System.Linq;
     using System.Threading.Tasks;
     using FluentArgs.Execution;
+    using FluentArgs.Extensions;
 
     internal class HelpVisitor : IStepVisitor
     {
@@ -20,12 +22,25 @@
 
         public Task Visit(FlagStep step)
         {
-            throw new System.NotImplementedException();
+            return helpPrinter.WriteFlagInfos(step.Description.Name.Names, step.Description.Description);
         }
 
-        public Task Visit(GivenCommandStep step)
+        public async Task Visit(GivenCommandStep step)
         {
-            throw new System.NotImplementedException();
+            // TODO: push command info
+            await step.Branches.Select(b =>
+            {
+                // Write info
+                if (b.then is FluentArgsDefinition argsBuilder)
+                {
+                    return argsBuilder.InitialStep.Accept(this);
+                }
+
+                return Task.CompletedTask;
+            }).Serialize().ConfigureAwait(false);
+            // TODO: pop command info
+
+            throw new NotImplementedException();
         }
 
         public Task Visit(GivenFlagStep step)
@@ -51,7 +66,7 @@
 
         public Task Visit(InvalidStep step)
         {
-            throw new System.NotImplementedException();
+            return Task.CompletedTask;
         }
 
         public async Task Visit(ParameterListStep step)
