@@ -128,6 +128,14 @@
             {
                 var separator = " ";
                 var descriptionLength = MaxLineLength - maxNameLength - separator.Length;
+                var linesPrefix = string.Concat(Enumerable.Repeat(" ", maxNameLength + separator.Length));
+
+                await OutputWriter.WriteLines(parameters.SelectMany(p =>
+                {
+                    var lines = SplitLine(p.description, descriptionLength).ToArray();
+                    var firstLine = p.parameterName.PadRight(maxNameLength) + separator + lines.First();
+                    return lines.Skip(1).Select(l => linesPrefix + l).Prepend(firstLine);
+                })).ConfigureAwait(false);
             }
         }
 

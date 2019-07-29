@@ -24,9 +24,11 @@
                     .WithDescription("A very secret key")
                     .IsOptionalWithDefault("DEFAULT_KEY")
                 .Parameter<MyEnum>("-e", "--e")
-                    .WithDescription("Choose your pokemon")
+                    .WithDescription("Choose your pokemon. This option is as useless as the others, but a long text is required to see if the line breaks work. Or not? Whatever.")
                     .IsRequired()
-                .Call(e => key => n =>
+                .Parameter("--name")
+                    .IsRequired()
+                .Call(name => e => key => n =>
                 {
                     Console.WriteLine($"n={n}");
                 })
