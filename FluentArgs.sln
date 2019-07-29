@@ -11,6 +11,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FluentArgs.Test", "FluentAr
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{60AE99DE-AA20-42CF-8ECE-5B4C78C90FEA}"
 	ProjectSection(SolutionItems) = preProject
+		azure-pipelines.yml = azure-pipelines.yml
 		code.ruleset = code.ruleset
 		paket.dependencies = paket.dependencies
 		README.md = README.md
@@ -18,7 +19,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FluentArgs.Playground", "FluentArgs.Playground\FluentArgs.Playground.csproj", "{D13B0894-EBC4-4BDA-9037-43A0B253DA3E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FluentArgs.Test.Helpers", "FluentArgs.Test.Helpers\FluentArgs.Test.Helpers.csproj", "{CA2DC929-1330-4A22-B476-9BEBCC46F8B7}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FluentArgs.Test.Helpers", "FluentArgs.Test.Helpers\FluentArgs.Test.Helpers.csproj", "{CA2DC929-1330-4A22-B476-9BEBCC46F8B7}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
