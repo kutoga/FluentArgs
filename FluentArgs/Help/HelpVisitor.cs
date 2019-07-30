@@ -1,14 +1,17 @@
 ﻿namespace FluentArgs.Help
 {
     using System;
+    using System.Collections.Generic;
     using System.Linq;
     using System.Threading.Tasks;
+    using FluentArgs.Description;
     using FluentArgs.Execution;
     using FluentArgs.Extensions;
 
     internal class HelpVisitor : IStepVisitor
     {
         private readonly IHelpPrinter helpPrinter;
+        private Stack<(Name name, string description)> givenTexts;
 
         public HelpVisitor(IHelpPrinter helpPrinter)
         {
@@ -27,16 +30,47 @@
 
         public async Task Visit(GivenCommandStep step)
         {
-            // TODO: push command info
-            await step.Branches.Select(b =>
+            if (step.Branches.Last().branch.Type == GivenCommandBranchType.Invalid)
             {
+                // TODO: The command is required; print this somehow
+            }
+
+            // TODO: push command info
+            await step.Branches.Select(async b =>
+            {
+                switch (b.branch.Type)
+                {
+                    case GivenCommandBranchType.HasValue:
+                        if (b.branch.PossibleValues.Length == 0)
+                        {
+                            givenTexts.Push((step.Name, "has a non-existing value"));
+                        }
+                        else if (b.branch.PossibleValues.Length == 1)
+                        {
+                            givenTexts.Push((step.Name, $" is {b.branch.PossibleValues[0]}"));
+                        }
+                        else
+                        {
+                            givenTexts.Push((step.Name, $" is one of the following values: {string.Join(", ", b.branch.PossibleValues)}"));
+                        }
+
+                        break;
+
+                    case GivenCommandBranchType.Matches:
+                        givenTexts.Push((step.Name, "matches a well-defined pattern"));
+                        break;
+
+                    case GivenCommandBranchType.Ignore:
+                        break;
+                }
+
                 // Write info
                 if (b.then is FluentArgsDefinition argsBuilder)
                 {
-                    return argsBuilder.InitialStep.Accept(this);
+                    await argsBuilder.InitialStep.Accept(this).ConfigureAwait(false);
                 }
 
-                return Task.CompletedTask;
+                givenTexts.Pop();
             }).Serialize().ConfigureAwait(false);
             // TODO: pop command info
 
