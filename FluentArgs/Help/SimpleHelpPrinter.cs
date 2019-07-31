@@ -33,7 +33,15 @@
             await OutputWriter.WriteLine(string.Empty).ConfigureAwait(false);
         }
 
-        public Task WriteParameterInfos(IReadOnlyCollection<string> aliases, string description, Type type, bool optional, bool hasDefaultValue, object defaultValue, IReadOnlyCollection<string> examples)
+        public Task WriteParameterInfos(
+            IReadOnlyCollection<string> aliases,
+            string description,
+            Type type,
+            bool optional,
+            bool hasDefaultValue,
+            object defaultValue,
+            IReadOnlyCollection<string> examples,
+            IReadOnlyCollection<(IReadOnlyCollection<string> aliases, string description)> givenHints)
         {
             var aliasStr = string.Join("|", aliases.OrderBy(a => a.Length).ThenBy(a => a));
             var descriptionStr = "";
@@ -72,7 +80,16 @@
             return Task.CompletedTask;
         }
 
-        public Task WriteParameterListInfos(IReadOnlyCollection<string> aliases, string description, Type type, bool optional, IReadOnlyCollection<string> separators, bool hasDefaultValue, object defaultValue, IReadOnlyCollection<string> examples)
+        public Task WriteParameterListInfos(
+            IReadOnlyCollection<string> aliases,
+            string description,
+            Type type,
+            bool optional,
+            IReadOnlyCollection<string> separators,
+            bool hasDefaultValue,
+            object defaultValue,
+            IReadOnlyCollection<string> examples,
+            IReadOnlyCollection<(IReadOnlyCollection<string> aliases, string description)> givenHints)
         {
             var aliasStr = string.Join("|", aliases.OrderBy(a => a.Length).ThenBy(a => a));
             var descriptionStr = "";
@@ -153,11 +170,6 @@
             }
         }
 
-        private IDisposable AddTab()
-        {
-            return new TabPrefixContext(this);
-        }
-
         public async Task Finalize()
         {
             if (parameters.Count == 0)
@@ -189,20 +201,21 @@
             }
         }
 
-        private class TabPrefixContext : IDisposable
+        public Task WriteFlagInfos(IReadOnlyCollection<string> aliases, string description, IReadOnlyCollection<(IReadOnlyCollection<string> aliases, string description)> givenHints)
         {
-            private readonly SimpleHelpPrinter simpleHelpPrinter;
-
-            public TabPrefixContext(SimpleHelpPrinter simpleHelpPrinter)
+            var aliasStr = string.Join("|", aliases.OrderBy(a => a.Length).ThenBy(a => a));
+            var descriptionStr = "";
+            if (description != null)
             {
-                this.simpleHelpPrinter = simpleHelpPrinter;
-                simpleHelpPrinter.outputWriters.Push(simpleHelpPrinter.OutputWriter.AddLinePrefix(Tab));
+                descriptionStr = description;
+            }
+            else
+            {
+                descriptionStr = "A flag";
             }
 
-            public void Dispose()
-            {
-                simpleHelpPrinter.outputWriters.Pop();
-            }
+            parameters.Add((aliasStr, descriptionStr));
+            return Task.CompletedTask;
         }
     }
 }

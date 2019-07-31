@@ -10,7 +10,8 @@
 
         Task WriteFlagInfos(
             IReadOnlyCollection<string> aliases,
-            string? description);
+            string? description,
+            IReadOnlyCollection<(IReadOnlyCollection<string> aliases, string description)> givenHints);
 
         Task WriteParameterInfos(
             IReadOnlyCollection<string> aliases,
@@ -19,7 +20,8 @@
             bool optional,
             bool hasDefaultValue,
             object? defaultValue,
-            IReadOnlyCollection<string> examples);
+            IReadOnlyCollection<string> examples,
+            IReadOnlyCollection<(IReadOnlyCollection<string> aliases, string description)> givenHints);
 
         Task WriteParameterListInfos(
             IReadOnlyCollection<string> aliases,
@@ -29,7 +31,8 @@
             IReadOnlyCollection<string> separators,
             bool hasDefaultValue,
             object? defaultValue,
-            IReadOnlyCollection<string> examples);
+            IReadOnlyCollection<string> examples,
+            IReadOnlyCollection<(IReadOnlyCollection<string> aliases, string description)> givenHints);
 
         Task Finalize();
     }

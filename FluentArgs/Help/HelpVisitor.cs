@@ -11,7 +11,12 @@
     internal class HelpVisitor : IStepVisitor
     {
         private readonly IHelpPrinter helpPrinter;
-        private Stack<(Name name, string description)> givenTexts;
+        private Stack<(Name name, string description)> givenTexts = new Stack<(Name name, string description)>();
+
+        private IReadOnlyCollection<(IReadOnlyCollection<string> aliases, string description)> GetGivenHints()
+        {
+            return givenTexts.Select(t => ((IReadOnlyCollection<string>)t.name.Names, t.description)).ToArray();
+        }
 
         public HelpVisitor(IHelpPrinter helpPrinter)
         {
@@ -25,7 +30,7 @@
 
         public Task Visit(FlagStep step)
         {
-            return helpPrinter.WriteFlagInfos(step.Description.Name.Names, step.Description.Description);
+            return helpPrinter.WriteFlagInfos(step.Description.Name.Names, step.Description.Description, GetGivenHints());
         }
 
         public async Task Visit(GivenCommandStep step)
@@ -114,7 +119,8 @@
                 parameterList.Separators,
                 parameterList.HasDefaultValue,
                 parameterList.DefaultValue,
-                parameterList.Examples).ConfigureAwait(false);
+                parameterList.Examples,
+                GetGivenHints()).ConfigureAwait(false);
             await step.Next.Accept(this).ConfigureAwait(false);
         }
 
@@ -128,7 +134,8 @@
                 !parameter.IsRequired,
                 parameter.HasDefaultValue,
                 parameter.DefaultValue,
-                parameter.Examples ?? Array.Empty<string>()).ConfigureAwait(false);
+                parameter.Examples ?? Array.Empty<string>(),
+                GetGivenHints()).ConfigureAwait(false);
             await step.Next.Accept(this).ConfigureAwait(false);
         }
 

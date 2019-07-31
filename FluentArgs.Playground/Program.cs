@@ -31,7 +31,12 @@
                 .ParameterList<MyEnum>("--drink")
                     .WithDescription("What are your favourite drinks?")
                     .IsOptional()
-                .Call(drinks => name => e => key => n =>
+                .Parameter("--abc")
+                    .IsRequired()
+                .Flag("-u")
+                    .WithDescription("just a flag")
+                .Flag("-w")
+                .Call(w => u => abc => drinks => name => e => key => n =>
                 {
                     Console.WriteLine($"n={n}");
                 })
