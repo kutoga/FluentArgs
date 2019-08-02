@@ -28,9 +28,10 @@
             return Task.CompletedTask;
         }
 
-        public Task Visit(FlagStep step)
+        public async Task Visit(FlagStep step)
         {
-            return helpPrinter.WriteFlagInfos(step.Description.Name.Names, step.Description.Description, GetGivenHints());
+            await helpPrinter.WriteFlagInfos(step.Description.Name.Names, step.Description.Description, GetGivenHints()).ConfigureAwait(false);
+            await step.Next.Accept(this).ConfigureAwait(false);
         }
 
         public async Task Visit(GivenCommandStep step)

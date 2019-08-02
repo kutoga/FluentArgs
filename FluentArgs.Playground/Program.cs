@@ -34,7 +34,7 @@
                 .Parameter("--abc")
                     .IsRequired()
                 .Flag("-u")
-                    .WithDescription("just a flag")
+                    .WithDescription("just a flag...")
                 .Flag("-w")
                 .Call(w => u => abc => drinks => name => e => key => n =>
                 {
