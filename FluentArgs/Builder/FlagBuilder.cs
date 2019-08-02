@@ -32,6 +32,16 @@
             return Build().Call(callback);
         }
 
+        public IBuildable CallUntyped(Action<IReadOnlyCollection<object>> callback)
+        {
+            return Build().CallUntyped(callback);
+        }
+
+        public IBuildable CallUntyped(Func<IReadOnlyCollection<object>, Task> callback)
+        {
+            return Build().CallUntyped(callback);
+        }
+
         public IConfigurableFlagWithOptionalDescription<Action<bool>, Func<bool, Task>> Flag(string name, params string[] moreNames)
         {
             return Build().Flag(name, moreNames);
@@ -92,6 +102,16 @@
         public IBuildable Call(Func<bool, TFuncAsync> callback)
         {
             return Build().Call(callback);
+        }
+
+        public IBuildable CallUntyped(Action<IReadOnlyCollection<object?>> callback)
+        {
+            return Build().CallUntyped(callback);
+        }
+
+        public IBuildable CallUntyped(Func<IReadOnlyCollection<object?>, Task> callback)
+        {
+            return Build().CallUntyped(callback);
         }
 
         public IConfigurableFlagWithOptionalDescription<Func<bool, TFunc>, Func<bool, TFuncAsync>> Flag(string name, params string[] moreNames)

@@ -9,6 +9,8 @@ namespace FluentArgs.Execution
     {
         Task Visit(CallStep step);
 
+        Task Visit(UntypedCallStep step);
+
         Task Visit(FlagStep step);
 
         Task Visit(GivenCommandStep step);

@@ -144,5 +144,10 @@
         {
             throw new System.NotImplementedException();
         }
+
+        public Task Visit(UntypedCallStep step)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

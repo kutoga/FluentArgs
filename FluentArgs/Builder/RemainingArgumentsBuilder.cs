@@ -1,6 +1,8 @@
 ﻿namespace FluentArgs.Builder
 {
     using System;
+    using System.Collections.Generic;
+    using System.Threading.Tasks;
     using FluentArgs.Description;
     using FluentArgs.Execution;
 
@@ -54,6 +56,16 @@
         {
             remainingArguments.Parser = s => parser(s);
             return this;
+        }
+
+        public IBuildable CallUntyped(Action<IReadOnlyCollection<object?>> callback)
+        {
+            return Finalize().CallUntyped(callback);
+        }
+
+        public IBuildable CallUntyped(Func<IReadOnlyCollection<object?>, Task> callback)
+        {
+            return Finalize().CallUntyped(callback);
         }
     }
 }

@@ -7,7 +7,7 @@
 
     internal class CallStep : Step
     {
-        private TargetFunction targetFunction;
+        private readonly TargetFunction targetFunction;
 
         public CallStep(Step previous, TargetFunction targetFunction)
             : base(previous)

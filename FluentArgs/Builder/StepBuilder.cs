@@ -2,7 +2,6 @@
 {
     using System;
     using System.Collections.Generic;
-    using System.IO;
     using System.Threading.Tasks;
     using FluentArgs.Description;
     using FluentArgs.Execution;
@@ -27,6 +26,16 @@
         public IBuildable Call(Func<Task> callback)
         {
             return new FinalBuilder(new CallStep(Step, new TargetFunction(callback)));
+        }
+
+        public IBuildable CallUntyped(Action<IReadOnlyCollection<object?>> callback)
+        {
+            return new FinalBuilder(new UntypedCallStep(Step, new UntypedTargetFunction(callback)));
+        }
+
+        public IBuildable CallUntyped(Func<IReadOnlyCollection<object?>, Task> callback)
+        {
+            return new FinalBuilder(new UntypedCallStep(Step, new UntypedTargetFunction(callback)));
         }
 
         public IBuildable Invalid()
@@ -112,6 +121,16 @@
         public IBuildable Call(TFuncAsync callback)
         {
             return new FinalBuilder(new CallStep(Step, new TargetFunction(callback)));
+        }
+
+        public IBuildable CallUntyped(Action<IReadOnlyCollection<object?>> callback)
+        {
+            return new FinalBuilder(new UntypedCallStep(Step, new UntypedTargetFunction(callback)));
+        }
+
+        public IBuildable CallUntyped(Func<IReadOnlyCollection<object?>, Task> callback)
+        {
+            return new FinalBuilder(new UntypedCallStep(Step, new UntypedTargetFunction(callback)));
         }
 
         public IBuildable Invalid()

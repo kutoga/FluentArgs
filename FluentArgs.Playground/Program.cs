@@ -36,6 +36,14 @@
                 .Flag("-u")
                     .WithDescription("just a flag...")
                 .Flag("-w")
+                .Given.Command("--special")
+                    .HasValue("xyz").Then(b => b
+                        .Parameter("-a")
+                            .IsRequired()
+                        .CallUntyped(d =>
+                        {
+                        }))
+                    .ElseIgnore()
                 .Call(w => u => abc => drinks => name => e => key => n =>
                 {
                     Console.WriteLine($"n={n}");
