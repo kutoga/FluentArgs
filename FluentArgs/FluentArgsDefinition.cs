@@ -14,6 +14,7 @@
 
         public void Parse(params string[] args)
         {
+            // TODO: unpack innerexception
             ParseAsync(args).Wait();
         }
 

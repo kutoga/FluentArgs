@@ -40,6 +40,9 @@
                     .HasValue("xyz").Then(b => b
                         .Parameter("-a")
                             .IsRequired()
+                        .Given.Flag("--myflag").Then(b => b
+                            .Parameter("--x").IsOptional()
+                            .CallUntyped(d => { }))
                         .CallUntyped(d =>
                         {
                         }))

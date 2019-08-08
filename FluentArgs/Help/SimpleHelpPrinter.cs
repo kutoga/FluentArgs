@@ -45,6 +45,7 @@
         {
             var aliasStr = string.Join("|", aliases.OrderBy(a => a.Length).ThenBy(a => a));
             var descriptionStr = "";
+
             if (optional)
             {
                 if (hasDefaultValue)
@@ -54,6 +55,20 @@
                 else
                 {
                     descriptionStr = "Optional. ";
+                }
+            }
+
+            if (givenHints.Count > 0)
+            {
+                var descriptions = givenHints.Reverse().Select(h => $"{h.aliases.OrderBy(a => a.Length).First()} {h.description}").ToArray();
+                descriptionStr += "Only available if ";
+                if (descriptions.Length > 1)
+                {
+                    descriptionStr += $"{string.Join(", ", descriptions.Take(descriptions.Length - 1))} and {descriptions.Last()}. ";
+                }
+                else
+                {
+                    descriptionStr += $"{descriptions.First()}. ";
                 }
             }
 
@@ -204,7 +219,12 @@
         public Task WriteFlagInfos(IReadOnlyCollection<string> aliases, string description, IReadOnlyCollection<(IReadOnlyCollection<string> aliases, string description)> givenHints)
         {
             var aliasStr = string.Join("|", aliases.OrderBy(a => a.Length).ThenBy(a => a));
-            var descriptionStr = "";
+            var descriptionStr = string.Empty;
+            if (givenHints.Count > 0)
+            {
+
+            }
+
             if (description != null)
             {
                 descriptionStr = description;

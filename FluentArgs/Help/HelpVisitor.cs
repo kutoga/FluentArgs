@@ -44,6 +44,8 @@
             // TODO: push command info
             await step.Branches.Select(async b =>
             {
+                var giventextsAdded = false;
+
                 switch (b.branch.Type)
                 {
                     case GivenCommandBranchType.HasValue:
@@ -53,17 +55,20 @@
                         }
                         else if (b.branch.PossibleValues.Length == 1)
                         {
-                            givenTexts.Push((step.Name, $" is {b.branch.PossibleValues[0]}"));
+                            givenTexts.Push((step.Name, $"is {b.branch.PossibleValues[0]}"));
                         }
                         else
                         {
-                            givenTexts.Push((step.Name, $" is one of the following values: {string.Join(", ", b.branch.PossibleValues)}"));
+                            givenTexts.Push((step.Name, $"is one of the following values: {string.Join(", ", b.branch.PossibleValues)}"));
                         }
+
+                        giventextsAdded = true;
 
                         break;
 
                     case GivenCommandBranchType.Matches:
                         givenTexts.Push((step.Name, "matches a well-defined pattern"));
+                        giventextsAdded = true;
                         break;
 
                     case GivenCommandBranchType.Ignore:
@@ -76,16 +81,27 @@
                     await argsBuilder.InitialStep.Accept(this).ConfigureAwait(false);
                 }
 
-                givenTexts.Pop();
+                if (giventextsAdded)
+                {
+                    givenTexts.Pop();
+                }
             }).Serialize().ConfigureAwait(false);
             // TODO: pop command info
 
-            throw new NotImplementedException();
+            //throw new NotImplementedException();
         }
 
-        public Task Visit(GivenFlagStep step)
+        public async Task Visit(GivenFlagStep step)
         {
-            throw new System.NotImplementedException();
+            // TODO: push command info
+            givenTexts.Push((step.Description.Name, " is set"));
+
+            if (step.ThenStep is FluentArgsDefinition argsBuilder)
+            {
+                await argsBuilder.InitialStep.Accept(this).ConfigureAwait(false);
+            }
+
+            givenTexts.Pop();
         }
 
         public Task Visit(GivenParameterStep step)
@@ -95,7 +111,7 @@
 
         public async Task Visit(InitialStep step)
         {
-            var applicationDescription = step.ParserSettings.ApplicationDescription;
+            var applicationDescription = step.ParserSettings?.ApplicationDescription;
             if (applicationDescription != null)
             {
                 await helpPrinter.WriteApplicationDescription(applicationDescription).ConfigureAwait(false);
@@ -147,7 +163,7 @@
 
         public Task Visit(UntypedCallStep step)
         {
-            throw new NotImplementedException();
+            return Task.CompletedTask;
         }
     }
 }
