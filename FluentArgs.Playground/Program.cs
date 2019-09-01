@@ -47,7 +47,8 @@
                         {
                         }))
                     .ElseIgnore()
-                .Call(w => u => abc => drinks => name => e => key => n =>
+                .LoadRemainingArguments()
+                .Call(args => w => u => abc => drinks => name => e => key => n =>
                 {
                     Console.WriteLine($"n={n}");
                 })

@@ -60,16 +60,7 @@
 
             if (givenHints.Count > 0)
             {
-                var descriptions = givenHints.Reverse().Select(h => $"{h.aliases.OrderBy(a => a.Length).First()} {h.description}").ToArray();
-                descriptionStr += "Only available if ";
-                if (descriptions.Length > 1)
-                {
-                    descriptionStr += $"{string.Join(", ", descriptions.Take(descriptions.Length - 1))} and {descriptions.Last()}. ";
-                }
-                else
-                {
-                    descriptionStr += $"{descriptions.First()}. ";
-                }
+                descriptionStr += GetGivenHintsOutput(givenHints);
             }
 
             if (description != null)
@@ -93,6 +84,22 @@
             parameters.Add((aliasStr, descriptionStr));
 
             return Task.CompletedTask;
+        }
+
+        private static string GetGivenHintsOutput(IReadOnlyCollection<(IReadOnlyCollection<string> aliases, string description)> givenHints)
+        {
+            var descriptions = givenHints.Reverse().Select(h => $"{h.aliases.OrderBy(a => a.Length).First()} {h.description}").ToArray();
+            var descriptionStr = "Only available if ";
+            if (descriptions.Length > 1)
+            {
+                descriptionStr += $"{string.Join(", ", descriptions.Take(descriptions.Length - 1))} and {descriptions.Last()}. ";
+            }
+            else
+            {
+                descriptionStr += $"{descriptions.First()}. ";
+            }
+
+            return descriptionStr;
         }
 
         public Task WriteParameterListInfos(
@@ -222,19 +229,33 @@
             var descriptionStr = string.Empty;
             if (givenHints.Count > 0)
             {
+                descriptionStr += GetGivenHintsOutput(givenHints);
+            }
 
+            descriptionStr += description ?? "A flag";
+
+            parameters.Add((aliasStr, descriptionStr));
+            return Task.CompletedTask;
+        }
+
+        public Task WriteRemainingArgumentsAreUsed(string? description, Type type, IReadOnlyCollection<(IReadOnlyCollection<string> aliases, string description)> givenHints)
+        {
+            var descriptionStr = string.Empty;
+            if (givenHints.Count > 0)
+            {
+                descriptionStr += GetGivenHintsOutput(givenHints);
             }
 
             if (description != null)
             {
-                descriptionStr = description;
+                descriptionStr += description + " ";
             }
             else
             {
-                descriptionStr = "A flag";
+                descriptionStr += $"All remaining arguments are used. Arguments type: {type.Name} ";
             }
 
-            parameters.Add((aliasStr, descriptionStr));
+            parameters.Add(("remaining arguments", descriptionStr));
             return Task.CompletedTask;
         }
     }

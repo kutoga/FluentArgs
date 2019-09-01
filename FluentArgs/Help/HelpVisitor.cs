@@ -39,6 +39,7 @@
             if (step.Branches.Last().branch.Type == GivenCommandBranchType.Invalid)
             {
                 // TODO: The command is required; print this somehow
+                // or just throw an error if this case happens (at runtime)
             }
 
             // TODO: push command info
@@ -156,9 +157,14 @@
             await step.Next.Accept(this).ConfigureAwait(false);
         }
 
-        public Task Visit(RemainingArgumentsStep step)
+        public async Task Visit(RemainingArgumentsStep step)
         {
-            throw new System.NotImplementedException();
+            var description = step.Description;
+            await helpPrinter.WriteRemainingArgumentsAreUsed(
+                description.Description,
+                description.Type,
+                GetGivenHints()).ConfigureAwait(false);
+            await step.Next.Accept(this).ConfigureAwait(false);
         }
 
         public Task Visit(UntypedCallStep step)

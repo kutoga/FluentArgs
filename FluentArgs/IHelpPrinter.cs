@@ -34,6 +34,11 @@
             IReadOnlyCollection<string> examples,
             IReadOnlyCollection<(IReadOnlyCollection<string> aliases, string description)> givenHints);
 
+        Task WriteRemainingArgumentsAreUsed(
+            string? description,
+            Type type,
+            IReadOnlyCollection<(IReadOnlyCollection<string> aliases, string description)> givenHints);
+
         Task Finalize();
     }
 }
