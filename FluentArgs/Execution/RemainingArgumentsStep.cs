@@ -13,7 +13,7 @@
         public RemainingArgumentsStep(Step previousStep, RemainingArguments remainingArguments)
             : base(previousStep)
         {
-            this.Description = remainingArguments;
+            Description = remainingArguments;
         }
 
         public override Task Accept(IStepVisitor visitor)

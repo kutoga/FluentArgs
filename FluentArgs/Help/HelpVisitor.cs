@@ -87,6 +87,8 @@
                     givenTexts.Pop();
                 }
             }).Serialize().ConfigureAwait(false);
+
+            await step.Next.Accept(this).ConfigureAwait(false);
             // TODO: pop command info
 
             //throw new NotImplementedException();

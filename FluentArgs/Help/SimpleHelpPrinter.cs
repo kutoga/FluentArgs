@@ -252,10 +252,10 @@
             }
             else
             {
-                descriptionStr += $"All remaining arguments are used. Arguments type: {type.Name} ";
+                descriptionStr += $"All remaining arguments are parsed. Type: {type.Name} ";
             }
 
-            parameters.Add(("remaining arguments", descriptionStr));
+            parameters.Add(("[...]", descriptionStr));
             return Task.CompletedTask;
         }
     }
