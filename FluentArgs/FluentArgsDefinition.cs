@@ -1,16 +1,21 @@
-﻿namespace FluentArgs
-{
-    using System.Threading.Tasks;
-    using FluentArgs.Execution;
+﻿using System;
+using System.Threading.Tasks;
+using FluentArgs.Description;
+using FluentArgs.Execution;
 
+namespace FluentArgs
+{
     internal class FluentArgsDefinition : IParsableFromState
     {
+        public FluentArgsDefinition(InitialStep initialStep, Name? helpFlag)
+        {
+            InitialStep = initialStep;
+            HelpFlag = helpFlag;
+        }
+
         public InitialStep InitialStep { get; }
 
-        public FluentArgsDefinition(InitialStep initialStep)
-        {
-            this.InitialStep = initialStep;
-        }
+        public Name? HelpFlag { get; }
 
         public void Parse(params string[] args)
         {
@@ -25,7 +30,15 @@
 
         public Task ParseFromState(State state)
         {
-            return InitialStep.Execute(state);
+            try
+            {
+                return InitialStep.Execute(state);
+            }
+            catch (Exception e)
+            {
+                /* todo: need error writer or something...; maybe the helpwriter only needs stdout? and the "error" writer needs stderr? */
+                throw;
+            }
         }
     }
 }

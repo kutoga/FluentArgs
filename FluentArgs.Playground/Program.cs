@@ -14,45 +14,54 @@
 
         static void Main(string[] args)
         {
+            //FluentArgsBuilder.New()
+            //    .DefaultConfigs()
+            //    .DefaultConfigsWithAppDescription("This application was just developed for testing purposes. It has no real-life application.")
+            //    .Parameter<int>("-n", "--number")
+            //        .WithDescription("Just a number")
+            //        .IsOptional()
+            //    .Parameter("-k", "--key")
+            //        .WithDescription("A very secret key")
+            //        .IsOptionalWithDefault("DEFAULT_KEY")
+            //    .Parameter<MyEnum>("-e", "--e")
+            //        .WithDescription("Choose your pokemon. This option is as useless as the others, but a long text is required to see if the line breaks work. Or not? Whatever.")
+            //        .IsRequired()
+            //    .Parameter("--name")
+            //        .IsRequired()
+            //    .ParameterList<MyEnum>("--drink")
+            //        .WithDescription("What are your favourite drinks?")
+            //        .IsOptional()
+            //    .Parameter("--abc")
+            //        .IsRequired()
+            //    .Flag("-u")
+            //        .WithDescription("just a flag...")
+            //    .Flag("-w")
+            //    .Given.Command("--special")
+            //        .HasValue("xyz").Then(b => b
+            //            .Parameter("-a")
+            //                .IsRequired()
+            //            .Given.Flag("--myflag").Then(b => b
+            //                .Parameter("--x").IsOptional()
+            //                .CallUntyped(d => { }))
+            //            .CallUntyped(d =>
+            //            {
+            //            }))
+            //        .ElseIgnore()
+            //    .LoadRemainingArguments()
+            //    .Call(args => w => u => abc => drinks => name => e => key => n =>
+            //    {
+            //        Console.WriteLine($"n={n}");
+            //    })
+            //    .Parse("--help");
             FluentArgsBuilder.New()
-                .DefaultConfigs()
-                .DefaultConfigsWithAppDescription("This application was just developed for testing purposes. It has no real-life application.")
-                .Parameter<int>("-n", "--number")
-                    .WithDescription("Just a number")
-                    .IsOptional()
-                .Parameter("-k", "--key")
-                    .WithDescription("A very secret key")
-                    .IsOptionalWithDefault("DEFAULT_KEY")
-                .Parameter<MyEnum>("-e", "--e")
-                    .WithDescription("Choose your pokemon. This option is as useless as the others, but a long text is required to see if the line breaks work. Or not? Whatever.")
-                    .IsRequired()
-                .Parameter("--name")
-                    .IsRequired()
-                .ParameterList<MyEnum>("--drink")
-                    .WithDescription("What are your favourite drinks?")
-                    .IsOptional()
-                .Parameter("--abc")
-                    .IsRequired()
-                .Flag("-u")
-                    .WithDescription("just a flag...")
-                .Flag("-w")
-                .Given.Command("--special")
-                    .HasValue("xyz").Then(b => b
-                        .Parameter("-a")
-                            .IsRequired()
-                        .Given.Flag("--myflag").Then(b => b
-                            .Parameter("--x").IsOptional()
-                            .CallUntyped(d => { }))
-                        .CallUntyped(d =>
-                        {
-                        }))
-                    .ElseIgnore()
-                .LoadRemainingArguments()
-                .Call(args => w => u => abc => drinks => name => e => key => n =>
+                .Parameter("-a").IsRequired()
+                .Parameter("-b").IsRequired()
+                .Call(b => a =>
                 {
-                    Console.WriteLine($"n={n}");
+                    Console.WriteLine($"a={a}");
+                    Console.WriteLine($"b={b}");
                 })
-                .Parse("--help");
+                .Parse("-a", "bla");
             Console.ReadLine();
             return;
 
