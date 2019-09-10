@@ -1,4 +1,6 @@
-﻿namespace FluentArgs.Help
+﻿using FluentArgs.Extensions;
+
+namespace FluentArgs.Help
 {
     using System;
     using System.Collections.Generic;
@@ -43,7 +45,7 @@
             IReadOnlyCollection<string> examples,
             IReadOnlyCollection<(IReadOnlyCollection<string> aliases, string description)> givenHints)
         {
-            var aliasStr = string.Join("|", aliases.OrderBy(a => a.Length).ThenBy(a => a));
+            var aliasStr = aliases.StringifyAliases();
             var descriptionStr = "";
 
             if (optional)
@@ -113,7 +115,7 @@
             IReadOnlyCollection<string> examples,
             IReadOnlyCollection<(IReadOnlyCollection<string> aliases, string description)> givenHints)
         {
-            var aliasStr = string.Join("|", aliases.OrderBy(a => a.Length).ThenBy(a => a));
+            var aliasStr = aliases.StringifyAliases(); // TODO: Test stringify aliases
             var descriptionStr = "";
             if (optional)
             {
@@ -225,7 +227,7 @@
 
         public Task WriteFlagInfos(IReadOnlyCollection<string> aliases, string description, IReadOnlyCollection<(IReadOnlyCollection<string> aliases, string description)> givenHints)
         {
-            var aliasStr = string.Join("|", aliases.OrderBy(a => a.Length).ThenBy(a => a));
+            var aliasStr = aliases.StringifyAliases();
             var descriptionStr = string.Empty;
             if (givenHints.Count > 0)
             {

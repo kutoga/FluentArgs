@@ -1,21 +1,26 @@
 ﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
 using FluentArgs.Description;
 using FluentArgs.Execution;
+using FluentArgs.Help;
 
 namespace FluentArgs
 {
     internal class FluentArgsDefinition : IParsableFromState
     {
-        public FluentArgsDefinition(InitialStep initialStep, Name? helpFlag)
+        private readonly Name? helpFlag;
+
+        private readonly ILineWriter errorLineWriter;
+
+        public FluentArgsDefinition(InitialStep initialStep, Name? helpFlag, ILineWriter errorLineWriter)
         {
             InitialStep = initialStep;
-            HelpFlag = helpFlag;
+            this.helpFlag = helpFlag;
+            this.errorLineWriter = errorLineWriter;
         }
 
         public InitialStep InitialStep { get; }
-
-        public Name? HelpFlag { get; }
 
         public void Parse(params string[] args)
         {
@@ -28,11 +33,16 @@ namespace FluentArgs
             return ParseFromState(State.InitialState(args));
         }
 
-        public Task ParseFromState(State state)
+        public async Task ParseFromState(State state)
         {
             try
             {
-                return InitialStep.Execute(state);
+                await InitialStep.Execute(state);
+            }
+            catch (ArgumentMissingException ex)
+            {
+                await errorLineWriter.WriteLines(
+                    $"Required argument '{ex.ArgumentName.Names)}");
             }
             catch (Exception e)
             {

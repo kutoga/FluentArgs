@@ -54,6 +54,7 @@
             //    })
             //    .Parse("--help");
             FluentArgsBuilder.New()
+                .DefaultConfigs()
                 .Parameter("-a").IsRequired()
                 .Parameter("-b").IsRequired()
                 .Call(b => a =>

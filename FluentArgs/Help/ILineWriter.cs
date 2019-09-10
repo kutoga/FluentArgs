@@ -17,6 +17,11 @@
             return lines.Select(writer.WriteLine).Serialize();
         }
 
+        public static Task WriteLines(this ILineWriter writer, params string[] lines)
+        {
+            return writer.WriteLines(lines.AsEnumerable());
+        }
+
         public static ILineWriter AddLinePrefix(this ILineWriter writer, string linePrefix)
         {
             return new PrefixedLineWriter(writer, linePrefix);
@@ -27,9 +32,9 @@
             private readonly ILineWriter wrapped;
             private readonly string prefix;
 
-            public PrefixedLineWriter(ILineWriter wrapper, string prefix)
+            public PrefixedLineWriter(ILineWriter wrapped, string prefix)
             {
-                this.wrapped = wrapper;
+                this.wrapped = wrapped;
                 this.prefix = prefix;
             }
 
