@@ -19,8 +19,9 @@
         [Fact]
         public void TestCopy()
         {
-            argumentParser.Parse(new[] { "--apikey", "secret", "--action", "copy", "--source", "/source/file", "--target", "/target/file" });
+            var parseSuccess = argumentParser.Parse(new[] { "--apikey", "secret", "--action", "copy", "--source", "/source/file", "--target", "/target/file" });
 
+            parseSuccess.Should().BeTrue();
             dummyClient.ApiKey.Should().Be("secret");
             dummyClient.CopyFileCalls.Should().BeEquivalentWithSameOrdering(("/source/file", "/target/file"));
         }
@@ -28,8 +29,9 @@
         [Fact]
         public void TestDelete()
         {
-            argumentParser.Parse(new[] { "-k", "secret", "--act", "delete", "--file", "/file" });
+            var parseSuccess = argumentParser.Parse(new[] { "-k", "secret", "--act", "delete", "--file", "/file" });
 
+            parseSuccess.Should().BeTrue();
             dummyClient.ApiKey.Should().Be("secret");
             dummyClient.DeleteFileCalls.Should().BeEquivalentWithSameOrdering("/file");
         }
@@ -37,8 +39,9 @@
         [Fact]
         public void TestReset()
         {
-            argumentParser.Parse(new[] { "--apikey", "secret", "-a", "reset" });
+            var parseSuccess = argumentParser.Parse(new[] { "--apikey", "secret", "-a", "reset" });
 
+            parseSuccess.Should().BeTrue();
             dummyClient.ApiKey.Should().Be("secret");
             dummyClient.ResetAccountCalls.Should().BeEquivalentWithSameOrdering(new object[] { null });
         }

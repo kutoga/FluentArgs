@@ -19,7 +19,7 @@
             this.stepWrapper = stepWrapper;
         }
 
-        public IGivenThen<TArgsBuilder, TArgsBuilder> WithAnyValue()
+        public IGivenThen<TArgsBuilder, TArgsBuilder> Exists()
         {
             //TODO: Simplify: Why not implementing IGivenThen<TArgsBuilder, TArgsBuilder> in this class?
 
@@ -33,12 +33,12 @@
             {
                 result = stepWrapper(new GivenParameterStep(
                     previousStep,
-                    GivenParameter.WithAnyValue(name),
+                    GivenParameter.Exists(name),
                     parsable as IParsableFromState ?? throw new Exception("TODO")));
             }
         }
 
-        public IGivenThen<TArgsBuilder, TArgsBuilder> WithValue<TParam>(TParam value, Func<string, TParam> parser = null)
+        public IGivenThen<TArgsBuilder, TArgsBuilder> HasValue<TParam>(TParam value, Func<string, TParam> parser = null)
         {
             TArgsBuilder result = default;
             return new GivenThenBuilder<TArgsBuilder, TArgsBuilder>(
@@ -50,7 +50,7 @@
             {
                 result = stepWrapper(new GivenParameterStep(
                     previousStep,
-                    GivenParameter.WithExactValue(name, typeof(TParam), value, GetParser()),
+                    GivenParameter.HasValue(name, typeof(TParam), value, GetParser()),
                     parsable as IParsableFromState ?? throw new Exception("TODO")));
             }
 

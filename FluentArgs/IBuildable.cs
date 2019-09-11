@@ -9,12 +9,12 @@
 
     public static class ICallableExtensions
     {
-        public static void Parse(this IBuildable buildable, string[] args)
+        public static bool Parse(this IBuildable buildable, params string[] args)
         {
-            buildable.Build().Parse(args);
+            return buildable.Build().Parse(args);
         }
 
-        public static Task ParseAsync(this IBuildable buildable, string[] args)
+        public static Task<bool> ParseAsync(this IBuildable buildable, params string[] args)
         {
             return buildable.Build().ParseAsync(args);
         }

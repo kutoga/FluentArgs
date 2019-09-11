@@ -25,8 +25,9 @@
                 .Parameter<MyEnum>("-m").IsRequired()
                 .Call(m => parsedM = m);
 
-            builder.Parse(args);
+            var parseSuccess = builder.Parse(args);
 
+            parseSuccess.Should().BeTrue();
             parsedM.Should().Be(expectedM);
         }
 
@@ -39,8 +40,9 @@
                 .Parameter<MyEnum>("-m").IsRequired()
                 .Call(m => parsedM = m);
 
-            builder.Parse(args);
+            var parseSuccess = builder.Parse(args);
 
+            parseSuccess.Should().BeTrue();
             parsedM.Should().Be(MyEnum.NameA);
         }
 

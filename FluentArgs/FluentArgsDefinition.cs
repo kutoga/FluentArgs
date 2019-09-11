@@ -1,30 +1,56 @@
-﻿namespace FluentArgs
-{
-    using System.Threading.Tasks;
-    using FluentArgs.Execution;
+﻿using System;
+using System.Linq;
+using System.Threading.Tasks;
+using FluentArgs.Description;
+using FluentArgs.Execution;
+using FluentArgs.Extensions;
+using FluentArgs.Help;
 
+namespace FluentArgs
+{
     internal class FluentArgsDefinition : IParsableFromState
     {
-        private readonly Step initialStep;
-
-        public FluentArgsDefinition(Step initialStep)
+        public FluentArgsDefinition(InitialStep initialStep)
         {
-            this.initialStep = initialStep;
+            InitialStep = initialStep;
         }
 
-        public void Parse(string[] args)
+        public InitialStep InitialStep { get; }
+
+        public bool Parse(params string[] args)
         {
-            ParseAsync(args).Wait();
+            // TODO: unpack innerexception
+            return ParseAsync(args).Result;
         }
 
-        public Task ParseAsync(string[] args)
+        public Task<bool> ParseAsync(params string[] args)
         {
             return ParseFromState(State.InitialState(args));
         }
 
-        public Task ParseFromState(State state)
+        public async Task<bool> ParseFromState(State state)
         {
-            return initialStep.Execute(state);
+            try
+            {
+                await InitialStep.Execute(state).ConfigureAwait(false);
+                return true;
+            }
+            catch (ArgumentMissingException ex)
+            {
+                await InitialStep.ParserSettings.ParsingErrorPrinter.PrintArgumentMissingError(
+                    ex.ArgumentName.Names,
+                    ex.Description,
+                    InitialStep.ParserSettings.HelpFlag?.Names).ConfigureAwait(false);
+                return false;
+            }
+            catch (ArgumentParsingException ex)
+            {
+                await InitialStep.ParserSettings.ParsingErrorPrinter.PrintArgumentParsingError(
+                    ex.ArgumentName?.Names,
+                    ex.Description,
+                    InitialStep.ParserSettings.HelpFlag?.Names).ConfigureAwait(false);
+                return false;
+            }
         }
     }
 }

@@ -9,34 +9,39 @@
 
     internal class ParameterStep : Step
     {
-        private Parameter parameter;
+        public Parameter Description { get; }
 
         public ParameterStep(Step previous, Parameter parameter)
             : base(previous)
         {
-            this.parameter = parameter;
+            this.Description = parameter;
+        }
+
+        public override Task Accept(IStepVisitor visitor)
+        {
+            return visitor.Visit(this);
         }
 
         public override Task Execute(State state)
         {
-            if (state.TryExtractArguments(parameter.Name.Names, out var arguments, out var newState, 1))
+            if (state.TryExtractArguments(Description.Name.Names, out var arguments, out var newState, 1))
             {
                 state = newState.AddParameter(Parse(arguments[1]));
             }
             else
             {
-                if (parameter.IsRequired)
+                if (Description.IsRequired)
                 {
-                    throw new Exception("TODO: parameter is required, but not given");
+                    throw new ArgumentMissingException("Required parameter not found!", Description.Name);
                 }
 
-                if (parameter.HasDefaultValue)
+                if (Description.HasDefaultValue)
                 {
-                    state = state.AddParameter(parameter.DefaultValue);
+                    state = state.AddParameter(Description.DefaultValue);
                 }
                 else
                 {
-                    state = state.AddParameter(Default.Instance(parameter.Type));
+                    state = state.AddParameter(Default.Instance(Description.Type));
                 }
             }
 
@@ -45,12 +50,12 @@
 
         private object Parse(string parameter)
         {
-            if (this.parameter.Parser != null)
+            if (this.Description.Parser != null)
             {
-                return this.parameter.Parser(parameter);
+                return this.Description.Parser(parameter);
             }
 
-            if (DefaultStringParsers.TryGetParser(this.parameter.Type, out var parser))
+            if (DefaultStringParsers.TryGetParser(this.Description.Type, out var parser))
             {
                 return parser!(parameter);
             }

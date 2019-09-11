@@ -16,12 +16,13 @@
             var args = new[] { "--param2", "value" };
             var builder = FluentArgsBuilder.New()
                 .Given.Parameter("--param")
-                    .WithAnyValue()
+                    .Exists()
                     .Then(() => redirected = true)
                 .Call(() => redirected = false);
 
-            builder.Parse(args);
+            var parseSuccess = builder.Parse(args);
 
+            parseSuccess.Should().BeTrue();
             redirected.Should().BeFalse();
         }
 
@@ -32,12 +33,13 @@
             var args = new[] { "--param", "value" };
             var builder = FluentArgsBuilder.New()
                 .Given.Parameter("--param")
-                    .WithAnyValue()
+                    .Exists()
                     .Then(() => redirected = true)
                 .Call(() => redirected = false);
 
-            builder.Parse(args);
+            var parseSuccess = builder.Parse(args);
 
+            parseSuccess.Should().BeTrue();
             redirected.Should().BeTrue();
         }
 
@@ -48,12 +50,13 @@
             var args = new[] { "--param", "value" };
             var builder = FluentArgsBuilder.New()
                 .Given.Parameter("--param")
-                    .WithValue("value")
+                    .HasValue("value")
                     .Then(() => redirected = true)
                 .Call(() => redirected = false);
 
-            builder.Parse(args);
+            var parseSuccess = builder.Parse(args);
 
+            parseSuccess.Should().BeTrue();
             redirected.Should().BeTrue();
         }
 
@@ -64,12 +67,13 @@
             var args = new[] { "--param", "12" };
             var builder = FluentArgsBuilder.New()
                 .Given.Parameter("--param")
-                    .WithValue(12)
+                    .HasValue(12)
                     .Then(() => redirected = true)
                 .Call(() => redirected = false);
 
-            builder.Parse(args);
+            var parseSuccess = builder.Parse(args);
 
+            parseSuccess.Should().BeTrue();
             redirected.Should().BeTrue();
         }
 
@@ -80,15 +84,16 @@
             var args = new[] { "--param1", "value1", "--param2", "value2" };
             var builder = FluentArgsBuilder.New()
                 .Given.Parameter("--param1")
-                    .WithValue("value1")
+                    .HasValue("value1")
                     .Then(() => calledBranches.Add("param1"))
                 .Given.Parameter("--param2")
-                    .WithValue("value2")
+                    .HasValue("value2")
                     .Then(() => calledBranches.Add("param2"))
                 .Call(() => calledBranches.Add("none"));
 
-            builder.Parse(args);
+            var parseSuccess = builder.Parse(args);
 
+            parseSuccess.Should().BeTrue();
             calledBranches.Should().BeEquivalentWithSameOrdering(new[] { "param1" });
         }
 
@@ -99,16 +104,17 @@
             var args = new[] { "-p1", "v1", "-p2", "v2" };
             var builder = FluentArgsBuilder.New()
                 .Given.Parameter("-p1")
-                    .WithValue("v1")
+                    .HasValue("v1")
                     .Then(b => b
                         .Given.Parameter("-p2")
-                            .WithValue("v2")
+                            .HasValue("v2")
                             .Then(() => calledBranch = "v1v2")
                         .Call(() => calledBranch = "v1"))
                 .Call(() => calledBranch = "none");
 
-            builder.Parse(args);
+            var parseSuccess = builder.Parse(args);
 
+            parseSuccess.Should().BeTrue();
             calledBranch.Should().Be("v1v2");
         }
 
@@ -119,12 +125,13 @@
             bool? redirected = null;
             var builder = FluentArgsBuilder.New()
                 .Given.Parameter("--param")
-                   .WithAnyValue()
+                   .Exists()
                    .Then(() => redirected = true)
                 .Call(() => redirected = false);
 
-            builder.Parse(args);
+            var parseSuccess = builder.Parse(args);
 
+            parseSuccess.Should().BeTrue();
             redirected.Should().BeFalse();
         }
 
@@ -135,12 +142,13 @@
             var args = new[] { "--age", "28" };
             var builder = FluentArgsBuilder.New()
                 .Given.Parameter("--age")
-                    .WithValue(28)
+                    .HasValue(28)
                     .Then(() => redirected = true)
                 .Call(() => redirected = false);
 
-            builder.Parse(args);
+            var parseSuccess = builder.Parse(args);
 
+            parseSuccess.Should().BeTrue();
             redirected.Should().BeTrue();
         }
 
@@ -151,12 +159,13 @@
             var args = new[] { "--lowername", "beni" };
             var builder = FluentArgsBuilder.New()
                 .Given.Parameter("--lowername")
-                    .WithValue("BENI", s => s.ToUpper(CultureInfo.InvariantCulture))
+                    .HasValue("BENI", s => s.ToUpper(CultureInfo.InvariantCulture))
                     .Then(() => redirected = true)
                 .Call(() => redirected = false);
 
-            builder.Parse(args);
+            var parseSuccess = builder.Parse(args);
 
+            parseSuccess.Should().BeTrue();
             redirected.Should().BeTrue();
         }
     }

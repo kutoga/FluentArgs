@@ -7,12 +7,17 @@
 
     internal class CallStep : Step
     {
-        private TargetFunction targetFunction;
+        private readonly TargetFunction targetFunction;
 
         public CallStep(Step previous, TargetFunction targetFunction)
             : base(previous)
         {
             this.targetFunction = targetFunction;
+        }
+
+        public override Task Accept(IStepVisitor visitor)
+        {
+            return visitor.Visit(this);
         }
 
         public override Task Execute(State state)

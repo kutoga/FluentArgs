@@ -5,17 +5,22 @@
 
     internal class FlagStep : Step
     {
-        private readonly Flag flag;
+        public Flag Description { get; }
 
         public FlagStep(Step previousStep, Flag flag)
             : base(previousStep)
         {
-            this.flag = flag;
+            this.Description = flag;
+        }
+
+        public override Task Accept(IStepVisitor visitor)
+        {
+            return visitor.Visit(this);
         }
 
         public override Task Execute(State state)
         {
-            if (state.TryExtractArguments(flag.Name.Names, out var arguments, out var newState))
+            if (state.TryExtractArguments(Description.Name.Names, out var arguments, out var newState))
             {
                 state = newState.AddParameter(true);
             }

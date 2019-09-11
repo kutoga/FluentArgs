@@ -21,8 +21,9 @@
                 .Parameter<bool>("-b").IsRequired()
                 .Call(b => parsedB = b);
 
-            builder.Parse(args);
+            var parseSuccess = builder.Parse(args);
 
+            parseSuccess.Should().BeTrue();
             parsedB.Should().BeTrue();
         }
 
@@ -42,8 +43,9 @@
                 .Parameter<bool>("-b").IsRequired()
                 .Call(b => parsedB = b);
 
-            builder.Parse(args);
+            var parseSuccess = builder.Parse(args);
 
+            parseSuccess.Should().BeTrue();
             parsedB.Should().BeFalse();
         }
     }

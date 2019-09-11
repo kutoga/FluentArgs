@@ -15,9 +15,9 @@
                 .Parameter("--b").IsRequired()
                 .Call(b => a => { });
 
-            Action parseAction = () => builder.Parse(args);
+            var parseSuccess = builder.Parse(args);
 
-            parseAction.Should().Throw<Exception>();
+            parseSuccess.Should().BeFalse();
         }
 
         [Fact]
@@ -35,8 +35,9 @@
                     parsedB = b;
                 });
 
-            builder.Parse(args);
+            var parseSuccess = builder.Parse(args);
 
+            parseSuccess.Should().BeTrue();
             parsedA.Should().Be("a");
             parsedB.Should().BeNull();
         }

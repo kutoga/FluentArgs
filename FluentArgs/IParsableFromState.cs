@@ -5,6 +5,6 @@
 
     internal interface IParsableFromState : IParsable
     {
-        Task ParseFromState(State state);
+        Task<bool> ParseFromState(State state);
     }
 }

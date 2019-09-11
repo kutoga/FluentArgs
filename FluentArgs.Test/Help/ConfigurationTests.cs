@@ -2,6 +2,7 @@
 {
     using System;
     using System.IO;
+    using FluentArgs.Help;
     using FluentAssertions;
     using Xunit;
 
@@ -12,14 +13,18 @@
         {
             var args = new[] { "--help" };
             var dummyOutput = new MemoryStream();
+            var textOutput = new StreamWriter(dummyOutput);
+            var called = false;
             var builder = FluentArgsBuilder.New()
                 .RegisterHelpFlag("--help")
-                .RegisterOutputStreams(dummyOutput, dummyOutput)
-                .Invalid();
+                .RegisterHelpPrinter(new SimpleHelpPrinter(textOutput))
+                .Call(() => called = true);
 
-            Action parseAction = () => builder.Parse(args);
+            var parseSuccess = builder.Parse(args);
 
-            parseAction.Should().NotThrow<Exception>();
+            parseSuccess.Should().BeTrue();
+            called.Should().BeFalse();
+            dummyOutput.ToArray().Should().NotBeEmpty();
         }
     }
 }

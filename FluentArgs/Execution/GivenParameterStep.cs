@@ -18,6 +18,11 @@
             this.thenStep = thenStep;
         }
 
+        public override Task Accept(IStepVisitor visitor)
+        {
+            return visitor.Visit(this);
+        }
+
         public override Task Execute(State state)
         {
             if (!state.TryExtractArguments(parameter.Name.Names, out var arguments, out var newState, 1))
@@ -58,7 +63,7 @@
                 return parser!(parameter);
             }
 
-            throw new Exception("TODO: IMPLEMENT MORE DEFAULTS");
+            throw new ArgumentParsingException($"No parse for the type '{this.parameter.Type.Name}' available!", this.parameter.Name);
         }
     }
 }

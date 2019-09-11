@@ -8,35 +8,40 @@
 
     internal class RemainingArgumentsStep : Step
     {
-        private readonly RemainingArguments remainingArguments;
+        public RemainingArguments Description { get; }
 
         public RemainingArgumentsStep(Step previousStep, RemainingArguments remainingArguments)
             : base(previousStep)
         {
-            this.remainingArguments = remainingArguments;
+            Description = remainingArguments;
+        }
+
+        public override Task Accept(IStepVisitor visitor)
+        {
+            return visitor.Visit(this);
         }
 
         public override Task Execute(State state)
         {
             var remainingArguments = state.GetRemainingArguments(out state);
-            var parameter = Reflection.Array.Create(this.remainingArguments.Type, remainingArguments.Select(a => Parse(a)).ToArray());
+            var parameter = Reflection.Array.Create(this.Description.Type, remainingArguments.Select(a => Parse(a)).ToArray());
             state = state.AddParameter(parameter);
             return Next.Execute(state);
         }
 
         private object Parse(string parameter)
         {
-            if (remainingArguments.Parser != null)
+            if (Description.Parser != null)
             {
-                return remainingArguments.Parser(parameter);
+                return Description.Parser(parameter);
             }
 
-            if (DefaultStringParsers.TryGetParser(remainingArguments.Type, out var parser))
+            if (DefaultStringParsers.TryGetParser(Description.Type, out var parser))
             {
                 return parser!(parameter);
             }
 
-            throw new NotImplementedException();
+            throw new ArgumentParsingException($"No parse for the type '{this.Description.Type.Name}' available!");
         }
     }
 }

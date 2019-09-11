@@ -1,12 +1,73 @@
-﻿namespace FluentArgs.Playground
+﻿using FluentArgs.Help;
+
+namespace FluentArgs.Playground
 {
     using System;
     using System.Threading.Tasks;
 
     class Program
     {
+        enum MyEnum
+        {
+            Pikachu,
+            Glurak,
+            Randomon
+        }
+
         static void Main(string[] args)
         {
+            //FluentArgsBuilder.New()
+            //    .DefaultConfigs()
+            //    .DefaultConfigsWithAppDescription("This application was just developed for testing purposes. It has no real-life application.")
+            //    .Parameter<int>("-n", "--number")
+            //        .WithDescription("Just a number")
+            //        .IsOptional()
+            //    .Parameter("-k", "--key")
+            //        .WithDescription("A very secret key")
+            //        .IsOptionalWithDefault("DEFAULT_KEY")
+            //    .Parameter<MyEnum>("-e", "--e")
+            //        .WithDescription("Choose your pokemon. This option is as useless as the others, but a long text is required to see if the line breaks work. Or not? Whatever.")
+            //        .IsRequired()
+            //    .Parameter("--name")
+            //        .IsRequired()
+            //    .ParameterList<MyEnum>("--drink")
+            //        .WithDescription("What are your favourite drinks?")
+            //        .IsOptional()
+            //    .Parameter("--abc")
+            //        .IsRequired()
+            //    .Flag("-u")
+            //        .WithDescription("just a flag...")
+            //    .Flag("-w")
+            //    .Given.Command("--special")
+            //        .HasValue("xyz").Then(b => b
+            //            .Parameter("-a")
+            //                .IsRequired()
+            //            .Given.Flag("--myflag").Then(b => b
+            //                .Parameter("--x").IsOptional()
+            //                .CallUntyped(d => { }))
+            //            .CallUntyped(d =>
+            //            {
+            //            }))
+            //        .ElseIgnore()
+            //    .LoadRemainingArguments()
+            //    .Call(args => w => u => abc => drinks => name => e => key => n =>
+            //    {
+            //        Console.WriteLine($"n={n}");
+            //    })
+            //    .Parse("--help");
+            FluentArgsBuilder.New()
+                .DefaultConfigs()
+                .Parameter("-a").IsRequired()
+                .Parameter("-b").IsRequired()
+                .Call(b => a =>
+                {
+                    Console.WriteLine($"a={a}");
+                    Console.WriteLine($"b={b}");
+                })
+                .Parse("--help", "-a", "bla");
+            Console.ReadLine();
+            return;
+
             //TODO: Given.Command(...) => if the comand is not present there should be a possibility to define this as invalid (the command is required)
 
             //TODO: Call .Build().Parse(xxx) instead of .Parse(); BUT add an extension method or something which just does this for you
@@ -46,7 +107,7 @@
                 .Parse(args);
 
             FluentArgsBuilder.New()
-                .Given.Parameter("-c", "--command").WithValue("copy").Then(b => b
+                .Given.Parameter("-c", "--command").HasValue("copy").Then(b => b
                     .Parameter("-i", "--input").IsRequired()
                     .Parameter<int>("-b", "--blocksize").IsOptional()
                     .Call(blockSize => input =>

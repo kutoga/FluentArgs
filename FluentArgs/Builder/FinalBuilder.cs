@@ -1,7 +1,10 @@
-﻿using FluentArgs.Execution;
+﻿using FluentArgs.Description;
+using FluentArgs.Help;
 
 namespace FluentArgs.Builder
 {
+    using FluentArgs.Execution;
+
     internal class FinalBuilder : IBuildable
     {
         private readonly Step step;
@@ -16,7 +19,7 @@ namespace FluentArgs.Builder
             return new FluentArgsDefinition(GetInitialStep());
         }
 
-        private Step GetInitialStep()
+        private InitialStep GetInitialStep()
         {
             var step = this.step;
             while (step.Previous != null)
@@ -24,7 +27,7 @@ namespace FluentArgs.Builder
                 step = step.Previous;
             }
 
-            return step;
+            return (InitialStep)step;
         }
     }
 }

@@ -19,13 +19,14 @@
                     .ElseIgnore()
                 .Call(() => redirected = false);
 
-            builder.Parse(args);
+            var parseSuccess = builder.Parse(args);
 
+            parseSuccess.Should().BeTrue();
             redirected.Should().BeFalse();
         }
 
         [Fact]
-        public static void GivenAnAlwaysInvalidCommandValue_ShouldThrow()
+        public static void GivenAnAlwaysInvalidCommandValue_ShouldNotParseSuccessful()
         {
             var args = new[] { "-c", "beni" };
             var builder = FluentArgsBuilder.New()
@@ -34,9 +35,9 @@
                     .ElseIsInvalid()
                 .Call(() => { });
 
-            Action parseAction = () => builder.Parse(args);
+            var parseSuccess = builder.Parse(args);
 
-            parseAction.Should().Throw<Exception>();
+            parseSuccess.Should().BeFalse();
         }
 
         [Fact]
@@ -50,8 +51,9 @@
                     .ElseIgnore()
                 .Call(() => calledBranch = "none");
 
-            builder.Parse(args);
+            var parseSuccess = builder.Parse(args);
 
+            parseSuccess.Should().BeTrue();
             calledBranch.Should().Be("branch1");
         }
 
@@ -72,13 +74,14 @@
                     .ElseIgnore()
                 .Call(() => calledBranch = "none");
 
-            builder.Parse(args);
+            var parseSuccess = builder.Parse(args);
 
+            parseSuccess.Should().BeTrue();
             calledBranch.Should().Be(branch);
         }
 
         [Fact]
-        public static void GivenACommandWithAnInvalidValue_ShouldThrow()
+        public static void GivenACommandWithAnInvalidValue_ShouldNotParseSuccessful()
         {
             var args = new[] { "--type", "pi" };
             var builder = FluentArgsBuilder.New()
@@ -87,9 +90,9 @@
                     .ElseIsInvalid()
                 .Call(() => { });
 
-            Action parseAction = () => builder.Parse(args);
+            var parseSuccess = builder.Parse(args);
 
-            parseAction.Should().Throw<Exception>();
+            parseSuccess.Should().BeFalse();
         }
 
         [Theory]
@@ -106,8 +109,9 @@
                     .ElseIsInvalid()
                 .Call(() => calledBranch = "none");
 
-            builder.Parse(args);
+            var parseSuccess = builder.Parse(args);
 
+            parseSuccess.Should().BeTrue();
             calledBranch.Should().Be(branch);
         }
 
@@ -132,8 +136,9 @@
                     .ElseIgnore()
                 .Call(() => calledBranch = "none");
 
-            builder.Parse(args);
+            var parseSuccess = builder.Parse(args);
 
+            parseSuccess.Should().BeTrue();
             calledBranch.Should().Be(expectedBranch);
         }
 
@@ -156,8 +161,9 @@
                     .ElseIgnore()
                 .Call(() => calledBranch = "none");
 
-            builder.Parse(args);
+            var parseSuccess = builder.Parse(args);
 
+            parseSuccess.Should().BeTrue();
             calledBranch.Should().Be(expectedBranch);
         }
 
@@ -174,8 +180,9 @@
                     .ElseIgnore()
                 .Call(() => redirected = false);
 
-            builder.Parse(args);
+            var parseSuccess = builder.Parse(args);
 
+            parseSuccess.Should().BeTrue();
             redirected.Should().BeTrue();
         }
     }

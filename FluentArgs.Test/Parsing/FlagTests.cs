@@ -14,8 +14,9 @@
                 .Flag("-x")
                 .Call(x => parsedX = x);
 
-            builder.Parse(args);
+            var parseSuccess = builder.Parse(args);
 
+            parseSuccess.Should().BeTrue();
             parsedX.Should().BeTrue();
         }
 
@@ -28,8 +29,9 @@
                 .Flag("-x")
                 .Call(x => parsedX = x);
 
-            builder.Parse(args);
+            var parseSuccess = builder.Parse(args);
 
+            parseSuccess.Should().BeTrue();
             parsedX.Should().BeFalse();
         }
 
@@ -52,8 +54,9 @@
                     parsedY = y;
                 });
 
-            builder.Parse(args);
+            var parseSuccess = builder.Parse(args);
 
+            parseSuccess.Should().BeTrue();
             parsedX.Should().Be(xPresent);
             parsedY.Should().Be(yPresent);
         }

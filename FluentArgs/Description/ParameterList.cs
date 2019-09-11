@@ -11,6 +11,7 @@
         {
             Name = name;
             Type = type;
+            Examples = Array.Empty<string>();
             HasDefaultValue = false;
             IsRequired = false;
             Separators = DefaultSeparators;
@@ -21,6 +22,8 @@
         public string? Description { get; set; }
 
         public Type Type { get; }
+
+        public string[] Examples { get; set; }
 
         public object? DefaultValue { get; set; }
 

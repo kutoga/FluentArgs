@@ -21,13 +21,14 @@
                 .ParameterList<int>("-n").IsRequired()
                 .Call(n => parsedN = n);
 
-            builder.Parse(args);
+            var parseSuccess = builder.Parse(args);
 
+            parseSuccess.Should().BeTrue();
             parsedN.Should().BeEquivalentWithSameOrdering(new[] { 1, 2, 3 });
         }
 
         [Fact]
-        public static void GivenARequiredParameterListWhichIsNotPresent_ShouldThrow()
+        public static void GivenARequiredParameterListWhichIsNotPresent_ShouldNotParseSuccessful()
         {
             var args = new[] { "-x" };
             IReadOnlyList<int> parsedN = default;
@@ -35,9 +36,9 @@
                 .ParameterList<int>("-n").IsRequired()
                 .Call(n => parsedN = n);
 
-            Action parseAction = () => builder.Parse(args);
+            var parseSuccess = builder.Parse(args);
 
-            parseAction.Should().Throw<Exception>();
+            parseSuccess.Should().BeFalse();
         }
 
         [Fact]
@@ -49,8 +50,9 @@
                 .ParameterList<int>("-n").IsOptional()
                 .Call(n => parsedN = n);
 
-            builder.Parse(args);
+            var parseSuccess = builder.Parse(args);
 
+            parseSuccess.Should().BeTrue();
             parsedN.Should().BeNull();
         }
 
@@ -63,8 +65,9 @@
                 .ParameterList<int>("-n").IsOptionalWithEmptyDefault()
                 .Call(n => parsedN = n);
 
-            builder.Parse(args);
+            var parseSuccess = builder.Parse(args);
 
+            parseSuccess.Should().BeTrue();
             parsedN.Should().BeEmpty();
         }
 
@@ -77,8 +80,9 @@
                 .ParameterList<int>("-n").IsOptionalWithDefault(new[] { 1, 2, 4 })
                 .Call(n => parsedN = n);
 
-            builder.Parse(args);
+            var parseSuccess = builder.Parse(args);
 
+            parseSuccess.Should().BeTrue();
             parsedN.Should().BeEquivalentWithSameOrdering(new[] { 1, 2, 4 }); //TODO: SHould().be(...)
         }
 
@@ -91,8 +95,9 @@
                 .ParameterList<int>("-n").IsRequired()
                 .Call(n => parsedN = n);
 
-            builder.Parse(args);
+            var parseSuccess = builder.Parse(args);
 
+            parseSuccess.Should().BeTrue();
             parsedN.Should().BeEquivalentWithSameOrdering(new[] { 1, 2, 3, 1, 44, 1337 }); //TODO: SHould().be(...)
         }
 
@@ -111,8 +116,9 @@
                     .IsRequired()
                 .Call(s => parsedS = s);
 
-            builder.Parse(args);
+            var parseSuccess = builder.Parse(args);
 
+            parseSuccess.Should().BeTrue();
             parsedS.Should().BeEquivalentWithSameOrdering(expectedValues); //TODO: SHould().be(...)
         }
 
@@ -127,8 +133,9 @@
                     .IsRequired()
                 .Call(s => parsedS = s);
 
-            builder.Parse(args);
+            var parseSuccess = builder.Parse(args);
 
+            parseSuccess.Should().BeTrue();
             parsedS.Should().BeEquivalentWithSameOrdering(new[] { "A", "B" }); //TODO: SHould().be(...)
         }
 
@@ -147,8 +154,9 @@
                     parsedB = b;
                 });
 
-            builder.Parse(args);
+            var parseSuccess = builder.Parse(args);
 
+            parseSuccess.Should().BeTrue();
             parsedA.Should().BeEquivalentWithSameOrdering(1, 2, 3);
             parsedB.Should().BeEquivalentWithSameOrdering(3, 4, 5);
         }

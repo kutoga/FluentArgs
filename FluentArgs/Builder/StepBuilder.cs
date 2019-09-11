@@ -2,14 +2,17 @@
 {
     using System;
     using System.Collections.Generic;
-    using System.IO;
     using System.Threading.Tasks;
     using FluentArgs.Description;
     using FluentArgs.Execution;
+    using FluentArgs.Help;
 
     internal class StepBuilder : IInitialFluentArgsBuilder
     {
-        public Step Step { get; set; } = new InitialStep();
+        public Step Step { get; set; } = new InitialStep()
+        {
+            ParserSettings = new ParserSettings(new SimpleHelpPrinter(Console.Out), new SimpleParsingErrorPrinter(Console.Error))
+        };
 
         //TODO: public und interface prefix weg
         IGiven<IFluentArgsBuilder> IGivenAppliable<IFluentArgsBuilder>.Given =>
@@ -25,6 +28,16 @@
             return new FinalBuilder(new CallStep(Step, new TargetFunction(callback)));
         }
 
+        public IBuildable CallUntyped(Action<IReadOnlyCollection<object?>> callback)
+        {
+            return new FinalBuilder(new UntypedCallStep(Step, new UntypedTargetFunction(callback)));
+        }
+
+        public IBuildable CallUntyped(Func<IReadOnlyCollection<object?>, Task> callback)
+        {
+            return new FinalBuilder(new UntypedCallStep(Step, new UntypedTargetFunction(callback)));
+        }
+
         public IBuildable Invalid()
         {
             return new FinalBuilder(new InvalidStep(Step));
@@ -38,27 +51,38 @@
 
         public IInitialFluentArgsBuilder RegisterHelpFlag(string name, params string[] moreNames)
         {
-            throw new NotImplementedException();
+            ((InitialStep)Step).ParserSettings.HelpFlag = new Name(name, moreNames);
+            return this;
         }
 
-        public IInitialFluentArgsBuilder RegisterOutputStreams(Stream output, Stream error)
+        public IInitialFluentArgsBuilder RegisterHelpPrinter(IHelpPrinter helpPrinter)
         {
-            throw new NotImplementedException();
+            ((InitialStep)Step).ParserSettings.HelpPrinter = helpPrinter;
+            return this;
+        }
+
+        public IInitialFluentArgsBuilder RegisterParsingErrorPrinter(IParsingErrorPrinter parsingErrorPrinter)
+        {
+            ((InitialStep)Step).ParserSettings.ParsingErrorPrinter = parsingErrorPrinter;
+            return this;
         }
 
         public IInitialFluentArgsBuilder WarnOnDuplicateNames()
         {
-            throw new NotImplementedException();
+            ((InitialStep)Step).ParserSettings.WarnOnDuplicateNames = true;
+            return this;
         }
 
         public IInitialFluentArgsBuilder WarnOnNonMinusStartingNames()
         {
-            throw new NotImplementedException();
+            ((InitialStep)Step).ParserSettings.WarnOnNonMinusStartingNames = true;
+            return this;
         }
 
         public IInitialFluentArgsBuilder WithApplicationDescription(string description)
         {
-            throw new NotImplementedException();
+            ((InitialStep)Step).ParserSettings.ApplicationDescription = description;
+            return this;
         }
 
         IConfigurableFlagWithOptionalDescription IFluentArgsBuilder.Flag(string name, params string[] moreNames)
@@ -103,6 +127,16 @@
         public IBuildable Call(TFuncAsync callback)
         {
             return new FinalBuilder(new CallStep(Step, new TargetFunction(callback)));
+        }
+
+        public IBuildable CallUntyped(Action<IReadOnlyCollection<object?>> callback)
+        {
+            return new FinalBuilder(new UntypedCallStep(Step, new UntypedTargetFunction(callback)));
+        }
+
+        public IBuildable CallUntyped(Func<IReadOnlyCollection<object?>, Task> callback)
+        {
+            return new FinalBuilder(new UntypedCallStep(Step, new UntypedTargetFunction(callback)));
         }
 
         public IBuildable Invalid()
