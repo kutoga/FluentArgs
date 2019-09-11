@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
 using FluentArgs.Extensions;
 
@@ -9,42 +10,41 @@ namespace FluentArgs.Help
     public class SimpleParsingErrorPrinter : IParsingErrorPrinter
     {
         private readonly ILineWriter errorLineWriter;
-        private readonly IReadOnlyCollection<string>? helpFlagAliases;
 
-        public SimpleParsingErrorPrinter(TextWriter errorWriter, IReadOnlyCollection<string>? helpFlagAlises)
+        public SimpleParsingErrorPrinter(TextWriter errorWriter)
         {
             errorLineWriter = new LineWriter(errorWriter);
-            helpFlagAliases = helpFlagAlises;
         }
 
-        public async Task PrintArgumentMissingError(IReadOnlyCollection<string> aliases, string description)
+        public async Task PrintArgumentMissingError(IReadOnlyCollection<string> aliases, string description, IReadOnlyCollection<string>? helpFlagAliases)
         {
             await errorLineWriter
                 .WriteLine($"Required argument '{aliases.StringifyAliases()}' not found!")
                 .ConfigureAwait(false);
-            await WriteHelpFlagInfo().ConfigureAwait(false);
-            await errorLineWriter.WriteLine($"Argument description: {description}").ConfigureAwait(false);
+            await errorLineWriter.WriteLine($"Description: {description}").ConfigureAwait(false);
+            await WriteHelpFlagInfo(helpFlagAliases).ConfigureAwait(false);
         }
 
-        public async Task PrintArgumentParsingError(IReadOnlyCollection<string>? aliases, string description)
+        public async Task PrintArgumentParsingError(IReadOnlyCollection<string>? aliases, string description, IReadOnlyCollection<string>? helpFlagAliases)
         {
             if (aliases != null)
             {
                 await errorLineWriter
                     .WriteLine($"Could not parse argument '{aliases.StringifyAliases()}'!")
                     .ConfigureAwait(false);
-                await WriteHelpFlagInfo().ConfigureAwait(false);
+                await WriteHelpFlagInfo(helpFlagAliases).ConfigureAwait(false);
             }
 
-            await errorLineWriter.WriteLine($"Parsing error: {description}").ConfigureAwait(false);
+            await errorLineWriter.WriteLine($"Error: {description}").ConfigureAwait(false);
         }
 
-        private Task WriteHelpFlagInfo()
+        private Task WriteHelpFlagInfo(IReadOnlyCollection<string>? helpFlagAliases)
         {
             if (helpFlagAliases != null)
                 return errorLineWriter.WriteLines(
                     string.Empty,
-                    $"Show help for more information: {Environment.GetCommandLineArgs()[0]} {helpFlagAliases.StringifyAliases()}");
+                    "Show help for more information:",
+                    $"  {Environment.GetCommandLineArgs()[0]} {helpFlagAliases.AliasesOrdering().FirstOrDefault()}");
 
             return Task.CompletedTask;
         }

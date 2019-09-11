@@ -15,8 +15,9 @@
                 .Given.Flag("-f").Then(() => redirected = true)
                 .Call(() => redirected = false);
 
-            builder.Parse(args);
+            var parseSuccess = builder.Parse(args);
 
+            parseSuccess.Should().BeTrue();
             redirected.Should().BeTrue();
         }
 
@@ -29,8 +30,9 @@
                 .Given.Flag("-f").Then(async () => redirected = true)
                 .Call(() => redirected = false);
 
-            builder.Parse(args);
+            var parseSuccess = builder.Parse(args);
 
+            parseSuccess.Should().BeTrue();
             redirected.Should().BeTrue();
         }
 
@@ -44,8 +46,9 @@
                 .Given.Flag("-f").Then(p1 => redirected = true)
                 .Call(p1 => redirected = false);
 
-            builder.Parse(args);
+            var parseSuccess = builder.Parse(args);
 
+            parseSuccess.Should().BeTrue();
             redirected.Should().BeTrue();
         }
 
@@ -59,8 +62,9 @@
                 .Given.Flag("-f").Then(async p1 => redirected = true)
                 .Call(p1 => redirected = false);
 
-            builder.Parse(args);
+            var parseSuccess = builder.Parse(args);
 
+            parseSuccess.Should().BeTrue();
             redirected.Should().BeTrue();
         }
 
@@ -79,8 +83,9 @@
                 })
                 .Call(p2 => p1 => redirected = false);
 
-            builder.Parse(args);
+            var parseSuccess = builder.Parse(args);
 
+            parseSuccess.Should().BeTrue();
             redirected.Should().BeTrue();
         }
 
@@ -95,8 +100,9 @@
                 .Given.Flag("-f").Then(p2 => p1 => redirected = true)
                 .Call(p2 => p1 => redirected = false);
 
-            builder.Parse(args);
+            var parseSuccess = builder.Parse(args);
 
+            parseSuccess.Should().BeTrue();
             redirected.Should().BeTrue();
         }
     }

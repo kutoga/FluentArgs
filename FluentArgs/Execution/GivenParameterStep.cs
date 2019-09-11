@@ -63,7 +63,7 @@
                 return parser!(parameter);
             }
 
-            throw new Exception("TODO: IMPLEMENT MORE DEFAULTS");
+            throw new ArgumentParsingException($"No parse for the type '{this.parameter.Type.Name}' available!", this.parameter.Name);
         }
     }
 }

@@ -20,8 +20,9 @@
                     .Then(() => redirected = true)
                 .Call(() => redirected = false);
 
-            builder.Parse(args);
+            var parseSuccess = builder.Parse(args);
 
+            parseSuccess.Should().BeTrue();
             redirected.Should().BeFalse();
         }
 
@@ -36,8 +37,9 @@
                     .Then(() => redirected = true)
                 .Call(() => redirected = false);
 
-            builder.Parse(args);
+            var parseSuccess = builder.Parse(args);
 
+            parseSuccess.Should().BeTrue();
             redirected.Should().BeTrue();
         }
 
@@ -52,8 +54,9 @@
                     .Then(() => redirected = true)
                 .Call(() => redirected = false);
 
-            builder.Parse(args);
+            var parseSuccess = builder.Parse(args);
 
+            parseSuccess.Should().BeTrue();
             redirected.Should().BeTrue();
         }
 
@@ -68,8 +71,9 @@
                     .Then(() => redirected = true)
                 .Call(() => redirected = false);
 
-            builder.Parse(args);
+            var parseSuccess = builder.Parse(args);
 
+            parseSuccess.Should().BeTrue();
             redirected.Should().BeTrue();
         }
 
@@ -87,8 +91,9 @@
                     .Then(() => calledBranches.Add("param2"))
                 .Call(() => calledBranches.Add("none"));
 
-            builder.Parse(args);
+            var parseSuccess = builder.Parse(args);
 
+            parseSuccess.Should().BeTrue();
             calledBranches.Should().BeEquivalentWithSameOrdering(new[] { "param1" });
         }
 
@@ -107,8 +112,9 @@
                         .Call(() => calledBranch = "v1"))
                 .Call(() => calledBranch = "none");
 
-            builder.Parse(args);
+            var parseSuccess = builder.Parse(args);
 
+            parseSuccess.Should().BeTrue();
             calledBranch.Should().Be("v1v2");
         }
 
@@ -123,8 +129,9 @@
                    .Then(() => redirected = true)
                 .Call(() => redirected = false);
 
-            builder.Parse(args);
+            var parseSuccess = builder.Parse(args);
 
+            parseSuccess.Should().BeTrue();
             redirected.Should().BeFalse();
         }
 
@@ -139,8 +146,9 @@
                     .Then(() => redirected = true)
                 .Call(() => redirected = false);
 
-            builder.Parse(args);
+            var parseSuccess = builder.Parse(args);
 
+            parseSuccess.Should().BeTrue();
             redirected.Should().BeTrue();
         }
 
@@ -155,8 +163,9 @@
                     .Then(() => redirected = true)
                 .Call(() => redirected = false);
 
-            builder.Parse(args);
+            var parseSuccess = builder.Parse(args);
 
+            parseSuccess.Should().BeTrue();
             redirected.Should().BeTrue();
         }
     }

@@ -16,11 +16,12 @@
             var textOutput = new StreamWriter(dummyOutput);
             var builder = FluentArgsBuilder.New()
                 .RegisterHelpFlag("--help")
-                .RegisterHelpPrinter(new SimpleHelpPrinter(textOutput, textOutput))
+                .RegisterHelpPrinter(new SimpleHelpPrinter(textOutput))
                 .Invalid();
 
-            builder.Parse(args);
+            var parseSuccess = builder.Parse(args);
 
+            parseSuccess.Should().BeTrue();
             dummyOutput.ToArray().Should().NotBeEmpty();
         }
     }

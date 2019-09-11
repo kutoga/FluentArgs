@@ -26,8 +26,9 @@
                     parsedC = c;
                 });
 
-            builder.Parse(args);
+            var parseSuccess = builder.Parse(args);
 
+            parseSuccess.Should().BeTrue();
             parsedA.Should().Be(1337);
             parsedB.Should().Be("beni");
             parsedC.Should().BeTrue();
@@ -44,26 +45,10 @@
                 .Parameter("-c").IsOptional()
                 .CallUntyped(p => parameters = p);
 
-            builder.Parse(args);
+            var parseSuccess = builder.Parse(args);
 
+            parseSuccess.Should().BeTrue();
             parameters.Should().BeEquivalentWithSameOrdering(1, "hey", null);
-        }
-
-        [Fact]
-        public static void GivenMultipleParametersAndAnAsyncUntypedCall_TheTaskShouldBeForwarded()
-        {
-            var dummyTask = Task.FromResult("My special task");
-            var args = new[] { "-a", "1", "-b", "hey" };
-            IReadOnlyCollection<object?>? parameters = null;
-            var builder = FluentArgsBuilder.New()
-                .Parameter<int>("-a").IsRequired()
-                .Parameter("-b").IsOptional()
-                .Parameter("-c").IsOptional()
-                .CallUntyped(_ => dummyTask);
-
-            var resultingTask = builder.ParseAsync(args);
-
-            resultingTask.Should().Be(dummyTask);
         }
     }
 }

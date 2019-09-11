@@ -9,10 +9,12 @@ namespace FluentArgs
     {
         Task PrintArgumentMissingError(
             IReadOnlyCollection<string> aliases,
-            string description);
+            string description,
+            IReadOnlyCollection<string>? helpFlagAliases);
 
         Task PrintArgumentParsingError(
             IReadOnlyCollection<string>? aliases,
-            string description);
+            string description,
+            IReadOnlyCollection<string>? helpFlagAliases);
     }
 }

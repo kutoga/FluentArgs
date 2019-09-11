@@ -27,7 +27,7 @@
             {
                 if (Description.IsRequired)
                 {
-                    throw new Exception("TODO: parameter is required, but not given");
+                    throw new ArgumentMissingException("Required (list-)parameter not found!", Description.Name);
                 }
 
                 if (Description.HasDefaultValue)

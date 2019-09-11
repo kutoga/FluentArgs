@@ -14,8 +14,9 @@
                 .Given.Flag("--silent").Then(() => redirected = true)
                 .Call(() => redirected = false);
 
-            builder.Parse(args);
+            var parseSuccess = builder.Parse(args);
 
+            parseSuccess.Should().BeTrue();
             redirected.Should().BeFalse();
         }
 
@@ -28,8 +29,9 @@
                 .Given.Flag("--silent").Then(() => redirected = true)
                 .Call(() => redirected = false);
 
-            builder.Parse(args);
+            var parseSuccess = builder.Parse(args);
 
+            parseSuccess.Should().BeTrue();
             redirected.Should().BeTrue();
         }
 
@@ -48,8 +50,9 @@
                 .Given.Flag("--branch3").Then(() => calledBranch = "branch3")
                 .Call(() => calledBranch = "none");
 
-            builder.Parse(args);
+            var parseSuccess = builder.Parse(args);
 
+            parseSuccess.Should().BeTrue();
             calledBranch.Should().Be(branchName);
         }
 
@@ -69,8 +72,9 @@
                     .Call(() => calledBranch = "branch10_none"))
                 .Call(() => calledBranch = "none_none");
 
-            builder.Parse(args);
+            var parseSuccess = builder.Parse(args);
 
+            parseSuccess.Should().BeTrue();
             calledBranch.Should().Be($"{branch1}_{branch2}");
         }
     }

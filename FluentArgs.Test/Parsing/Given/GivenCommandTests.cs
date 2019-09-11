@@ -19,8 +19,9 @@
                     .ElseIgnore()
                 .Call(() => redirected = false);
 
-            builder.Parse(args);
+            var parseSuccess = builder.Parse(args);
 
+            parseSuccess.Should().BeTrue();
             redirected.Should().BeFalse();
         }
 
@@ -50,8 +51,9 @@
                     .ElseIgnore()
                 .Call(() => calledBranch = "none");
 
-            builder.Parse(args);
+            var parseSuccess = builder.Parse(args);
 
+            parseSuccess.Should().BeTrue();
             calledBranch.Should().Be("branch1");
         }
 
@@ -72,8 +74,9 @@
                     .ElseIgnore()
                 .Call(() => calledBranch = "none");
 
-            builder.Parse(args);
+            var parseSuccess = builder.Parse(args);
 
+            parseSuccess.Should().BeTrue();
             calledBranch.Should().Be(branch);
         }
 
@@ -106,8 +109,9 @@
                     .ElseIsInvalid()
                 .Call(() => calledBranch = "none");
 
-            builder.Parse(args);
+            var parseSuccess = builder.Parse(args);
 
+            parseSuccess.Should().BeTrue();
             calledBranch.Should().Be(branch);
         }
 
@@ -132,8 +136,9 @@
                     .ElseIgnore()
                 .Call(() => calledBranch = "none");
 
-            builder.Parse(args);
+            var parseSuccess = builder.Parse(args);
 
+            parseSuccess.Should().BeTrue();
             calledBranch.Should().Be(expectedBranch);
         }
 
@@ -156,8 +161,9 @@
                     .ElseIgnore()
                 .Call(() => calledBranch = "none");
 
-            builder.Parse(args);
+            var parseSuccess = builder.Parse(args);
 
+            parseSuccess.Should().BeTrue();
             calledBranch.Should().Be(expectedBranch);
         }
 
@@ -174,8 +180,9 @@
                     .ElseIgnore()
                 .Call(() => redirected = false);
 
-            builder.Parse(args);
+            var parseSuccess = builder.Parse(args);
 
+            parseSuccess.Should().BeTrue();
             redirected.Should().BeTrue();
         }
     }

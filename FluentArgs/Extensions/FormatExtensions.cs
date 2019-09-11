@@ -8,10 +8,14 @@ namespace FluentArgs.Extensions
 {
     internal static class FormatExtensions
     {
+        public static IEnumerable<string> AliasesOrdering(this IEnumerable<string> aliases)
+        {
+            return aliases.OrderBy(a => a.Length).ThenBy(a => a);
+        }
+
         public static string StringifyAliases(this IReadOnlyCollection<string> aliases, string separator = "|")
         {
-            var orderedNames = aliases.OrderBy(a => a.Length).ThenBy(a => a);
-            return string.Join(separator, orderedNames);
+            return string.Join(separator, aliases.AliasesOrdering());
         }
     }
 }

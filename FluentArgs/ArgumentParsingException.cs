@@ -5,7 +5,7 @@ namespace FluentArgs
 {
     internal class ArgumentParsingException : Exception
     {
-        public ArgumentParsingException(string description, Name? argumentName)
+        public ArgumentParsingException(string description, Name? argumentName = null)
         {
             Description = description;
             ArgumentName = argumentName;

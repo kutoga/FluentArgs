@@ -21,7 +21,6 @@
             {
                 var helpGenerator = new HelpGenerator(this);
                 return helpGenerator.Write();
-                throw new Exception("TODO: show help");
             }
 
             if (Next == null)

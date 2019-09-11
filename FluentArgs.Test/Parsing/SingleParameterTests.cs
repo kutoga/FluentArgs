@@ -18,8 +18,9 @@
                 .Parameter("--name").IsRequired()
                 .Call(name => parsedName = name);
 
-            builder.Parse(args);
+            var parseSuccess = builder.Parse(args);
 
+            parseSuccess.Should().BeTrue();
             parsedName.Should().Be("beni");
         }
 
@@ -32,35 +33,36 @@
                 .Parameter<int>("--age").IsRequired()
                 .Call(age => parsedAge = age);
 
-            builder.Parse(args);
+            var parseSuccess = builder.Parse(args);
 
+            parseSuccess.Should().BeTrue();
             parsedAge.Should().Be(28);
         }
 
         [Fact]
-        public static void GivenARequiredArgIsMissing_ShouldThrow()
+        public static void GivenARequiredArgIsMissing_ShouldNotbeParsedSuccessful()
         {
             var args = new[] { "--name", "beni" };
             var builder = FluentArgsBuilder.New()
                 .Parameter<int>("--age").IsRequired()
                 .Call(age => { });
 
-            Action parseAction = () => builder.Parse(args);
+            var parseSuccess = builder.Parse(args);
 
-            parseAction.Should().Throw<Exception>();
+            parseSuccess.Should().BeFalse();
         }
 
         [Fact]
-        public static void GivenARequiredParameterWithoutAValue_ShouldThrow()
+        public static void GivenARequiredParameterWithoutAValue_ShouldNotbeParsedSuccessful()
         {
             var args = new[] { "--name" };
             var builder = FluentArgsBuilder.New()
                 .Parameter("--name").IsRequired()
                 .Call(name => { });
 
-            Action parseAction = () => builder.Parse(args);
+            var parseSuccess = builder.Parse(args);
 
-            parseAction.Should().Throw<Exception>();
+            parseSuccess.Should().BeFalse();
         }
 
         [Fact]
@@ -77,8 +79,9 @@
                     done = true;
                 });
 
-            builder.Parse(args);
+            var parseSuccess = builder.Parse(args);
 
+            parseSuccess.Should().BeTrue();
             done.Should().BeTrue();
             parsedAge.Should().Be(default);
         }
@@ -97,8 +100,9 @@
                     done = true;
                 });
 
-            builder.Parse(args);
+            var parseSuccess = builder.Parse(args);
 
+            parseSuccess.Should().BeTrue();
             done.Should().BeTrue();
             parsedName.Should().Be(default);
         }
@@ -117,8 +121,9 @@
                     done = true;
                 });
 
-            builder.Parse(args);
+            var parseSuccess = builder.Parse(args);
 
+            parseSuccess.Should().BeTrue();
             done.Should().BeTrue();
             parsedAge.Should().Be(1729);
         }
@@ -137,24 +142,11 @@
                     done = true;
                 });
 
-            builder.Parse(args);
+            var parseSuccess = builder.Parse(args);
 
+            parseSuccess.Should().BeTrue();
             done.Should().BeTrue();
             parsedAge.Should().Be(28);
-        }
-
-        [Fact]
-        public static void GivenAnAsyncCall_TheTaskShouldBeForwarded()
-        {
-            Task dummyTask = Task.FromResult("My special task");
-            var args = new[] { "--name", "joleene" };
-            var builder = FluentArgsBuilder.New()
-                .Parameter("--name").IsRequired()
-                .Call(name => dummyTask);
-
-            var resultingTask = builder.ParseAsync(args);
-
-            resultingTask.Should().Be(dummyTask);
         }
 
         [Fact]
@@ -173,8 +165,9 @@
                     done = true;
                 });
 
-            builder.Parse(args);
+            var parseSuccess = builder.Parse(args);
 
+            parseSuccess.Should().BeTrue();
             done.Should().BeTrue();
             parsedName.Should().Be("BENI");
         }

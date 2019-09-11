@@ -41,7 +41,7 @@
                 return parser!(parameter);
             }
 
-            throw new NotImplementedException();
+            throw new ArgumentParsingException($"No parse for the type '{this.Description.Type.Name}' available!");
         }
     }
 }

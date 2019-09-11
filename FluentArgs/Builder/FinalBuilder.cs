@@ -8,17 +8,15 @@ namespace FluentArgs.Builder
     internal class FinalBuilder : IBuildable
     {
         private readonly Step step;
-        private readonly ILineWriter errorLineWriter;
 
-        public FinalBuilder(Step step, ILineWriter errorLineWriter)
+        public FinalBuilder(Step step)
         {
             this.step = step;
-            this.errorLineWriter = errorLineWriter;
         }
 
         public IParsable Build()
         {
-            return new FluentArgsDefinition(GetInitialStep(), errorLineWriter);
+            return new FluentArgsDefinition(GetInitialStep());
         }
 
         private InitialStep GetInitialStep()

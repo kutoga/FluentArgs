@@ -17,8 +17,9 @@
                 .LoadRemainingArguments()
                 .Call(args => parsedArgs = args);
 
-            builder.Parse(args);
+            var parseSuccess = builder.Parse(args);
 
+            parseSuccess.Should().BeTrue();
             parsedArgs.Should().BeEquivalentWithSameOrdering(new[] { "-x", "a", "-y", "b" });
         }
 
@@ -31,8 +32,9 @@
                 .LoadRemainingArguments()
                 .Call(async args => parsedArgs = args);
 
-            builder.Parse(args);
+            var parseSuccess = builder.Parse(args);
 
+            parseSuccess.Should().BeTrue();
             parsedArgs.Should().BeEquivalentWithSameOrdering(new[] { "-x", "a", "-y", "b" });
         }
 
@@ -46,8 +48,9 @@
                 .LoadRemainingArguments()
                 .Call(args => _ => parsedArgs = args);
 
-            builder.Parse(args);
+            var parseSuccess = builder.Parse(args);
 
+            parseSuccess.Should().BeTrue();
             parsedArgs.Should().BeEquivalentWithSameOrdering(new[] { "a", "b", "c" });
         }
 
@@ -65,8 +68,9 @@
                     return Task.CompletedTask;
                 });
 
-            builder.Parse(args);
+            var parseSuccess = builder.Parse(args);
 
+            parseSuccess.Should().BeTrue();
             parsedArgs.Should().BeEquivalentWithSameOrdering(new[] { "a", "b", "c" });
         }
 
@@ -80,8 +84,9 @@
                     .WithParser(s => int.Parse(s) * 2)
                 .Call(args => parsedArgs = args);
 
-            builder.Parse(args);
+            var parseSuccess = builder.Parse(args);
 
+            parseSuccess.Should().BeTrue();
             parsedArgs.Should().BeEquivalentWithSameOrdering(new[] { 2, 4, -2, 4 });
         }
     }

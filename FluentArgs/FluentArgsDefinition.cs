@@ -10,12 +10,9 @@ namespace FluentArgs
 {
     internal class FluentArgsDefinition : IParsableFromState
     {
-        private readonly ILineWriter errorLineWriter;
-
-        public FluentArgsDefinition(InitialStep initialStep, ILineWriter errorLineWriter)
+        public FluentArgsDefinition(InitialStep initialStep)
         {
             InitialStep = initialStep;
-            this.errorLineWriter = errorLineWriter;
         }
 
         public InitialStep InitialStep { get; }
@@ -40,42 +37,20 @@ namespace FluentArgs
             }
             catch (ArgumentMissingException ex)
             {
-                if (ex.ArgumentName != null)
-                {
-                    await errorLineWriter
-                        .WriteLine($"Required argument '{ex.ArgumentName.Names.StringifyAliases()}' not found!")
-                        .ConfigureAwait(false);
-                    await WriteHelpFlagInfo().ConfigureAwait(false);
-                }
-
-                await errorLineWriter.WriteLine($"Argument description: {ex.Description}").ConfigureAwait(false);
+                await InitialStep.ParserSettings.ParsingErrorPrinter.PrintArgumentMissingError(
+                    ex.ArgumentName.Names,
+                    ex.Description,
+                    InitialStep.ParserSettings.HelpFlag?.Names).ConfigureAwait(false);
                 return false;
             }
             catch (ArgumentParsingException ex)
             {
-                if (ex.ArgumentName != null)
-                {
-                    await errorLineWriter
-                        .WriteLine($"Could not parse argument '{ex.ArgumentName.Names.StringifyAliases()}'!")
-                        .ConfigureAwait(false);
-                    await WriteHelpFlagInfo().ConfigureAwait(false);
-                }
-
-                await errorLineWriter.WriteLine($"Parsing error: {ex.Description}").ConfigureAwait(false);
+                await InitialStep.ParserSettings.ParsingErrorPrinter.PrintArgumentParsingError(
+                    ex.ArgumentName?.Names,
+                    ex.Description,
+                    InitialStep.ParserSettings.HelpFlag?.Names).ConfigureAwait(false);
                 return false;
             }
-        }
-
-        private Task WriteHelpFlagInfo()
-        {
-            if (InitialStep.ParserSettings.HelpFlag != null)
-            {
-                return errorLineWriter.WriteLines(
-                    string.Empty,
-                    $"Show help for more information: {Environment.GetCommandLineArgs()[0]} {InitialStep.ParserSettings.HelpFlag.Names.StringifyAliases()}");
-            }
-
-            return Task.CompletedTask;
         }
     }
 }

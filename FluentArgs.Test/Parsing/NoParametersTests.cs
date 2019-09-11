@@ -16,35 +16,10 @@
             var builder = FluentArgsBuilder.New()
                 .Call(() => done = true);
 
-            builder.Parse(args);
+            var parseSuccess = builder.Parse(args);
 
+            parseSuccess.Should().BeTrue();
             done.Should().BeTrue();
-        }
-
-        [Fact]
-        public static void GivenAnAsyncCall_TheTaskShouldBeForwarded()
-        {
-            Task dummyTask = Task.FromResult("My special task");
-            var args = Array.Empty<string>();
-            var builder = FluentArgsBuilder.New()
-                .Call(() => dummyTask);
-
-            var resultingTask = builder.ParseAsync(args);
-
-            resultingTask.Should().Be(dummyTask);
-        }
-
-        [Fact]
-        public static void GivenAnAsyncUntypedCall_TheTaskShouldBeForwarded()
-        {
-            var dummyTask = Task.FromResult("My special task");
-            var args = Array.Empty<string>();
-            var builder = FluentArgsBuilder.New()
-                .CallUntyped(_ => dummyTask);
-
-            var resultingTask = builder.ParseAsync(args);
-
-            resultingTask.Should().Be(dummyTask);
         }
 
         [Fact]
@@ -55,8 +30,9 @@
             var builder = FluentArgsBuilder.New()
                 .Call(() => done = true);
 
-            builder.Parse(args);
+            var parseSuccess = builder.Parse(args);
 
+            parseSuccess.Should().BeTrue();
             done.Should().BeTrue();
         }
 
@@ -68,8 +44,9 @@
             var builder = FluentArgsBuilder.New()
                 .CallUntyped(p => parameters = p);
 
-            builder.Parse(args);
+            var parseSuccess = builder.Parse(args);
 
+            parseSuccess.Should().BeTrue();
             parameters.Should().BeEmpty();
         }
     }

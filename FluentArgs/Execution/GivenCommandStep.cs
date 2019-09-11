@@ -59,7 +59,7 @@
                             break;
 
                         default:
-                            throw new Exception("TODO: sinnvolle exception");
+                            throw new Exception("Invalid 'Given'-branch type.");
                     }
 
                     var (result, matches) = handler(state, parameterValue, branch.branch, branch.then);
@@ -105,7 +105,7 @@
 
         private (Task? result, bool matches) ExecuteInvalid(State state, string parameterValue, GivenCommandBranch branch, IParsableFromState then)
         {
-            throw new Exception("TODO: invalid command value (show help?)");
+            throw new ArgumentParsingException("Invalid command value.", Name);
         }
 
         private object Parse(string parameter, Func<string, object>? parser, Type type)
@@ -120,7 +120,7 @@
                 return defaultParser!(parameter);
             }
 
-            throw new Exception("TODO: IMPLEMENT MORE DEFAULTS");
+            throw new ArgumentParsingException($"No parse for the type '{type.Name}' available!", Name);
         }
     }
 }

@@ -32,7 +32,7 @@
             {
                 if (Description.IsRequired)
                 {
-                    throw new ArgumentMissingException("Parameter not found!", Description.Name);
+                    throw new ArgumentMissingException("Required parameter not found!", Description.Name);
                 }
 
                 if (Description.HasDefaultValue)
