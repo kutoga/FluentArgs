@@ -28,7 +28,7 @@
         }
 
         [Fact]
-        public static void GivenARequiredParameterListWhichIsNotPresent_ShouldThrow()
+        public static void GivenARequiredParameterListWhichIsNotPresent_ShouldNotParseSuccessful()
         {
             var args = new[] { "-x" };
             IReadOnlyList<int> parsedN = default;
@@ -36,9 +36,9 @@
                 .ParameterList<int>("-n").IsRequired()
                 .Call(n => parsedN = n);
 
-            Action parseAction = () => builder.Parse(args);
+            var parseSuccess = builder.Parse(args);
 
-            parseAction.Should().Throw<Exception>();
+            parseSuccess.Should().BeFalse();
         }
 
         [Fact]

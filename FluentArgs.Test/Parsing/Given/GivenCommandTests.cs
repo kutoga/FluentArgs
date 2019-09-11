@@ -26,7 +26,7 @@
         }
 
         [Fact]
-        public static void GivenAnAlwaysInvalidCommandValue_ShouldThrow()
+        public static void GivenAnAlwaysInvalidCommandValue_ShouldNotParseSuccessful()
         {
             var args = new[] { "-c", "beni" };
             var builder = FluentArgsBuilder.New()
@@ -35,9 +35,9 @@
                     .ElseIsInvalid()
                 .Call(() => { });
 
-            Action parseAction = () => builder.Parse(args);
+            var parseSuccess = builder.Parse(args);
 
-            parseAction.Should().Throw<Exception>();
+            parseSuccess.Should().BeFalse();
         }
 
         [Fact]
@@ -81,7 +81,7 @@
         }
 
         [Fact]
-        public static void GivenACommandWithAnInvalidValue_ShouldThrow()
+        public static void GivenACommandWithAnInvalidValue_ShouldNotParseSuccessful()
         {
             var args = new[] { "--type", "pi" };
             var builder = FluentArgsBuilder.New()
@@ -90,9 +90,9 @@
                     .ElseIsInvalid()
                 .Call(() => { });
 
-            Action parseAction = () => builder.Parse(args);
+            var parseSuccess = builder.Parse(args);
 
-            parseAction.Should().Throw<Exception>();
+            parseSuccess.Should().BeFalse();
         }
 
         [Theory]
