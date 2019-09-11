@@ -178,7 +178,7 @@ namespace FluentArgs.Playground
              *TODO:
              * .ConfigureDefaults() ->
  
-.WarnOnNonMinusStartingNames() // basiert auf RegisterOnBuiltCallback(Action<…>)
+.ThrowOnNonMinusStartingNames() // basiert auf RegisterOnBuiltCallback(Action<…>)
 .WarnOnDuplicateUsedNames() // nur im selben branch
 .ShowHelp("-h", "--help")
 */

@@ -20,7 +20,7 @@
         public IGivenCommandInitial<TArgsBuilder> Command(string name, params string[] moreNames)
         {
             return new GivenCommandBuilder<TArgsBuilder>(
-                new Name(name, moreNames),
+                Name.ValidateAndBuild(name, moreNames),
                 argsBuilderFactory,
                 previousStep,
                 stepWrapper);
@@ -38,14 +38,14 @@
             {
                 result = stepWrapper(new GivenFlagStep(
                     previousStep,
-                    new Flag(new Name(name, moreNames)),
+                    new Flag(Name.ValidateAndBuild(name, moreNames)),
                     parsable as IParsableFromState ?? throw new Exception("TODO")));
             }
         }
 
         public IGivenParameter<TArgsBuilder> Parameter(string name, params string[] moreNames)
         {
-            return new GivenParameterBuilder<TArgsBuilder>(new Name(name, moreNames), argsBuilderFactory(), previousStep, stepWrapper);
+            return new GivenParameterBuilder<TArgsBuilder>(Name.ValidateAndBuild(name, moreNames), argsBuilderFactory(), previousStep, stepWrapper);
         }
     }
 }
