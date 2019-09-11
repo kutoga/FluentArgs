@@ -4,8 +4,8 @@
 
     public interface IParsable
     {
-        void Parse(params string[] args);
+        bool Parse(params string[] args);
 
-        Task ParseAsync(params string[] args);
+        Task<bool> ParseAsync(params string[] args);
     }
 }

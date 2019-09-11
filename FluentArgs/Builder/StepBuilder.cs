@@ -11,7 +11,7 @@
     {
         public Step Step { get; set; } = new InitialStep()
         {
-            ParserSettings = new ParserSettings(new SimpleHelpPrinter(Console.Out, Console.Error))
+            ParserSettings = new ParserSettings(new SimpleHelpPrinter(Console.Out), new SimpleParsingErrorPrinter(Console.Error));
         };
 
         //TODO: public und interface prefix weg

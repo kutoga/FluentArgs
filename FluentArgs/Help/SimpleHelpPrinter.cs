@@ -13,20 +13,15 @@ namespace FluentArgs.Help
         private const string Tab = "    ";
         private const int MaxLineLength = 80;
         private readonly Stack<ILineWriter> outputWriters;
-        private readonly Stack<ILineWriter> errorWriters;
         private readonly IList<(string parameterName, string description)> parameters;
 
         private ILineWriter OutputWriter => outputWriters.Peek();
 
-        private ILineWriter ErrorWriter => errorWriters.Peek();
-
-        public SimpleHelpPrinter(TextWriter outputWriter, TextWriter errorWriter)
+        public SimpleHelpPrinter(TextWriter outputWriter)
         {
             outputWriters = new Stack<ILineWriter>();
-            errorWriters = new Stack<ILineWriter>();
             parameters = new List<(string, string)>();
             outputWriters.Push(new LineWriter(outputWriter));
-            errorWriters.Push(new LineWriter(errorWriter));
         }
 
         public async Task WriteApplicationDescription(string description)

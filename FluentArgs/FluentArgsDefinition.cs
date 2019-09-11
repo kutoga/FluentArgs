@@ -10,35 +10,33 @@ namespace FluentArgs
 {
     internal class FluentArgsDefinition : IParsableFromState
     {
-        private readonly Name? helpFlag;
+        private readonly ILineWriter errorLineWriter;
 
-        private readonly ILineWriter errorLineWriter;
-
-        public FluentArgsDefinition(InitialStep initialStep, Name? helpFlag, ILineWriter errorLineWriter)
+        public FluentArgsDefinition(InitialStep initialStep, ILineWriter errorLineWriter)
         {
             InitialStep = initialStep;
-            this.helpFlag = helpFlag;
             this.errorLineWriter = errorLineWriter;
         }
 
         public InitialStep InitialStep { get; }
 
-        public void Parse(params string[] args)
+        public bool Parse(params string[] args)
         {
             // TODO: unpack innerexception
-            ParseAsync(args).Wait();
+            return ParseAsync(args).Result;
         }
 
-        public Task ParseAsync(params string[] args)
+        public Task<bool> ParseAsync(params string[] args)
         {
             return ParseFromState(State.InitialState(args));
         }
 
-        public async Task ParseFromState(State state)
+        public async Task<bool> ParseFromState(State state)
         {
             try
             {
                 await InitialStep.Execute(state).ConfigureAwait(false);
+                return true;
             }
             catch (ArgumentMissingException ex)
             {
@@ -47,9 +45,11 @@ namespace FluentArgs
                     await errorLineWriter
                         .WriteLine($"Required argument '{ex.ArgumentName.Names.StringifyAliases()}' not found!")
                         .ConfigureAwait(false);
+                    await WriteHelpFlagInfo().ConfigureAwait(false);
                 }
 
                 await errorLineWriter.WriteLine($"Argument description: {ex.Description}").ConfigureAwait(false);
+                return false;
             }
             catch (ArgumentParsingException ex)
             {
@@ -58,10 +58,24 @@ namespace FluentArgs
                     await errorLineWriter
                         .WriteLine($"Could not parse argument '{ex.ArgumentName.Names.StringifyAliases()}'!")
                         .ConfigureAwait(false);
+                    await WriteHelpFlagInfo().ConfigureAwait(false);
                 }
 
                 await errorLineWriter.WriteLine($"Parsing error: {ex.Description}").ConfigureAwait(false);
+                return false;
             }
+        }
+
+        private Task WriteHelpFlagInfo()
+        {
+            if (InitialStep.ParserSettings.HelpFlag != null)
+            {
+                return errorLineWriter.WriteLines(
+                    string.Empty,
+                    $"Show help for more information: {Environment.GetCommandLineArgs()[0]} {InitialStep.ParserSettings.HelpFlag.Names.StringifyAliases()}");
+            }
+
+            return Task.CompletedTask;
         }
     }
 }

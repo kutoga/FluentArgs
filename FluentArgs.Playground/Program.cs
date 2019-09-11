@@ -1,4 +1,6 @@
-﻿namespace FluentArgs.Playground
+﻿using FluentArgs.Help;
+
+namespace FluentArgs.Playground
 {
     using System;
     using System.Threading.Tasks;
