@@ -11,6 +11,8 @@ namespace FluentArgs
 
         TArgsParser RegisterHelpPrinter(IHelpPrinter helpPrinter);
 
+        TArgsParser RegisterParsingErrorPrinter(IParsingErrorPrinter parsingErrorPrinter);
+
         TArgsParser WarnOnDuplicateNames();
 
         TArgsParser WarnOnNonMinusStartingNames();

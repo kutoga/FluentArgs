@@ -14,14 +14,16 @@
             var args = new[] { "--help" };
             var dummyOutput = new MemoryStream();
             var textOutput = new StreamWriter(dummyOutput);
+            var called = false;
             var builder = FluentArgsBuilder.New()
                 .RegisterHelpFlag("--help")
                 .RegisterHelpPrinter(new SimpleHelpPrinter(textOutput))
-                .Invalid();
+                .Call(() => called = true);
 
             var parseSuccess = builder.Parse(args);
 
             parseSuccess.Should().BeTrue();
+            called.Should().BeFalse();
             dummyOutput.ToArray().Should().NotBeEmpty();
         }
     }

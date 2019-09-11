@@ -61,6 +61,12 @@
             return this;
         }
 
+        public IInitialFluentArgsBuilder RegisterParsingErrorPrinter(IParsingErrorPrinter parsingErrorPrinter)
+        {
+            ((InitialStep)Step).ParserSettings.ParsingErrorPrinter = parsingErrorPrinter;
+            return this;
+        }
+
         public IInitialFluentArgsBuilder WarnOnDuplicateNames()
         {
             ((InitialStep)Step).ParserSettings.WarnOnDuplicateNames = true;

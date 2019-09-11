@@ -64,7 +64,7 @@ namespace FluentArgs.Playground
                     Console.WriteLine($"a={a}");
                     Console.WriteLine($"b={b}");
                 })
-                .Parse("-a", "bla");
+                .Parse("--help", "-a", "bla");
             Console.ReadLine();
             return;
 
