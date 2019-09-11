@@ -13,9 +13,9 @@ namespace FluentArgs
 
         TArgsParser RegisterParsingErrorPrinter(IParsingErrorPrinter parsingErrorPrinter);
 
-        TArgsParser WarnOnDuplicateNames();
+        TArgsParser ThrowOnDuplicateNames();
 
-        TArgsParser WarnOnNonMinusStartingNames();
+        TArgsParser ThrowOnNonMinusStartingNames();
     }
 
     public static class IConfigurableParserExtensions
@@ -33,8 +33,8 @@ namespace FluentArgs
         {
             return configurableParser
                 .RegisterDefaultHelpFlags()
-                .WarnOnDuplicateNames()
-                .WarnOnNonMinusStartingNames();
+                .ThrowOnDuplicateNames()
+                .ThrowOnNonMinusStartingNames();
         }
 
         public static TArgsParser DefaultConfigsWithAppDescription<TArgsParser>(

@@ -51,7 +51,7 @@
 
         public IInitialFluentArgsBuilder RegisterHelpFlag(string name, params string[] moreNames)
         {
-            ((InitialStep)Step).ParserSettings.HelpFlag = new Name(name, moreNames);
+            ((InitialStep)Step).ParserSettings.HelpFlag = Name.ValidateAndBuild(name, moreNames);
             return this;
         }
 
@@ -67,13 +67,13 @@
             return this;
         }
 
-        public IInitialFluentArgsBuilder WarnOnDuplicateNames()
+        public IInitialFluentArgsBuilder ThrowOnDuplicateNames()
         {
             ((InitialStep)Step).ParserSettings.WarnOnDuplicateNames = true;
             return this;
         }
 
-        public IInitialFluentArgsBuilder WarnOnNonMinusStartingNames()
+        public IInitialFluentArgsBuilder ThrowOnNonMinusStartingNames()
         {
             ((InitialStep)Step).ParserSettings.WarnOnNonMinusStartingNames = true;
             return this;
@@ -87,14 +87,14 @@
 
         IConfigurableFlagWithOptionalDescription IFluentArgsBuilder.Flag(string name, params string[] moreNames)
         {
-            return new FlagBuilder(s => new StepBuilder<Action<bool>, Func<bool, Task>> { Step = s }, Step, new Flag(new Name(name, moreNames)));
+            return new FlagBuilder(s => new StepBuilder<Action<bool>, Func<bool, Task>> { Step = s }, Step, new Flag(Name.ValidateAndBuild(name, moreNames)));
         }
 
         IConfigurableParameter<IFluentArgsBuilder<Action<TNextParam>, Func<TNextParam, Task>>, TNextParam> IFluentArgsBuilder.Parameter<TNextParam>(string name, params string[] moreNames)
         {
             var nextBuilder = new StepBuilder<Action<TNextParam>, Func<TNextParam, Task>>();
             return new ParameterBuilder<IFluentArgsBuilder<Action<TNextParam>, Func<TNextParam, Task>>, TNextParam>(
-                ParameterBuilt, nextBuilder, new Name(name, moreNames));
+                ParameterBuilt, nextBuilder, Name.ValidateAndBuild(name, moreNames));
 
             void ParameterBuilt(Parameter parameter) =>
                 nextBuilder.Step = new ParameterStep(Step, parameter);
@@ -104,7 +104,7 @@
         {
             var nextBuilder = new StepBuilder<Action<IReadOnlyList<TNextParam>>, Func<IReadOnlyList<TNextParam>, Task>>();
             return new ParameterListBuilder<IFluentArgsBuilder<Action<IReadOnlyList<TNextParam>>, Func<IReadOnlyList<TNextParam>, Task>>, TNextParam>(
-                ParameterListBuilt, nextBuilder, new Name(name, moreNames));
+                ParameterListBuilt, nextBuilder, Name.ValidateAndBuild(name, moreNames));
 
             void ParameterListBuilt(ParameterList parameterList) =>
                 nextBuilder.Step = new ParameterListStep(Step, parameterList);
@@ -152,14 +152,14 @@
 
         IConfigurableFlagWithOptionalDescription<TFunc, TFuncAsync> IFluentArgsBuilder<TFunc, TFuncAsync>.Flag(string name, params string[] moreNames)
         {
-            return new FlagBuilder<TFunc, TFuncAsync>(s => new StepBuilder<Func<bool, TFunc>, Func<bool, TFuncAsync>> { Step = s }, Step, new Flag(new Name(name, moreNames)));
+            return new FlagBuilder<TFunc, TFuncAsync>(s => new StepBuilder<Func<bool, TFunc>, Func<bool, TFuncAsync>> { Step = s }, Step, new Flag(Name.ValidateAndBuild(name, moreNames)));
         }
 
         IConfigurableParameter<IFluentArgsBuilder<Func<TNextParam, TFunc>, Func<TNextParam, TFuncAsync>>, TNextParam> IFluentArgsBuilder<TFunc, TFuncAsync>.Parameter<TNextParam>(string name, params string[] moreNames)
         {
             var nextBuilder = new StepBuilder<Func<TNextParam, TFunc>, Func<TNextParam, TFuncAsync>>();
             return new ParameterBuilder<IFluentArgsBuilder<Func<TNextParam, TFunc>, Func<TNextParam, TFuncAsync>>, TNextParam>(
-                ParameterBuilt, nextBuilder, new Name(name, moreNames));
+                ParameterBuilt, nextBuilder, Name.ValidateAndBuild(name, moreNames));
 
             void ParameterBuilt(Parameter parameter) =>
                 nextBuilder.Step = new ParameterStep(Step, parameter);
@@ -169,7 +169,7 @@
         {
             var nextBuilder = new StepBuilder<Func<IReadOnlyList<TNextParam>, TFunc>, Func<IReadOnlyList<TNextParam>, TFuncAsync>>();
             return new ParameterListBuilder<IFluentArgsBuilder<Func<IReadOnlyList<TNextParam>, TFunc>, Func<IReadOnlyList<TNextParam>, TFuncAsync>>, TNextParam>(
-                ParameterListBuilt, nextBuilder, new Name(name, moreNames));
+                ParameterListBuilt, nextBuilder, Name.ValidateAndBuild(name, moreNames));
 
             void ParameterListBuilt(ParameterList parameterList) =>
                 nextBuilder.Step = new ParameterListStep(Step, parameterList);
