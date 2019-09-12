@@ -8,7 +8,9 @@ namespace FluentArgs.Test.Help
 {
     public static class NonMinusStartingParameterNames
     {
-        [Fact]
+        [Theory]
+        [InlineData("x")]
+        // ...
         public static void IfNotConfigured_AnyNonEmptyNameIsValid()
         {
             false.Should().BeTrue();
