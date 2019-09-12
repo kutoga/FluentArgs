@@ -49,9 +49,9 @@
         [Fact]
         public void TestInvalidCommand()
         {
-            Action parseAction = () => argumentParser.Parse(new[] { "--apikey", "secret", "-a", "not_existing_command" });
+            var parseSuccess = argumentParser.Parse(new[] { "--apikey", "secret", "-a", "not_existing_command" });
 
-            parseAction.Should().Throw<Exception>();
+            parseSuccess.Should().BeFalse();
         }
 
         //TODO: Enum parser

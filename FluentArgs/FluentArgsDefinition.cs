@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Runtime.ExceptionServices;
 using System.Threading.Tasks;
 using FluentArgs.Description;
 using FluentArgs.Execution;
@@ -19,8 +20,21 @@ namespace FluentArgs
 
         public bool Parse(params string[] args)
         {
-            // TODO: unpack innerexception
-            return ParseAsync(args).Result;
+            try
+            {
+                return ParseAsync(args).Result;
+            }
+            catch (AggregateException e)
+            {
+                // TODO: Is there a cleaner way to do this?
+                if (e.InnerExceptions.Count != 1)
+                {
+                    throw new Exception("Multiple inner exceptions: This never should happen!", e);
+                }
+
+                ExceptionDispatchInfo.Capture(e.InnerException).Throw();
+                throw;
+            }
         }
 
         public Task<bool> ParseAsync(params string[] args)
