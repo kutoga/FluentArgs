@@ -120,5 +120,17 @@
             successB.Should().BeFalse();
             extractedArgumentsA.Should().BeEquivalentWithSameOrdering("-a", "1");
         }
+
+        [Fact]
+        public static void ExtractingArgumentsWithEqualSign_ShouldWork()
+        {
+            var args = new[] { "-a=1" };
+            IArgumentExtractor extractor = new ArgumentExtractor(args);
+
+            var success = extractor.TryExtract(new[] { "-a" }, out var extractedArguments, out var _, 1);
+
+            success.Should().BeTrue();
+            extractedArguments.Should().BeEquivalentWithSameOrdering("-a", "1");
+        }
     }
 }
