@@ -168,5 +168,19 @@
             parseSuccess.Should().BeTrue();
             redirected.Should().BeTrue();
         }
+
+        [Fact]
+        public static void GivenAParameterValueIsCheckedTheParameter_ShouldNoLongerBeAvailable()
+        {
+            var args = new[] { "-n", "1" };
+            var builder = FluentArgsBuilder.New()...
+        }
+
+        [Fact]
+        public static void GivenAParameterValueIsNotCheckedTheParameter_ShouldStillBeAvailable()
+        {
+            var args = new[] { "-n", "1" };
+            var builder = FluentArgsBuilder.New()...
+
+        }
     }
-}
