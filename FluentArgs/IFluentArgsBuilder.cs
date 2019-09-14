@@ -17,6 +17,9 @@
         IConfigurableParameterList<IFluentArgsBuilder<Action<IReadOnlyList<TParam>>, Func<IReadOnlyList<TParam>, Task>>, TParam>
             ParameterList<TParam>(string name, params string[] moreNames);
 
+        IConfigurablePopArgument<IFluentArgsBuilder<Action<TParam>, Func<TParam, Task>>, TParam>
+            PopArgument<TParam>();
+
         IConfigurableRemainingArguments<Action<IReadOnlyList<TParam>>, Func<IReadOnlyList<TParam>, Task>, TParam> LoadRemainingArguments<TParam>();
 
         IBuildable Invalid();
@@ -34,6 +37,9 @@
 
         IConfigurableParameterList<IFluentArgsBuilder<Func<IReadOnlyList<TNextParam>, TFunc>, Func<IReadOnlyList<TNextParam>, TFuncAsync>>, TNextParam>
             ParameterList<TNextParam>(string name, params string[] moreNames);
+
+        IConfigurablePopArgument<IFluentArgsBuilder<Func<TNextParam, TFunc>, Func<TNextParam, TFuncAsync>>, TNextParam>
+            PopArgument<TNextParam>();
 
         IConfigurableRemainingArguments<Func<IReadOnlyList<TParam>, TFunc>, Func<IReadOnlyList<TParam>, TFuncAsync>, TParam> LoadRemainingArguments<TParam>();
 
@@ -60,6 +66,12 @@
             return builder.LoadRemainingArguments<string>();
         }
 
+        public static IConfigurablePopArgument<IFluentArgsBuilder<Action<string>, Func<string, Task>>, string>
+            PopArgument(this IFluentArgsBuilder builder)
+        {
+            return builder.PopArgument<string>();
+        }
+
         public static IConfigurableParameter<IFluentArgsBuilder<Func<string, TFunc>, Func<string, TFuncAsync>>, string>
             Parameter<TFunc, TFuncAsync>(this IFluentArgsBuilder<TFunc, TFuncAsync> builder, string name, params string[] moreNames)
         {
@@ -76,6 +88,12 @@
             LoadRemainingArguments<TFunc, TFuncAsync>(this IFluentArgsBuilder<TFunc, TFuncAsync> builder)
         {
             return builder.LoadRemainingArguments<string>();
+        }
+
+        public static IConfigurablePopArgument<IFluentArgsBuilder<Func<string, TFunc>, Func<string, TFuncAsync>>, string>
+            PopArgument<TFunc, TFuncAsync>(this IFluentArgsBuilder<TFunc, TFuncAsync> builder)
+        {
+            return builder.PopArgument<string>();
         }
     }
 }
