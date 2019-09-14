@@ -67,15 +67,15 @@
             return this;
         }
 
-        public IInitialFluentArgsBuilder ThrowOnDuplicateNames()
+        public IInitialFluentArgsBuilder ThrowOnDuplicateNames(bool enable)
         {
-            ((InitialStep)Step).ParserSettings.WarnOnDuplicateNames = true;
+            ((InitialStep)Step).ParserSettings.WarnOnDuplicateNames = enable;
             return this;
         }
 
-        public IInitialFluentArgsBuilder ThrowOnNonMinusStartingNames()
+        public IInitialFluentArgsBuilder ThrowOnNonMinusStartingNames(bool enable)
         {
-            ((InitialStep)Step).ParserSettings.WarnOnNonMinusStartingNames = true;
+            ((InitialStep)Step).ParserSettings.WarnOnNonMinusStartingNames = enable;
             return this;
         }
 

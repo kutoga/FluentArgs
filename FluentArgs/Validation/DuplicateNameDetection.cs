@@ -63,7 +63,19 @@ namespace FluentArgs.Validation
 
         public Task Visit(GivenParameterStep step)
         {
-            TODO
+            if (!step.Description.RequireExactValue)
+            {
+                return step.Next.Accept(this);
+            }
+
+            var newDuplicationDetection = ValidateName(step.Description.Name);
+            var branchTask = Task.CompletedTask;
+            if (step.ThenStep is FluentArgsDefinition argsBuilder)
+            {
+                branchTask = argsBuilder.InitialStep.Accept(newDuplicationDetection);
+            }
+
+            return Task.WhenAll(branchTask, step.Next.Accept(newDuplicationDetection));
         }
 
         public Task Visit(InitialStep step)

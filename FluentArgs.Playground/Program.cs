@@ -60,7 +60,7 @@ namespace FluentArgs.Playground
                 .Parameter("-a").IsRequired()
                 .Parameter("-b").IsRequired()
                 .PopArgument().IsOptional()
-                .Call(b => a =>
+                .Call(c => b => a =>
                 {
                     Console.WriteLine($"a={a}");
                     Console.WriteLine($"b={b}");
