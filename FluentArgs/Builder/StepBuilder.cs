@@ -43,6 +43,16 @@
             return new FinalBuilder(new InvalidStep(Step));
         }
 
+        public IConfigurablePopArgument<IUnnamedArgumentsFluentArgsBuilder<Action<TParam>, Func<TParam, Task>>, TParam> PopArgument<TParam>()
+        {
+            var nextBuilder = new StepBuilder<Action<TParam>, Func<TParam, Task>>();
+            return new PopArgumentBuilder<IUnnamedArgumentsFluentArgsBuilder<Action<TParam>, Func<TParam, Task>>, TParam>(
+                PopArgumentBuilt, nextBuilder);
+
+            void PopArgumentBuilt(PopArgument popArgument) =>
+                nextBuilder.Step = new PopArgumentStep(Step, popArgument);
+        }
+
         public IConfigurableRemainingArguments<Action<IReadOnlyList<TParam>>, Func<IReadOnlyList<TParam>, Task>, TParam> LoadRemainingArguments<TParam>()
         {
             return new RemainingArgumentsBuilder<Action<IReadOnlyList<TParam>>, Func<IReadOnlyList<TParam>, Task>, TParam>(
@@ -78,6 +88,11 @@
             ((InitialStep)Step).ParserSettings.WarnOnNonMinusStartingNames = enable;
             return this;
         }
+
+        public IInitialFluentArgsBuilder ThrowIfUnusedArgumentsArePresent(bool enable = true)
+        {
+            throw new NotImplementedException();
+        } 
 
         public IInitialFluentArgsBuilder WithApplicationDescription(string description)
         {
@@ -144,6 +159,16 @@
             return new FinalBuilder(new InvalidStep(Step));
         }
 
+        public IConfigurablePopArgument<IUnnamedArgumentsFluentArgsBuilder<Func<TNextParam, TFunc>, Func<TNextParam, TFuncAsync>>, TNextParam> PopArgument<TNextParam>()
+        {
+            var nextBuilder = new StepBuilder<Func<TNextParam, TFunc>, Func<TNextParam, TFuncAsync>>();
+            return new PopArgumentBuilder<IUnnamedArgumentsFluentArgsBuilder<Func<TNextParam, TFunc>, Func<TNextParam, TFuncAsync>>, TNextParam>(
+                PopArgumentBuilt, nextBuilder);
+
+            void PopArgumentBuilt(PopArgument popArgument) =>
+                nextBuilder.Step = new PopArgumentStep(Step, popArgument);
+        }
+
         public IConfigurableRemainingArguments<Func<IReadOnlyList<TParam>, TFunc>, Func<IReadOnlyList<TParam>, TFuncAsync>, TParam> LoadRemainingArguments<TParam>()
         {
             return new RemainingArgumentsBuilder<Func<IReadOnlyList<TParam>, TFunc>, Func<IReadOnlyList<TParam>, TFuncAsync>, TParam>(
@@ -157,6 +182,7 @@
 
         IConfigurableParameter<IFluentArgsBuilder<Func<TNextParam, TFunc>, Func<TNextParam, TFuncAsync>>, TNextParam> IFluentArgsBuilder<TFunc, TFuncAsync>.Parameter<TNextParam>(string name, params string[] moreNames)
         {
+            //TODO: TNextParam -> TParam
             var nextBuilder = new StepBuilder<Func<TNextParam, TFunc>, Func<TNextParam, TFuncAsync>>();
             return new ParameterBuilder<IFluentArgsBuilder<Func<TNextParam, TFunc>, Func<TNextParam, TFuncAsync>>, TNextParam>(
                 ParameterBuilt, nextBuilder, Name.ValidateAndBuild(name, moreNames));

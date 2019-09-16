@@ -56,5 +56,18 @@
         {
             return parameters;
         }
+
+        public bool PopArgument(out string? argument, out State newState)
+        {
+            if (parameters.Count == 0)
+            {
+                argument = default;
+                newState = this;
+                return false;
+            }
+
+            argument = parameters[0];
+            return 
+        }
     }
 }

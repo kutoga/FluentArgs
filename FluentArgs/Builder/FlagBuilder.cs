@@ -52,6 +52,11 @@
             return Build().Invalid();
         }
 
+        public IConfigurablePopArgument<IUnnamedArgumentsFluentArgsBuilder<Func<TNextParam, Action<bool>>, Func<TNextParam, Func<bool, Task>>>, TNextParam> PopArgument<TNextParam>()
+        {
+            return Build().PopArgument<TNextParam>();
+        }
+
         public IConfigurableRemainingArguments<Func<IReadOnlyList<TParam>, Action<bool>>, Func<IReadOnlyList<TParam>, Func<bool, Task>>, TParam> LoadRemainingArguments<TParam>()
         {
             return Build().LoadRemainingArguments<TParam>();
@@ -122,6 +127,11 @@
         public IBuildable Invalid()
         {
             return Build().Invalid();
+        }
+
+        public IConfigurablePopArgument<IUnnamedArgumentsFluentArgsBuilder<Func<TNextParam, Func<bool, TFunc>>, Func<TNextParam, Func<bool, TFuncAsync>>>, TNextParam> PopArgument<TNextParam>()
+        {
+            return Build().PopArgument<TNextParam>();
         }
 
         public IConfigurableRemainingArguments<Func<IReadOnlyList<TParam>, Func<bool, TFunc>>, Func<IReadOnlyList<TParam>, Func<bool, TFuncAsync>>, TParam> LoadRemainingArguments<TParam>()
