@@ -30,6 +30,39 @@
             return TryExtract(new[] { firstArgument }, out arguments, out newArgumentExtractor, followingArgumentsToInclude);
         }
 
+        public bool TryPopArgument(out string argument, out IArgumentExtractor newArgumentExtractor)
+        {
+            var firstArgumentGroupsWithElements = argumentGroups
+                .Select((g, i) => (group: g, index: i))
+                .SkipWhile(g => g.group.Arguments.Count == 0)
+                .Select(g => (int?) g.index)
+                .FirstOrDefault();
+
+            if (firstArgumentGroupsWithElements == null)
+            {
+                argument = default;
+                newArgumentExtractor = default; // TODO: default OR newArgumentExtractor?
+                return false;
+            }
+
+            var argumentGroup = argumentGroups[firstArgumentGroupsWithElements.Value];
+            argument = argumentGroup.Arguments.First();
+
+            if (argumentGroup.Arguments.Count == 1)
+            {
+                newArgumentExtractor = new ArgumentExtractor(argumentGroups.RemoveAt(firstArgumentGroupsWithElements.Value));
+            }
+            else
+            {
+                var newArgumentGroups = argumentGroups.SetItem(
+                    firstArgumentGroupsWithElements.Value,
+                    new ArgumentList(argumentGroup.Arguments.Skip(1).ToImmutableList()));
+                newArgumentExtractor = new ArgumentExtractor(newArgumentGroups);
+            }
+
+            return true;
+        }
+
         public bool TryExtract(
             IEnumerable<string> firstArgumentPossibilities,
             out IImmutableList<string> arguments,

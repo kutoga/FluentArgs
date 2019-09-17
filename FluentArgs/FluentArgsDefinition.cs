@@ -52,7 +52,7 @@ namespace FluentArgs
             catch (ArgumentMissingException ex)
             {
                 await InitialStep.ParserSettings.ParsingErrorPrinter.PrintArgumentMissingError(
-                    ex.ArgumentName.Names,
+                    ex.ArgumentName?.Names,
                     ex.Description,
                     InitialStep.ParserSettings.HelpFlag?.Names).ConfigureAwait(false);
                 return false;

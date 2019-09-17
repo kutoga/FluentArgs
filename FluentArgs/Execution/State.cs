@@ -57,17 +57,21 @@
             return parameters;
         }
 
-        public bool PopArgument(out string? argument, out State newState)
+        public bool PopArgument(out string argument, out State newState)
         {
-            if (parameters.Count == 0)
+            var success = argumentExtractor.TryPopArgument(out var poppedArgument, out var newArgumentExtractor);
+            if (success)
+            {
+                argument = poppedArgument;
+                newState = new State(parameters, newArgumentExtractor);
+            }
+            else
             {
                 argument = default;
-                newState = this;
-                return false;
+                newState = default;
             }
 
-            argument = parameters[0];
-            return 
+            return success;
         }
     }
 }

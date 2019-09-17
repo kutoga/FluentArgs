@@ -24,15 +24,15 @@
 
         public override Task Execute(State state)
         {
-            if (/*TODO*/ false)
+            if (state.PopArgument(out var argument, out var newState))
             {
-                //state = newState.AddParameter(Parse(arguments[1]));
+                state = newState.AddParameter(Parse(argument));
             }
             else
             {
                 if (Description.IsRequired)
                 {
-                    throw new ArgumentMissingException("Required popArgument not found!", Description.Name);
+                    throw new ArgumentMissingException($"Required popArgument not found! Argument description: {Description.Description}");
                 }
 
                 if (Description.HasDefaultValue)

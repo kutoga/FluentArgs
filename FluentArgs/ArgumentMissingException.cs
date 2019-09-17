@@ -5,7 +5,7 @@ namespace FluentArgs
 {
     internal class ArgumentMissingException : Exception
     {
-        public ArgumentMissingException(string description, Name? argumentName)
+        public ArgumentMissingException(string description, Name? argumentName = null)
         {
             Description = description;
             ArgumentName = argumentName;

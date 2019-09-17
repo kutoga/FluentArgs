@@ -100,6 +100,11 @@ namespace FluentArgs.Validation
             return step.Next.Accept(newDuplicationDetection);
         }
 
+        public Task Visit(PopArgumentStep step)
+        {
+            return step.Next.Accept(this);
+        }
+
         public Task Visit(RemainingArgumentsStep step)
         {
             return step.Next.Accept(this);

@@ -162,6 +162,51 @@ namespace FluentArgs.Help
             return Task.CompletedTask;
         }
 
+        public Task WritePopArgumentInfos(string description, Type type, bool optional, bool hasDefaultValue, object defaultValue,
+            IReadOnlyCollection<string> examples, IReadOnlyCollection<(IReadOnlyCollection<string> aliases, string description)> givenHints)
+        {
+            var descriptionStr = "Unnamed argument. ";
+
+            if (optional)
+            {
+                if (hasDefaultValue)
+                {
+                    descriptionStr = $"Optional with default '{defaultValue}'. ";
+                }
+                else
+                {
+                    descriptionStr = "Optional. ";
+                }
+            }
+
+            if (givenHints.Count > 0)
+            {
+                descriptionStr += GetGivenHintsOutput(givenHints);
+            }
+
+            if (description != null)
+            {
+                descriptionStr += description + " ";
+            }
+            else
+            {
+                descriptionStr += $"Type: {type.Name} ";
+            }
+
+            if (examples.Count > 0)
+            {
+                descriptionStr += "Examples: " + string.Join(", ", examples);
+            }
+            else if (type.IsEnum)
+            {
+                descriptionStr += "Possible values: " + string.Join(", ", Enum.GetValues(type).Cast<object>().ToArray());
+            }
+
+            parameters.Add((string.Empty, descriptionStr));
+
+            return Task.CompletedTask;
+        }
+
         private static IEnumerable<string> SplitLine(string line, int maxLineLength)
         {
             while (line.Length > maxLineLength)

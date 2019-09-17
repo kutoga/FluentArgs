@@ -132,5 +132,31 @@
             success.Should().BeTrue();
             extractedArguments.Should().BeEquivalentWithSameOrdering("-a", "1");
         }
+
+        [Fact]
+        public static void PopArgument_ShouldReturnAndRemoveTheFirstArgument()
+        {
+            var args = new[] {"a", "b"};
+            IArgumentExtractor extractor = new ArgumentExtractor(args);
+
+            var successA = extractor.TryPopArgument(out var extractedArgumentA, out extractor);
+            var successB = extractor.TryPopArgument(out var extractedArgumentB, out var _);
+
+            successA.Should().BeTrue();
+            successB.Should().BeTrue();
+            extractedArgumentA.Should().Be("a");
+            extractedArgumentB.Should().Be("b");
+        }
+
+        [Fact]
+        public static void PopArgumentWhenThereAreNoArguments_ShouldFail()
+        {
+            var args = Array.Empty<string>();
+            IArgumentExtractor extractor = new ArgumentExtractor(args);
+
+            var success = extractor.TryPopArgument(out var extractedArgument, out var _);
+
+            success.Should().BeFalse();
+        }
     }
 }
