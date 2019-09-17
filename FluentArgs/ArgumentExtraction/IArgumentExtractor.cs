@@ -5,9 +5,14 @@
 
     internal interface IArgumentExtractor
     {
-        bool TryExtract(IEnumerable<string> firstArgumentPossibilities, out IImmutableList<string> arguments, out IArgumentExtractor newArgumentExtractor, int followingArgumentsToInclude = 0);
+        bool TryExtractNamedArgument(IEnumerable<string> firstArgumentPossibilities, out IImmutableList<string> arguments, out IArgumentExtractor newArgumentExtractor);
 
-        bool TryExtract(string firstArgument, out IImmutableList<string> arguments, out IArgumentExtractor newArgumentExtractor, int followingArgumentsToInclude = 0);
+        bool TryExtractNamedArgument(string firstArgument, out IImmutableList<string> arguments, out IArgumentExtractor newArgumentExtractor);
+
+        bool TryExtractFlag(IEnumerable<string> flagNamePossibilites, out string flag, out IArgumentExtractor newArgumentExtractor);
+
+        bool TryExtractFlag(string flagName, out IArgumentExtractor newArgumentExtractor);
+
 
         bool TryPopArgument(out string argument, out IArgumentExtractor newArgumentExtractor);
 

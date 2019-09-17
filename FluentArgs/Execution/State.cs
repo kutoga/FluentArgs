@@ -33,7 +33,7 @@
 
         public bool TryExtractArguments(IEnumerable<string> firstArgumentPossibilities, out IImmutableList<string> arguments, out State newState, int followingArgumentsToInclude = 0)
         {
-            var result = argumentExtractor.TryExtract(firstArgumentPossibilities, out arguments, out var newArgumentExtractor, followingArgumentsToInclude);
+            var result = argumentExtractor.TryExtractNamedArgument(firstArgumentPossibilities, out arguments, out var newArgumentExtractor, followingArgumentsToInclude);
             if (result)
             {
                 newState = new State(parameters, newArgumentExtractor);

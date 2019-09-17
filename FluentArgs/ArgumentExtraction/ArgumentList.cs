@@ -14,13 +14,8 @@
 
         public IImmutableList<string> Arguments { get; }
 
-        public IEnumerable<DetectedArguments> DetectArgument(string firstArgument, int followingNumberOfArguments)
+        public IEnumerable<DetectedArguments> DetectNamedArgument(string firstArgument)
         {
-            if (followingNumberOfArguments < 0)
-            {
-                throw new Exception($"{nameof(followingNumberOfArguments)} must be non-negative!");
-            }
-
             var possibleIndices = Arguments
                 .Select((a, i) => (argument: a, index: i))
                 .Where(a => a.argument == firstArgument);
@@ -36,14 +31,14 @@
             //}
 
             var validIndices = possibleIndices
-                .Where(a => (a.index + followingNumberOfArguments) < Arguments.Count)
+                .Where(a => (a.index + 1) < Arguments.Count)
                 .Select(a => a.index);
                 //.ToList();
 
             return validIndices.Select(i => new DetectedArguments(
-                Arguments.Skip(i).Take(1 + followingNumberOfArguments).ToImmutableList(),
+                Arguments.Skip(i).Take(2).ToImmutableList(),
                 Arguments.Take(i).ToImmutableList(),
-                Arguments.Skip(i + 1 + followingNumberOfArguments).ToImmutableList()));
+                Arguments.Skip(i + 2).ToImmutableList()));
         }
     }
 }

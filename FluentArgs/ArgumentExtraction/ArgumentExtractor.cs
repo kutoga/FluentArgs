@@ -21,13 +21,22 @@
 
         public static ArgumentExtractor Empty { get; } = new ArgumentExtractor(Enumerable.Empty<string>());
 
-        public bool TryExtract(
+        public bool TryExtractNamedArgument(
             string firstArgument,
             out IImmutableList<string> arguments,
-            out IArgumentExtractor newArgumentExtractor,
-            int followingArgumentsToInclude = 0)
+            out IArgumentExtractor newArgumentExtractor)
         {
-            return TryExtract(new[] { firstArgument }, out arguments, out newArgumentExtractor, followingArgumentsToInclude);
+            return TryExtractNamedArgument(new[] { firstArgument }, out arguments, out newArgumentExtractor);
+        }
+
+        public bool TryExtractFlag(IEnumerable<string> flagNamePossibilites, out string flag, out IArgumentExtractor newArgumentExtractor)
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool TryExtractFlag(string flagName, out IArgumentExtractor newArgumentExtractor)
+        {
+            throw new NotImplementedException();
         }
 
         public bool TryPopArgument(out string argument, out IArgumentExtractor newArgumentExtractor)
@@ -63,14 +72,13 @@
             return true;
         }
 
-        public bool TryExtract(
+        public bool TryExtractNamedArgument(
             IEnumerable<string> firstArgumentPossibilities,
             out IImmutableList<string> arguments,
-            out IArgumentExtractor newArgumentExtractor,
-            int followingArgumentsToInclude = 0)
+            out IArgumentExtractor newArgumentExtractor)
         {
             var detectedArgumentsPossibilities = firstArgumentPossibilities
-                .SelectMany(firstArgument => DetectArguments(firstArgument, followingArgumentsToInclude))
+                .SelectMany(firstArgument => DetectNamedArgument(firstArgument, followingArgumentsToInclude))
                 .ToImmutableList();
 
             if (detectedArgumentsPossibilities.Count == 0)
@@ -98,12 +106,11 @@
             return argumentGroups.SelectMany(g => g.Arguments);
         }
 
-        private IEnumerable<(IImmutableList<string> arguments, Func<IEnumerable<ArgumentList>> splitArgumentList)> DetectArguments(
-            string firstArgument,
-            int followingArgumentsToInclude)
+        private IEnumerable<(IImmutableList<string> arguments, Func<IEnumerable<ArgumentList>> splitArgumentList)> DetectNamedArgument(
+            string argumentName)
         {
             return argumentGroups
-                .SelectMany(g => g.DetectArgument(firstArgument, followingArgumentsToInclude)
+                .SelectMany(g => g.DetectNamedArgument(argumentName)
                     .Select(a =>
                     {
                         Func<IEnumerable<ArgumentList>> splitArgumentList = () => SplitArgumentList(g, a);

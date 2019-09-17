@@ -16,7 +16,7 @@
         {
             var extractor = new ArgumentExtractor(allArgmnets);
 
-            var success = extractor.TryExtract(argument, out var extractedArguments, out var _);
+            var success = extractor.TryExtractNamedArgument(argument, out var extractedArguments, out var _);
 
             success.Should().BeTrue();
             extractedArguments.Should().BeEquivalentWithSameOrdering(argument);
@@ -34,7 +34,7 @@
         {
             var extractor = new ArgumentExtractor(allArguments);
 
-            var success = extractor.TryExtract(argument, out var extractedArguments, out var _, followingArguments);
+            var success = extractor.TryExtractNamedArgument(argument, out var extractedArguments, out var _, followingArguments);
 
             success.Should().BeTrue();
             extractedArguments.Should().BeEquivalentWithSameOrdering(expectedArguments); //TODO: use everywhere the method with ordering
@@ -46,7 +46,7 @@
             var args = new[] { "-a", "1" };
             IArgumentExtractor extractor = new ArgumentExtractor(args);
 
-            var success = extractor.TryExtract("-a", out var extractedArguments, out var _, 2);
+            var success = extractor.TryExtractNamedArgument("-a", out var extractedArguments, out var _, 2);
 
             success.Should().BeFalse();
         }
@@ -57,7 +57,7 @@
             var args = new[] { "-a", "-a" };
             IArgumentExtractor extractor = new ArgumentExtractor(args);
 
-            var success = extractor.TryExtract("-a", out var extractedArguments, out var _);
+            var success = extractor.TryExtractNamedArgument("-a", out var extractedArguments, out var _);
 
             success.Should().BeFalse();
             //extractAction.Should().Throw<ArgumentException>(); //TODO: ugly interface~?
@@ -69,7 +69,7 @@
             var args = new[] { "-c", "-k", "-a", "1", "-b", "2", "3", "-c", "x" };
             IArgumentExtractor extractor = new ArgumentExtractor(args);
 
-            var success = extractor.TryExtract("-c", out var extractedArguments, out var _, 2);
+            var success = extractor.TryExtractNamedArgument("-c", out var extractedArguments, out var _, 2);
 
             success.Should().BeTrue();
             extractedArguments.Should().BeEquivalentWithSameOrdering("-c", "-k", "-a");
@@ -81,10 +81,10 @@
             var args = new[] { "-a", "1", "-b", "2", "-c", "3", "dummy", "-d", "x" };
             IArgumentExtractor extractor = new ArgumentExtractor(args);
 
-            var success = extractor.TryExtract("-a", out var extractedArgumentsA, out extractor, 1);
-            success = extractor.TryExtract("-b", out var extractedArgumentsB, out extractor, 1) && success;
-            success = extractor.TryExtract("-d", out var extractedArgumentsD, out extractor, 1) && success;
-            success = extractor.TryExtract("-c", out var extractedArgumentsC, out var _, 1) && success;
+            var success = extractor.TryExtractNamedArgument("-a", out var extractedArgumentsA, out extractor, 1);
+            success = extractor.TryExtractNamedArgument("-b", out var extractedArgumentsB, out extractor, 1) && success;
+            success = extractor.TryExtractNamedArgument("-d", out var extractedArgumentsD, out extractor, 1) && success;
+            success = extractor.TryExtractNamedArgument("-c", out var extractedArgumentsC, out var _, 1) && success;
 
             success.Should().BeTrue();
             extractedArgumentsA.Should().BeEquivalentWithSameOrdering("-a", "1");
@@ -99,8 +99,8 @@
             var args = new[] { "-a" };
             IArgumentExtractor extractor = new ArgumentExtractor(args);
 
-            var success1 = extractor.TryExtract("-a", out var extractedArguments1, out extractor);
-            var success2 = extractor.TryExtract("-a", out var extractedArguments2, out var _);
+            var success1 = extractor.TryExtractNamedArgument("-a", out var extractedArguments1, out extractor);
+            var success2 = extractor.TryExtractNamedArgument("-a", out var extractedArguments2, out var _);
 
             success1.Should().BeTrue();
             success2.Should().BeFalse();
@@ -113,8 +113,8 @@
             var args = new[] { "-b", "-a", "1", "2" };
             IArgumentExtractor extractor = new ArgumentExtractor(args);
 
-            var successA = extractor.TryExtract("-a", out var extractedArgumentsA, out extractor, 1);
-            var successB = extractor.TryExtract("-b", out var extractedArgumentsB, out var _, 1);
+            var successA = extractor.TryExtractNamedArgument("-a", out var extractedArgumentsA, out extractor, 1);
+            var successB = extractor.TryExtractNamedArgument("-b", out var extractedArgumentsB, out var _, 1);
 
             successA.Should().BeTrue();
             successB.Should().BeFalse();
@@ -127,7 +127,7 @@
             var args = new[] { "-a=1" };
             IArgumentExtractor extractor = new ArgumentExtractor(args);
 
-            var success = extractor.TryExtract(new[] { "-a" }, out var extractedArguments, out var _, 1);
+            var success = extractor.TryExtractNamedArgument(new[] { "-a" }, out var extractedArguments, out var _, 1);
 
             success.Should().BeTrue();
             extractedArguments.Should().BeEquivalentWithSameOrdering("-a", "1");
