@@ -14,7 +14,7 @@
 
         public IImmutableList<string> Arguments { get; }
 
-        public IEnumerable<DetectedArguments> DetectNamedArgument(string firstArgument)
+        public IEnumerable<DetectedNamedArgument> DetectNamedArgument(string firstArgument)
         {
             var possibleIndices = Arguments
                 .Select((a, i) => (argument: a, index: i))
@@ -35,8 +35,9 @@
                 .Select(a => a.index);
                 //.ToList();
 
-            return validIndices.Select(i => new DetectedArguments(
-                Arguments.Skip(i).Take(2).ToImmutableList(),
+            return validIndices.Select(i => new DetectedNamedArgument(
+                Arguments[i],
+                Arguments[i + 1],
                 Arguments.Take(i).ToImmutableList(),
                 Arguments.Skip(i + 2).ToImmutableList()));
         }

@@ -23,10 +23,10 @@
 
         public bool TryExtractNamedArgument(
             string firstArgument,
-            out IImmutableList<string> arguments,
+            out string value,
             out IArgumentExtractor newArgumentExtractor)
         {
-            return TryExtractNamedArgument(new[] { firstArgument }, out arguments, out newArgumentExtractor);
+            return TryExtractNamedArgument(new[] { firstArgument }, out var _, out value, out newArgumentExtractor);
         }
 
         public bool TryExtractFlag(IEnumerable<string> flagNamePossibilites, out string flag, out IArgumentExtractor newArgumentExtractor)
@@ -74,30 +74,34 @@
 
         public bool TryExtractNamedArgument(
             IEnumerable<string> firstArgumentPossibilities,
-            out IImmutableList<string> arguments,
+            out string argument,
+            out string value,
             out IArgumentExtractor newArgumentExtractor)
         {
             var detectedArgumentsPossibilities = firstArgumentPossibilities
-                .SelectMany(firstArgument => DetectNamedArgument(firstArgument, followingArgumentsToInclude))
+                .SelectMany(firstArgument => DetectNamedArgument(firstArgument))
                 .ToImmutableList();
 
             if (detectedArgumentsPossibilities.Count == 0)
             {
-                arguments = default;
+                argument = default;
+                value = default;
                 newArgumentExtractor = default;
                 return false;
             }
 
             if (detectedArgumentsPossibilities.Count > 1)
             {
-                arguments = default; //How to propagate this error to the outside world? 
+                argument = default; //How to propagate this error to the outside world? 
+                value = default;
                 newArgumentExtractor = default;
                 return false;
             }
 
-            var foundArguments = detectedArgumentsPossibilities[0];
-            newArgumentExtractor = new ArgumentExtractor(foundArguments.splitArgumentList());
-            arguments = foundArguments.arguments;
+            var foundArgument = detectedArgumentsPossibilities[0];
+            newArgumentExtractor = new ArgumentExtractor(foundArgument.splitArgumentList());
+            argument = foundArgument.argument;
+            value = foundArgument.value;
             return true;
         }
 
@@ -106,7 +110,7 @@
             return argumentGroups.SelectMany(g => g.Arguments);
         }
 
-        private IEnumerable<(IImmutableList<string> arguments, Func<IEnumerable<ArgumentList>> splitArgumentList)> DetectNamedArgument(
+        private IEnumerable<(string argument, string value, Func<IEnumerable<ArgumentList>> splitArgumentList)> DetectNamedArgument(
             string argumentName)
         {
             return argumentGroups
@@ -114,10 +118,10 @@
                     .Select(a =>
                     {
                         Func<IEnumerable<ArgumentList>> splitArgumentList = () => SplitArgumentList(g, a);
-                        return (arguments: a.Arguments, splitArgumentList);
+                        return (argument: a.Argument, value: a.Value,  splitArgumentList);
                     }));
 
-            IEnumerable<ArgumentList> SplitArgumentList(ArgumentList arguments, DetectedArguments detectedArguments)
+            IEnumerable<ArgumentList> SplitArgumentList(ArgumentList arguments, DetectedNamedArgument detectedArguments)
             {
                 var listToRemoveIndex = argumentGroups.IndexOf(arguments);
                 var listsToInsert = new[] { detectedArguments.LeftSideArguments, detectedArguments.RightSideArguments }

@@ -23,7 +23,7 @@
 
         public override Task Execute(State state)
         {
-            if (!state.TryExtractArguments(Description.Name.Names, out var _, out var newState))
+            if (!state.TryExtractNamedArgument(Description.Name.Names, out var _, out var newState))
             {
                 return Next.Execute(state);
             }

@@ -31,9 +31,24 @@
             return new State(parameters.Add(parameter), argumentExtractor);
         }
 
-        public bool TryExtractArguments(IEnumerable<string> firstArgumentPossibilities, out IImmutableList<string> arguments, out State newState, int followingArgumentsToInclude = 0)
+        public bool TryExtractFlag(IEnumerable<string> validFlagNames, out string flag, out State newState)
         {
-            var result = argumentExtractor.TryExtractNamedArgument(firstArgumentPossibilities, out arguments, out var newArgumentExtractor, followingArgumentsToInclude);
+            var result = argumentExtractor.TryExtractFlag(validFlagNames, out flag, out var newArgumentExtractor);
+            if (result)
+            {
+                newState = new State(parameters, newArgumentExtractor);
+            }
+            else
+            {
+                newState = default;
+            }
+
+            return result;
+        }
+
+        public bool TryExtractNamedArgument(IEnumerable<string> validArgumentNames, out string argument, out string value, out State newState)
+        {
+            var result = argumentExtractor.TryExtractNamedArgument(validArgumentNames, out argument, out value, out var newArgumentExtractor);
             if (result)
             {
                 newState = new State(parameters, newArgumentExtractor);

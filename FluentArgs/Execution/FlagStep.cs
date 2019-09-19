@@ -20,7 +20,7 @@
 
         public override Task Execute(State state)
         {
-            if (state.TryExtractArguments(Description.Name.Names, out var arguments, out var newState))
+            if (state.TryExtractNamedArgument(Description.Name.Names, out var arguments, out var newState))
             {
                 state = newState.AddParameter(true);
             }

@@ -28,7 +28,7 @@
 
         public override Task Execute(State state)
         {
-            if (!state.TryExtractArguments(Name.Names, out var arguments, out var newState, 1))
+            if (!state.TryExtractNamedArgument(Name.Names, out var arguments, out var newState, 1))
             {
                 return Next.Execute(state);
             }
