@@ -7,14 +7,14 @@
     using FluentArgs.Parser;
     using FluentArgs.Reflection;
 
-    internal class PopArgumentStep : Step
+    internal class PositionalArgumentStep : Step
     {
-        public PopArgument Description { get; }
+        public PositionalArgument Description { get; }
 
-        public PopArgumentStep(Step previous, PopArgument popArgument)
+        public PositionalArgumentStep(Step previous, PositionalArgument positionalArgument)
             : base(previous)
         {
-            this.Description = popArgument;
+            this.Description = positionalArgument;
         }
 
         public override Task Accept(IStepVisitor visitor)
@@ -32,7 +32,7 @@
             {
                 if (Description.IsRequired)
                 {
-                    throw new ArgumentMissingException($"Required popArgument not found! Argument description: {Description.Description}");
+                    throw new ArgumentMissingException($"Required positionalArgument not found! Argument description: {Description.Description}");
                 }
 
                 if (Description.HasDefaultValue)

@@ -134,7 +134,7 @@
         }
 
         [Fact]
-        public static void PopArgument_ShouldReturnAndRemoveTheFirstArgument()
+        public static void PositionalArgument_ShouldReturnAndRemoveTheFirstArgument()
         {
             var args = new[] {"a", "b"};
             IArgumentExtractor extractor = new ArgumentExtractor(args);
@@ -149,7 +149,7 @@
         }
 
         [Fact]
-        public static void PopArgumentWhenThereAreNoArguments_ShouldFail()
+        public static void PositionalArgumentWhenThereAreNoArguments_ShouldFail()
         {
             var args = Array.Empty<string>();
             IArgumentExtractor extractor = new ArgumentExtractor(args);

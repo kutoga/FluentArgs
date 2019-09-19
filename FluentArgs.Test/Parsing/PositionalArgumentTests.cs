@@ -3,83 +3,83 @@ using Xunit;
 
 namespace FluentArgs.Test.Parsing
 {
-    public static class PopArgumentsTests
+    public static class PositionalArgumentTests
     {
         [Fact]
-        public static void PopArgument_ShouldReturnTheNextUnusedArgument()
+        public static void PositionalArgument_ShouldReturnTheNextUnusedArgument()
         {
             var args = new[] {"--timeout", "12", "/dev/stdout"};
-            string? poppedArg = null;
+            string? positionalArg = null;
             var builder = FluentArgsBuilder.New()
                 .Parameter<int>("--timeout").IsRequired()
-                .PopArgument().IsRequired()
-                .Call(arg => timeout => poppedArg = arg);
+                .PositionalArgument().IsRequired()
+                .Call(arg => timeout => positionalArg = arg);
 
             var parseSuccess = builder.Parse(args);
 
             parseSuccess.Should().BeTrue();
-            poppedArg.Should().Be("/dev/stdout");
+            positionalArg.Should().Be("/dev/stdout");
         }
 
         [Fact]
-        public static void PopRequiredArgumentIfThereAreNoMoreArguments_ShouldNotBeSuccessful()
+        public static void PositionalRequiredArgumentIfThereAreNoMoreArguments_ShouldNotBeSuccessful()
         {
             var args = new[] { "--timeout", "12" };
-            string? poppedArg = null;
+            string? positionalArg = null;
             var builder = FluentArgsBuilder.New()
                 .Parameter<int>("--timeout").IsRequired()
-                .PopArgument().IsRequired()
-                .Call(arg => timeout => poppedArg = arg);
+                .PositionalArgument().IsRequired()
+                .Call(arg => timeout => positionalArg = arg);
 
             var parseSuccess = builder.Parse(args);
 
             parseSuccess.Should().BeFalse();
-            poppedArg.Should().Be(null);
+            positionalArg.Should().Be(null);
         }
 
         [Fact]
-        public static void PopOptionalArgumentIfThereAreNoMoreArguments_ShouldNotBeSuccessful()
+        public static void PositionalOptionalArgumentIfThereAreNoMoreArguments_ShouldNotBeSuccessful()
         {
             var args = new[] { "--timeout", "12" };
-            string? poppedArg = null;
+            string? positionalArg = null;
             var builder = FluentArgsBuilder.New()
                 .Parameter<int>("--timeout").IsRequired()
-                .PopArgument().IsOptional()
-                .Call(arg => timeout => poppedArg = arg);
+                .PositionalArgument().IsOptional()
+                .Call(arg => timeout => positionalArg = arg);
 
             var parseSuccess = builder.Parse(args);
 
             parseSuccess.Should().BeTrue();
-            poppedArg.Should().Be(null);
+            positionalArg.Should().Be(null);
         }
 
         [Fact]
-        public static void PopIntArgument_ShouldWork()
+        public static void PositionalIntArgument_ShouldWork()
         {
             var args = new[] { "--timeout", "12", "42" };
-            int? poppedArg = null;
+            int? positionalArg = null;
             var builder = FluentArgsBuilder.New()
                 .Parameter<int>("--timeout").IsRequired()
-                .PopArgument<int>().IsRequired()
-                .Call(arg => timeout => poppedArg = arg);
+                .PostionalArgument<int>().IsRequired()
+                .Call(arg => timeout => positionalArg = arg);
 
             var parseSuccess = builder.Parse(args);
 
             parseSuccess.Should().BeTrue();
-            poppedArg.Should().Be(42);
+            positionalArg.Should().Be(42);
         }
 
         [Fact]
-        public static void PoppingMultipleArguments_ShouldWork()
+        public static void MultiplePositionalArguments_ShouldWork()
         {
             var args = new[] { "a", "b", "c" };
             string? parsedA1 = null;
             string? parsedA2 = null;
             string? parsedA3 = null;
             var builder = FluentArgsBuilder.New()
-                .PopArgument().IsRequired()
-                .PopArgument().IsRequired()
-                .PopArgument().IsRequired()
+                .PositionalArgument().IsRequired()
+                .PositionalArgument().IsRequired()
+                .PositionalArgument().IsRequired()
                 .Call(a3 => a2 => a1 =>
                 {
                     parsedA1 = a1;

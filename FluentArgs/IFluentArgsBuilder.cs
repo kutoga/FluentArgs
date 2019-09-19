@@ -6,7 +6,7 @@
 
     public interface IFluentArgsBuilder :
         IGivenAppliable<IFluentArgsBuilder>,
-        IUnnamedArgumentsFluentArgsBuilder
+        IPositionalArgumentFluentArgsBuilder
     {
         IConfigurableFlagWithOptionalDescription
             Flag(string name, params string[] moreNames);
@@ -22,7 +22,7 @@
 
     public interface IFluentArgsBuilder<TFunc, TFuncAsync> :
         IGivenAppliable<IFluentArgsBuilder<TFunc, TFuncAsync>>,
-        IUnnamedArgumentsFluentArgsBuilder<TFunc, TFuncAsync>
+        IPositionalArgumentFluentArgsBuilder<TFunc, TFuncAsync>
     {
         IConfigurableFlagWithOptionalDescription<TFunc, TFuncAsync>
             Flag(string name, params string[] moreNames);

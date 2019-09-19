@@ -162,10 +162,10 @@ namespace FluentArgs.Help
             return Task.CompletedTask;
         }
 
-        public Task WritePopArgumentInfos(string description, Type type, bool optional, bool hasDefaultValue, object defaultValue,
+        public Task WritePositionalArgumentInfos(string description, Type type, bool optional, bool hasDefaultValue, object defaultValue,
             IReadOnlyCollection<string> examples, IReadOnlyCollection<(IReadOnlyCollection<string> aliases, string description)> givenHints)
         {
-            var descriptionStr = "Unnamed argument. ";
+            var descriptionStr = "Positional argument. ";
 
             if (optional)
             {
@@ -202,7 +202,7 @@ namespace FluentArgs.Help
                 descriptionStr += "Possible values: " + string.Join(", ", Enum.GetValues(type).Cast<object>().ToArray());
             }
 
-            parameters.Add((string.Empty, descriptionStr));
+            parameters.Add(("[ARG]", descriptionStr));
 
             return Task.CompletedTask;
         }

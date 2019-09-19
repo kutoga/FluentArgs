@@ -100,7 +100,7 @@ namespace FluentArgs.Validation
             return step.Next.Accept(newDuplicationDetection);
         }
 
-        public Task Visit(PopArgumentStep step)
+        public Task Visit(PositionalArgumentStep step)
         {
             return step.Next.Accept(this);
         }

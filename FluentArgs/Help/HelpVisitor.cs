@@ -159,10 +159,10 @@
             await step.Next.Accept(this).ConfigureAwait(false);
         }
 
-        public async Task Visit(PopArgumentStep step)
+        public async Task Visit(PositionalArgumentStep step)
         {
             var parameter = step.Description;
-            await helpPrinter.WritePopArgumentInfos(
+            await helpPrinter.WritePositionalArgumentInfos(
                 parameter.Description,
                 parameter.Type,
                 !parameter.IsRequired,

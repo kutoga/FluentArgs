@@ -26,7 +26,7 @@ namespace FluentArgs.Help
             }
             else
             {
-                await errorLineWriter.WriteLine("Required unnamed argument not found!").ConfigureAwait(false);
+                await errorLineWriter.WriteLine("Required positional argument not found!").ConfigureAwait(false);
             }
 
             await errorLineWriter.WriteLine($"Description: {description}").ConfigureAwait(false);

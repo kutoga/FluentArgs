@@ -34,7 +34,7 @@
             IReadOnlyCollection<string> examples,
             IReadOnlyCollection<(IReadOnlyCollection<string> aliases, string description)> givenHints);
 
-        Task WritePopArgumentInfos(
+        Task WritePositionalArgumentInfos(
             string? description,
             Type type,
             bool optional,

@@ -43,14 +43,14 @@
             return new FinalBuilder(new InvalidStep(Step));
         }
 
-        public IConfigurablePopArgument<IUnnamedArgumentsFluentArgsBuilder<Action<TParam>, Func<TParam, Task>>, TParam> PopArgument<TParam>()
+        public IConfigurablePositionalArgument<IPositionalArgumentFluentArgsBuilder<Action<TParam>, Func<TParam, Task>>, TParam> PositionalArgument<TParam>()
         {
             var nextBuilder = new StepBuilder<Action<TParam>, Func<TParam, Task>>();
-            return new PopArgumentBuilder<IUnnamedArgumentsFluentArgsBuilder<Action<TParam>, Func<TParam, Task>>, TParam>(
-                PopArgumentBuilt, nextBuilder);
+            return new PositionalArgumentBuilder<IPositionalArgumentFluentArgsBuilder<Action<TParam>, Func<TParam, Task>>, TParam>(
+                PositionalArgumentBuilt, nextBuilder);
 
-            void PopArgumentBuilt(PopArgument popArgument) =>
-                nextBuilder.Step = new PopArgumentStep(Step, popArgument);
+            void PositionalArgumentBuilt(PositionalArgument positionalArgument) =>
+                nextBuilder.Step = new PositionalArgumentStep(Step, positionalArgument);
         }
 
         public IConfigurableRemainingArguments<Action<IReadOnlyList<TParam>>, Func<IReadOnlyList<TParam>, Task>, TParam> LoadRemainingArguments<TParam>()
@@ -159,14 +159,14 @@
             return new FinalBuilder(new InvalidStep(Step));
         }
 
-        public IConfigurablePopArgument<IUnnamedArgumentsFluentArgsBuilder<Func<TNextParam, TFunc>, Func<TNextParam, TFuncAsync>>, TNextParam> PopArgument<TNextParam>()
+        public IConfigurablePositionalArgument<IPositionalArgumentFluentArgsBuilder<Func<TNextParam, TFunc>, Func<TNextParam, TFuncAsync>>, TNextParam> PostionalArgument<TNextParam>()
         {
             var nextBuilder = new StepBuilder<Func<TNextParam, TFunc>, Func<TNextParam, TFuncAsync>>();
-            return new PopArgumentBuilder<IUnnamedArgumentsFluentArgsBuilder<Func<TNextParam, TFunc>, Func<TNextParam, TFuncAsync>>, TNextParam>(
-                PopArgumentBuilt, nextBuilder);
+            return new PositionalArgumentBuilder<IPositionalArgumentFluentArgsBuilder<Func<TNextParam, TFunc>, Func<TNextParam, TFuncAsync>>, TNextParam>(
+                PositionalArgumentBuilt, nextBuilder);
 
-            void PopArgumentBuilt(PopArgument popArgument) =>
-                nextBuilder.Step = new PopArgumentStep(Step, popArgument);
+            void PositionalArgumentBuilt(PositionalArgument positionalArgument) =>
+                nextBuilder.Step = new PositionalArgumentStep(Step, positionalArgument);
         }
 
         public IConfigurableRemainingArguments<Func<IReadOnlyList<TParam>, TFunc>, Func<IReadOnlyList<TParam>, TFuncAsync>, TParam> LoadRemainingArguments<TParam>()

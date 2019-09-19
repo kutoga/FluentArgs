@@ -2,9 +2,9 @@
 {
     using System;
 
-    internal class PopArgument
+    internal class PositionalArgument
     {
-        public PopArgument(Type type)
+        public PositionalArgument(Type type)
         {
             Type = type;
             HasDefaultValue = false;
