@@ -62,33 +62,33 @@
         }
 
         [Fact]
-        public static void ExtractingArgumentWithMultipleButOnlyOneValideCandidate_ShouldWork()
+        public static void ExtractingNamedArgumentWithMultipleButOnlyOneValideCandidate_ShouldWork()
         {
-            var args = new[] { "-c", "-k", "-a", "1", "-b", "2", "3", "-c", "x" };
+            var args = new[] { "-c", "-k", "-a", "1", "-b", "2", "3", "-c" };
             IArgumentExtractor extractor = new ArgumentExtractor(args);
 
-            var success = extractor.TryExtractNamedArgument("-c", out var extractedArguments, out var _, 2);
+            var success = extractor.TryExtractNamedArgument("-c", out var value, out _);
 
             success.Should().BeTrue();
-            extractedArguments.Should().BeEquivalentWithSameOrdering("-c", "-k", "-a");
+            value.Should().Be("-k");
         }
 
         [Fact]
-        public static void ExtractingMultipleSerialArguments_ShouldWork()
+        public static void ExtractingMultipleSerialNamedArguments_ShouldWork()
         {
             var args = new[] { "-a", "1", "-b", "2", "-c", "3", "dummy", "-d", "x" };
             IArgumentExtractor extractor = new ArgumentExtractor(args);
 
-            var success = extractor.TryExtractNamedArgument("-a", out var extractedArgumentsA, out extractor);
-            success = extractor.TryExtractNamedArgument("-b", out var extractedArgumentsB, out extractor) && success;
-            success = extractor.TryExtractNamedArgument("-d", out var extractedArgumentsD, out extractor) && success;
-            success = extractor.TryExtractNamedArgument("-c", out var extractedArgumentsC, out var _) && success;
+            var success = extractor.TryExtractNamedArgument("-a", out var valueA, out extractor);
+            success = extractor.TryExtractNamedArgument("-b", out var valueB, out extractor) && success;
+            success = extractor.TryExtractNamedArgument("-d", out var valueD, out extractor) && success;
+            success = extractor.TryExtractNamedArgument("-c", out var valueC, out var _) && success;
 
             success.Should().BeTrue();
-            extractedArgumentsA.Should().BeEquivalentWithSameOrdering("-a", "1");
-            extractedArgumentsB.Should().BeEquivalentWithSameOrdering("-b", "2");
-            extractedArgumentsC.Should().BeEquivalentWithSameOrdering("-c", "3");
-            extractedArgumentsD.Should().BeEquivalentWithSameOrdering("-d", "x");
+            valueA.Should().Be("1");
+            valueB.Should().Be("2");
+            valueC.Should().Be("3");
+            valueD.Should().Be("4");
         }
 
         [Fact]

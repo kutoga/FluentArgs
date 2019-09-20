@@ -26,7 +26,7 @@
 
         public override Task Execute(State state)
         {
-            if (!state.TryExtractNamedArgument(Description.Name.Names, out var arguments, out var newState, 1))
+            if (!state.TryExtractNamedArgument(Description.Name.Names, out _, out var value, out var newState))
             {
                 return Next.Execute(state);
             }
@@ -41,7 +41,7 @@
                 {
                     state = newState;
 
-                    if (object.Equals(Parse(arguments[1]), Description.RequiredValue))
+                    if (object.Equals(Parse(value), Description.RequiredValue))
                     {
                         return ThenStep.ParseFromState(state);
                     }
