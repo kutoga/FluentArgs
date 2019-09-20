@@ -40,7 +40,7 @@
                 return false;
             }
 
-            if (!state.TryExtractFlag(helpFlags, out var _, out var newState))
+            if (!state.TryExtractFlag(helpFlags, out _, out var newState))
             {
                 return false;
             }

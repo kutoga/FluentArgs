@@ -55,7 +55,7 @@
             var args = new[] { "-a", "-a" };
             IArgumentExtractor extractor = new ArgumentExtractor(args);
 
-            var success = extractor.TryExtractNamedArgument("-a", out var extractedArguments, out var _);
+            var success = extractor.TryExtractNamedArgument("-a", out var extractedArguments, out _);
 
             success.Should().BeFalse();
             //extractAction.Should().Throw<ArgumentException>(); //TODO: ugly interface~?
@@ -82,7 +82,7 @@
             var success = extractor.TryExtractNamedArgument("-a", out var valueA, out extractor);
             success = extractor.TryExtractNamedArgument("-b", out var valueB, out extractor) && success;
             success = extractor.TryExtractNamedArgument("-d", out var valueD, out extractor) && success;
-            success = extractor.TryExtractNamedArgument("-c", out var valueC, out var _) && success;
+            success = extractor.TryExtractNamedArgument("-c", out var valueC, out _) && success;
 
             success.Should().BeTrue();
             valueA.Should().Be("1");
@@ -111,7 +111,7 @@
             IArgumentExtractor extractor = new ArgumentExtractor(args);
 
             var successA = extractor.TryExtractNamedArgument("-a", out var extractedValueA, out extractor);
-            var successB = extractor.TryExtractNamedArgument("-b", out var extractedValueB, out var _);
+            var successB = extractor.TryExtractNamedArgument("-b", out var extractedValueB, out _);
 
             successA.Should().BeTrue();
             successB.Should().BeFalse();
@@ -124,10 +124,10 @@
             var args = new[] { "-a=1" };
             IArgumentExtractor extractor = new ArgumentExtractor(args);
 
-            var success = extractor.TryExtractNamedArgument(new[] { "-a" }, out var extractedArguments, out var _, 1);
+            var success = extractor.TryExtractNamedArgument("-a", out var value, out _, new[] {"="});
 
             success.Should().BeTrue();
-            extractedArguments.Should().BeEquivalentWithSameOrdering("-a", "1");
+            value.Should().Be("1");
         }
 
         [Fact]
@@ -137,7 +137,7 @@
             IArgumentExtractor extractor = new ArgumentExtractor(args);
 
             var successA = extractor.TryPopArgument(out var extractedArgumentA, out extractor);
-            var successB = extractor.TryPopArgument(out var extractedArgumentB, out var _);
+            var successB = extractor.TryPopArgument(out var extractedArgumentB, out _);
 
             successA.Should().BeTrue();
             successB.Should().BeTrue();
@@ -151,7 +151,7 @@
             var args = Array.Empty<string>();
             IArgumentExtractor extractor = new ArgumentExtractor(args);
 
-            var success = extractor.TryPopArgument(out var extractedArgument, out var _);
+            var success = extractor.TryPopArgument(out var extractedArgument, out _);
 
             success.Should().BeFalse();
         }

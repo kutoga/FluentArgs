@@ -24,9 +24,15 @@
         public bool TryExtractNamedArgument(
             string firstArgument,
             out string value,
-            out IArgumentExtractor newArgumentExtractor)
+            out IArgumentExtractor newArgumentExtractor,
+            IEnumerable<string>? assignmentOperators = null)
         {
-            return TryExtractNamedArgument(new[] { firstArgument }, out var _, out value, out newArgumentExtractor);
+            return TryExtractNamedArgument(
+                new[] {firstArgument},
+                out _,
+                out value,
+                out newArgumentExtractor,
+                assignmentOperators);
         }
 
         public bool TryExtractFlag(IEnumerable<string> flagNamePossibilites, out string flag, out IArgumentExtractor newArgumentExtractor)
@@ -76,10 +82,11 @@
             IEnumerable<string> firstArgumentPossibilities,
             out string argument,
             out string value,
-            out IArgumentExtractor newArgumentExtractor)
+            out IArgumentExtractor newArgumentExtractor,
+            IEnumerable<string>? assignmentOperators)
         {
             var detectedArgumentsPossibilities = firstArgumentPossibilities
-                .SelectMany(firstArgument => DetectNamedArgument(firstArgument))
+                .SelectMany(firstArgument => DetectNamedArgument(firstArgument, assignmentOperators))
                 .ToImmutableList();
 
             if (detectedArgumentsPossibilities.Count == 0)
@@ -111,7 +118,8 @@
         }
 
         private IEnumerable<(string argument, string value, Func<IEnumerable<ArgumentList>> splitArgumentList)> DetectNamedArgument(
-            string argumentName)
+            string argumentName,
+            IEnumerable<string>? assignmentOperator)
         {
             return argumentGroups
                 .SelectMany(g => g.DetectNamedArgument(argumentName)

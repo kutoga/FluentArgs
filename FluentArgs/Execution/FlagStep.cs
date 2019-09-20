@@ -20,7 +20,7 @@
 
         public override Task Execute(State state)
         {
-            if (state.TryExtractFlag(Description.Name.Names, out var _, out var newState))
+            if (state.TryExtractFlag(Description.Name.Names, out _, out var newState))
             {
                 state = newState.AddParameter(true);
             }
