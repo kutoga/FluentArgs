@@ -12,8 +12,8 @@
         {
             [typeof(string)] = s => s,
 
-            [typeof(short)] = s => short.Parse(s, CultureInfo.InvariantCulture),
-            [typeof(int)] = s => int.Parse(s, CultureInfo.InvariantCulture),
+            [typeof(short)] = s => ParseNumber<short>(s, short.TryParse, short.TryParse),
+            [typeof(int)] = s => ParseNumber<int>(s, int.TryParse, int.TryParse),
             [typeof(long)] = s => long.Parse(s, CultureInfo.InvariantCulture),
 
             [typeof(ushort)] = s => ushort.Parse(s, CultureInfo.InvariantCulture),
@@ -37,6 +37,28 @@
 
             [typeof(Uri)] = s => new Uri(s)
         };
+
+        private delegate bool TryParseNumber<T>(string input, out T result);
+
+        private delegate bool TryParseNumberWithFormat<T>(string input, NumberStyles style, IFormatProvider provider, out T result);
+
+        private static T ParseNumber<T>(string input, TryParseNumber<T> tryParse, TryParseNumberWithFormat<T> tryparseWithFormat)
+        {
+            T result;
+
+            if (tryParse(input, out result))
+            {
+                return result;
+            }
+
+            if (input.StartsWith("0x", StringComparison.InvariantCultureIgnoreCase) && tryparseWithFormat(input, NumberStyles.HexNumber,
+                    CultureInfo.InvariantCulture, out result))
+            {
+                return result;
+            }
+
+            throw new FormatException($"Cannot parse '{input}' as type '{typeof(T).Name}'!");
+        }
 
         private static bool TryGetEnumParser(Type enumType, out Func<string, object>? parser)
         {
@@ -70,7 +92,7 @@
 
         private static bool TryGetNullableTypeParser(Type targetType, out Func<string, object>? parser)
         {
-            if (targetType == typeof(Nullable<>))
+            if (targetType.IsGenericType && targetType.GetGenericTypeDefinition() == typeof(Nullable<>))
             {
                 var wrappedType = targetType.GenericTypeArguments[0];
                 if (Parsers.ContainsKey(wrappedType))
