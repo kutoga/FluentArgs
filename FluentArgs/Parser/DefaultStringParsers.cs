@@ -68,6 +68,22 @@
             return true;
         }
 
+        private static bool TryGetNullableTypeParser(Type targetType, out Func<string, object>? parser)
+        {
+            if (targetType == typeof(Nullable<>))
+            {
+                var wrappedType = targetType.GenericTypeArguments[0];
+                if (Parsers.ContainsKey(wrappedType))
+                {
+                    parser = Parsers[wrappedType];
+                    return true;
+                }
+            }
+
+            parser = default;
+            return false;
+        }
+
         private static bool ParseBool(string s)
         {
             var sLower = s.ToLowerInvariant();
@@ -94,6 +110,11 @@
             if (Parsers.ContainsKey(targetType))
             {
                 parser = Parsers[targetType];
+                return true;
+            }
+
+            if (TryGetNullableTypeParser(targetType, out parser))
+            {
                 return true;
             }
 
