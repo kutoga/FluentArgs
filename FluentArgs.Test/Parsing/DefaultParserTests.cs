@@ -22,7 +22,6 @@ namespace FluentArgs.Test.Parsing
         [InlineData("0", 0.0d)]
         [InlineData("-1.5", -1.5d)]
         [InlineData("16.66666", 16.6666d)]
-        [InlineData("0x32", (double)0x32)]
         public static void DefaultDoubleParser_ShouldExist(string value, double expectedParsedValue)
         {
             ParseValueWithDefaultParser<double>(value)
@@ -33,7 +32,6 @@ namespace FluentArgs.Test.Parsing
         [InlineData("0", 0.0d)]
         [InlineData("-1.5", -1.5d)]
         [InlineData("16.66666", 16.6666d)]
-        [InlineData("0x32", (double)0x32)]
         public static void DefaultNullableDoubleParser_ShouldExist(string value, double expectedParsedValue)
         {
             ParseValueWithDefaultParser<double?>(value)
@@ -44,7 +42,6 @@ namespace FluentArgs.Test.Parsing
         [InlineData("0", 0.0f)]
         [InlineData("-1.5", -1.5f)]
         [InlineData("16.66666", 16.6666f)]
-        [InlineData("0x32", (float)0x32)]
         public static void DefaultFloatParser_ShouldExist(string value, float expectedParsedValue)
         {
             ParseValueWithDefaultParser<float>(value)
@@ -55,7 +52,6 @@ namespace FluentArgs.Test.Parsing
         [InlineData("0", 0.0f)]
         [InlineData("-1.5", -1.5f)]
         [InlineData("16.66666", 16.6666f)]
-        [InlineData("0x32", (float)0x32)]
         public static void DefaultNullableFloatParser_ShouldExist(string value, float expectedParsedValue)
         {
             ParseValueWithDefaultParser<float?>(value)
@@ -66,7 +62,6 @@ namespace FluentArgs.Test.Parsing
         [InlineData("0", 0.0d)]
         [InlineData("-1.5", -1.5d)]
         [InlineData("16.66666", 16.6666d)]
-        [InlineData("0x32", (double)0x32)]
         public static void DefaultDecimalParser_ShouldExist(string value, decimal expectedParsedValue)
         {
             ParseValueWithDefaultParser<decimal>(value)
@@ -77,7 +72,6 @@ namespace FluentArgs.Test.Parsing
         [InlineData("0", 0.0d)]
         [InlineData("-1.5", -1.5d)]
         [InlineData("16.66666", 16.6666d)]
-        [InlineData("0x32", (double)0x32)]
         public static void DefaultNullableDecimalParser_ShouldExist(string value, decimal expectedParsedValue)
         {
             ParseValueWithDefaultParser<decimal?>(value)
@@ -333,7 +327,7 @@ namespace FluentArgs.Test.Parsing
         {
             return new[]
             {
-                new object[] { "10.10.2010 10:10:10", new DateTimeOffset(2010, 10, 10, 10, 10, 10, TimeSpan.Zero),  }
+                new object[] { "10.10.2010 10:10:10 +00:00", new DateTimeOffset(2010, 10, 10, 10, 10, 10, TimeSpan.Zero),  }
             };
         }
 

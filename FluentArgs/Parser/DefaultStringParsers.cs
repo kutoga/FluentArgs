@@ -12,17 +12,19 @@
         {
             [typeof(string)] = s => s,
 
-            [typeof(short)] = s => ParseNumber<short>(s, short.TryParse, short.TryParse),
-            [typeof(int)] = s => ParseNumber<int>(s, int.TryParse, int.TryParse),
-            [typeof(long)] = s => long.Parse(s, CultureInfo.InvariantCulture),
+            [typeof(short)] = s => ParseNumber<short>(s, short.Parse, short.TryParse),
+            [typeof(int)] = s => ParseNumber<int>(s, int.Parse, int.TryParse),
+            [typeof(long)] = s => ParseNumber<long>(s, long.Parse, long.TryParse),
 
-            [typeof(ushort)] = s => ushort.Parse(s, CultureInfo.InvariantCulture),
-            [typeof(uint)] = s => uint.Parse(s, CultureInfo.InvariantCulture),
-            [typeof(ulong)] = s => ulong.Parse(s, CultureInfo.InvariantCulture),
+            [typeof(ushort)] = s => ParseNumber<ushort>(s, ushort.Parse, ushort.TryParse),
+            [typeof(uint)] = s => ParseNumber<uint>(s, uint.Parse, uint.TryParse),
+            [typeof(ulong)] = s => ParseNumber<ulong>(s, ulong.Parse, ulong.TryParse),
 
             [typeof(float)] = s => float.Parse(s, CultureInfo.InvariantCulture),
             [typeof(double)] = s => double.Parse(s, CultureInfo.InvariantCulture),
             [typeof(decimal)] = s => decimal.Parse(s, CultureInfo.InvariantCulture),
+
+            [typeof(byte)] = s => ParseNumber<byte>(s, byte.Parse, byte.TryParse),
 
             //TODO: Does parsing 1, 0 usw. work?
             [typeof(bool)] = s => ParseBool(s), //bool.Parse(s),
@@ -38,26 +40,19 @@
             [typeof(Uri)] = s => new Uri(s)
         };
 
-        private delegate bool TryParseNumber<T>(string input, out T result);
+        private delegate T ParseNumberFunc<out T>(string input);
 
-        private delegate bool TryParseNumberWithFormat<T>(string input, NumberStyles style, IFormatProvider provider, out T result);
+        private delegate bool TryParseNumberFunc<T>(string input, NumberStyles style, IFormatProvider provider, out T result);
 
-        private static T ParseNumber<T>(string input, TryParseNumber<T> tryParse, TryParseNumberWithFormat<T> tryparseWithFormat)
+        private static T ParseNumber<T>(string input, ParseNumberFunc<T> parse, TryParseNumberFunc<T> tryParseWithFormat)
         {
-            T result;
-
-            if (tryParse(input, out result))
+            if (input.StartsWith("0x", StringComparison.InvariantCultureIgnoreCase) &&
+                tryParseWithFormat(input.Substring(2), NumberStyles.HexNumber, CultureInfo.InvariantCulture, out var result))
             {
                 return result;
             }
 
-            if (input.StartsWith("0x", StringComparison.InvariantCultureIgnoreCase) && tryparseWithFormat(input, NumberStyles.HexNumber,
-                    CultureInfo.InvariantCulture, out result))
-            {
-                return result;
-            }
-
-            throw new FormatException($"Cannot parse '{input}' as type '{typeof(T).Name}'!");
+            return parse(input);
         }
 
         private static bool TryGetEnumParser(Type enumType, out Func<string, object>? parser)
@@ -95,11 +90,7 @@
             if (targetType.IsGenericType && targetType.GetGenericTypeDefinition() == typeof(Nullable<>))
             {
                 var wrappedType = targetType.GenericTypeArguments[0];
-                if (Parsers.ContainsKey(wrappedType))
-                {
-                    parser = Parsers[wrappedType];
-                    return true;
-                }
+                return TryGetParser(wrappedType, out parser);
             }
 
             parser = default;
