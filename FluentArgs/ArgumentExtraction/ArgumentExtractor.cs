@@ -37,12 +37,33 @@
 
         public bool TryExtractFlag(IEnumerable<string> flagNamePossibilites, out string flag, out IArgumentExtractor newArgumentExtractor)
         {
-            throw new NotImplementedException();
+            var detectedArgumentsPossibilities = flagNamePossibilites
+                .SelectMany(DetectFlagArgument)
+                .ToImmutableList();
+
+            if (detectedArgumentsPossibilities.Count == 0)
+            {
+                flag = default;
+                newArgumentExtractor = default;
+                return false;
+            }
+
+            if (detectedArgumentsPossibilities.Count > 1)
+            {
+                flag = default;
+                newArgumentExtractor = default;
+                return false;
+            }
+
+            var foundArgument = detectedArgumentsPossibilities[0];
+            newArgumentExtractor = new ArgumentExtractor(foundArgument.splitArgumentList());
+            flag = foundArgument.flagName;
+            return true;
         }
 
         public bool TryExtractFlag(string flagName, out IArgumentExtractor newArgumentExtractor)
         {
-            throw new NotImplementedException();
+            return TryExtractFlag(new[] {flagName}, out _, out newArgumentExtractor);
         }
 
         public bool TryPopArgument(out string argument, out IArgumentExtractor newArgumentExtractor)
@@ -133,6 +154,32 @@
             {
                 var listToRemoveIndex = argumentGroups.IndexOf(arguments);
                 var listsToInsert = new[] { detectedArguments.LeftSideArguments, detectedArguments.RightSideArguments }
+                    .Where(a => a.Count > 0)
+                    .Select(a => new ArgumentList(a))
+                    .ToImmutableList(); //TODO: in the complete project: whenever possible, use immutable data structures
+
+                return argumentGroups
+                    .Take(listToRemoveIndex)
+                    .Concat(listsToInsert)
+                    .Concat(argumentGroups.Skip(listToRemoveIndex + 1));
+            }
+        }
+
+        private IEnumerable<(string flagName, Func<IEnumerable<ArgumentList>> splitArgumentList)> DetectFlagArgument(
+            string flagName)
+        {
+            return argumentGroups
+                .SelectMany(g => g.DetectFlagArgument(flagName)
+                    .Select(a =>
+                    {
+                        Func<IEnumerable<ArgumentList>> splitArgumentList = () => SplitArgumentList(g, a);
+                        return (argument: a.FlagName, splitArgumentList);
+                    }));
+
+            IEnumerable<ArgumentList> SplitArgumentList(ArgumentList arguments, DetectedFlagArgument detectedFlag)
+            {
+                var listToRemoveIndex = argumentGroups.IndexOf(arguments);
+                var listsToInsert = new[] { detectedFlag.LeftSideArguments, detectedFlag.RightSideArguments }
                     .Where(a => a.Count > 0)
                     .Select(a => new ArgumentList(a))
                     .ToImmutableList(); //TODO: in the complete project: whenever possible, use immutable data structures

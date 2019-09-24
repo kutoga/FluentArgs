@@ -41,5 +41,18 @@
                 Arguments.Take(i).ToImmutableList(),
                 Arguments.Skip(i + 2).ToImmutableList()));
         }
+
+        public IEnumerable<DetectedFlagArgument> DetectFlagArgument(string flagName)
+        {
+            var validIndices = Arguments
+                .Select((a, i) => (argument: a, index: i))
+                .Where(a => a.argument == flagName)
+                .Select(a => a.index);
+
+            return validIndices.Select(i => new DetectedFlagArgument(
+                Arguments[i],
+                Arguments.Take(i).ToImmutableList(),
+                Arguments.Skip(i + 1).ToImmutableList()));
+        }
     }
 }
