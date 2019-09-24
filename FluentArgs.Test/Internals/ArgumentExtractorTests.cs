@@ -52,7 +52,7 @@
         [Fact]
         public static void ExtractingArgumentsWithMultipleCandidates_ShouldFail()
         {
-            var args = new[] { "-a", "-a" };
+            var args = new[] { "-a", "1", "-a", "2" };
             IArgumentExtractor extractor = new ArgumentExtractor(args);
 
             var success = extractor.TryExtractNamedArgument("-a", out var extractedArguments, out _);
@@ -62,7 +62,19 @@
         }
 
         [Fact]
-        public static void ExtractingNamedArgumentWithMultipleButOnlyOneValideCandidate_ShouldWork()
+        public static void ExtractingArgumentsWithMultipleOverlappingCandidates_ShouldFail()
+        {
+            var args = new[] { "-a", "-a", "2" };
+            IArgumentExtractor extractor = new ArgumentExtractor(args);
+
+            var success = extractor.TryExtractNamedArgument("-a", out var extractedArguments, out _);
+
+            success.Should().BeFalse();
+            //extractAction.Should().Throw<ArgumentException>(); //TODO: ugly interface~?
+        }
+
+        [Fact]
+        public static void ExtractingNamedArgumentWithMultipleButOnlyOneValidCandidate_ShouldWork()
         {
             var args = new[] { "-c", "-k", "-a", "1", "-b", "2", "3", "-c" };
             IArgumentExtractor extractor = new ArgumentExtractor(args);
@@ -76,7 +88,7 @@
         [Fact]
         public static void ExtractingMultipleSerialNamedArguments_ShouldWork()
         {
-            var args = new[] { "-a", "1", "-b", "2", "-c", "3", "dummy", "-d", "x" };
+            var args = new[] { "-a", "1", "-b", "2", "-c", "3", "dummy", "-d", "4" };
             IArgumentExtractor extractor = new ArgumentExtractor(args);
 
             var success = extractor.TryExtractNamedArgument("-a", out var valueA, out extractor);
@@ -97,7 +109,7 @@
             var args = new[] { "-a" };
             IArgumentExtractor extractor = new ArgumentExtractor(args);
 
-            var success1 = extractor.TryExtractFlag("-a", out _);
+            var success1 = extractor.TryExtractFlag("-a", out extractor);
             var success2 = extractor.TryExtractFlag("-a", out _);
 
             success1.Should().BeTrue();
@@ -119,12 +131,15 @@
         }
 
         [Fact]
-        public static void ExtractingArgumentsWithEqualSign_ShouldWork()
+        public static void 
+            ExtractingArgumentsWithEqualSign_ShouldWork()
         {
             var args = new[] { "-a=1" };
             IArgumentExtractor extractor = new ArgumentExtractor(args);
 
             var success = extractor.TryExtractNamedArgument("-a", out var value, out _, new[] {"="});
+
+            true.Should().BeFalse("REMINDER: MORE TESTS")
 
             success.Should().BeTrue();
             value.Should().Be("1");

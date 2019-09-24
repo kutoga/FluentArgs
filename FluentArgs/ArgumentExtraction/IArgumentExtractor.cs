@@ -10,13 +10,13 @@
             out string argument,
             out string value,
             out IArgumentExtractor newArgumentExtractor,
-            IEnumerable<string>? assignmentOperators = null);
+            IReadOnlyCollection<string>? assignmentOperators = null);
 
         bool TryExtractNamedArgument(
             string firstArgument,
             out string value,
             out IArgumentExtractor newArgumentExtractor,
-            IEnumerable<string>? assignmentOperators = null);
+            IReadOnlyCollection<string>? assignmentOperators = null);
 
         bool TryExtractFlag(IEnumerable<string> flagNamePossibilites, out string flag, out IArgumentExtractor newArgumentExtractor);
 

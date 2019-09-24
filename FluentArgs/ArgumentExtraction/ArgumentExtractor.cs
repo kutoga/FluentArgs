@@ -25,7 +25,7 @@
             string firstArgument,
             out string value,
             out IArgumentExtractor newArgumentExtractor,
-            IEnumerable<string>? assignmentOperators = null)
+            IReadOnlyCollection<string>? assignmentOperators = null)
         {
             return TryExtractNamedArgument(
                 new[] {firstArgument},
@@ -104,7 +104,7 @@
             out string argument,
             out string value,
             out IArgumentExtractor newArgumentExtractor,
-            IEnumerable<string>? assignmentOperators)
+            IReadOnlyCollection<string>? assignmentOperators)
         {
             var detectedArgumentsPossibilities = firstArgumentPossibilities
                 .SelectMany(firstArgument => DetectNamedArgument(firstArgument, assignmentOperators))
@@ -140,10 +140,10 @@
 
         private IEnumerable<(string argument, string value, Func<IEnumerable<ArgumentList>> splitArgumentList)> DetectNamedArgument(
             string argumentName,
-            IEnumerable<string>? assignmentOperator)
+            IReadOnlyCollection<string>? assignmentOperators)
         {
             return argumentGroups
-                .SelectMany(g => g.DetectNamedArgument(argumentName)
+                .SelectMany(g => g.DetectNamedArgument(argumentName, assignmentOperators)
                     .Select(a =>
                     {
                         Func<IEnumerable<ArgumentList>> splitArgumentList = () => SplitArgumentList(g, a);
