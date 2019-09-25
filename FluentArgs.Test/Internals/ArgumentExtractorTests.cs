@@ -131,15 +131,14 @@
         }
 
         [Fact]
-        public static void 
-            ExtractingArgumentsWithEqualSign_ShouldWork()
+        public static void ExtractingArgumentsWithEqualSign_ShouldWork()
         {
             var args = new[] { "-a=1" };
             IArgumentExtractor extractor = new ArgumentExtractor(args);
 
             var success = extractor.TryExtractNamedArgument("-a", out var value, out _, new[] {"="});
 
-            true.Should().BeFalse("REMINDER: MORE TESTS")
+            true.Should().BeFalse("REMINDER: MORE TESTS with assignment operators");
 
             success.Should().BeTrue();
             value.Should().Be("1");
