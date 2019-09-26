@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System.Collections.Generic;
+using System.IO;
 
 namespace FluentArgs
 {
@@ -6,6 +7,10 @@ namespace FluentArgs
         where TArgsParser : IConfigurableParser<TArgsParser> //TODO: überall wo möglich so reinmachen
     {
         TArgsParser WithApplicationDescription(string description);
+
+        TArgsParser WithAssignmentOperators(string assignmentOperator, params string[] moreAssignmentOperators);
+
+        TArgsParser WithoutAssignmentOperators();
 
         TArgsParser RegisterHelpFlag(string name, params string[] moreNames);
 

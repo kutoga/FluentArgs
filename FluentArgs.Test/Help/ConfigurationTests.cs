@@ -26,5 +26,19 @@
             called.Should().BeFalse();
             dummyOutput.ToArray().Should().NotBeEmpty();
         }
+
+        [Fact]
+        public static void GivenAllAssignmentOperatorsAreDisabled_ShouldNotUseThem()
+        {
+            var args = new[] { "-a=1" };
+            var builder = FluentArgsBuilder.New()
+                .WithoutAssignmentOperators()
+                .Parameter("-a").IsRequired()
+                .Call(_ => { });
+
+            var parseSuccess = builder.Parse(args);
+
+            parseSuccess.Should().BeFalse();
+        }
     }
 }

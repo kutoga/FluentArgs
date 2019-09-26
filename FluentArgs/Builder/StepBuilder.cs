@@ -1,4 +1,6 @@
-﻿namespace FluentArgs.Builder
+﻿using System.Linq;
+
+namespace FluentArgs.Builder
 {
     using System;
     using System.Collections.Generic;
@@ -12,6 +14,9 @@
         public Step Step { get; set; } = new InitialStep()
         {
             ParserSettings = new ParserSettings(new SimpleHelpPrinter(Console.Out), new SimpleParsingErrorPrinter(Console.Error))
+            {
+                AssignmentOperators = new[] { "=" }
+            }
         };
 
         //TODO: public und interface prefix weg
@@ -59,6 +64,12 @@
                 s => new StepBuilder<Action<IReadOnlyList<TParam>>, Func<IReadOnlyList<TParam>, Task>> { Step = s }, Step);
         }
 
+        public IInitialFluentArgsBuilder WithoutAssignmentOperators()
+        {
+            ((InitialStep) Step).ParserSettings.AssignmentOperators = Array.Empty<string>();
+            return this;
+        }
+
         public IInitialFluentArgsBuilder RegisterHelpFlag(string name, params string[] moreNames)
         {
             ((InitialStep)Step).ParserSettings.HelpFlag = Name.ValidateAndBuild(name, moreNames);
@@ -92,11 +103,18 @@
         public IInitialFluentArgsBuilder ThrowIfUnusedArgumentsArePresent(bool enable = true)
         {
             throw new NotImplementedException();
-        } 
+        }
 
         public IInitialFluentArgsBuilder WithApplicationDescription(string description)
         {
             ((InitialStep)Step).ParserSettings.ApplicationDescription = description;
+            return this;
+        }
+
+        public IInitialFluentArgsBuilder WithAssignmentOperators(string assignmentOperator, params string[] moreAssignmentOperators)
+        {
+            ((InitialStep) Step).ParserSettings.AssignmentOperators =
+                new[] {assignmentOperator}.Concat(moreAssignmentOperators).ToArray();
             return this;
         }
 

@@ -1,4 +1,7 @@
-﻿namespace FluentArgs.Description
+﻿using System.Collections.Generic;
+using System.Collections.Immutable;
+
+namespace FluentArgs.Description
 {
     internal class ParserSettings
     {
@@ -6,9 +9,12 @@
         {
             HelpPrinter = helpPrinter;
             ParsingErrorPrinter = parsingErrorPrinter;
+            AssignmentOperators = ImmutableArray<string>.Empty;
         }
 
         public string? ApplicationDescription { get; set; }
+
+        public IReadOnlyCollection<string> AssignmentOperators { get; set; }
 
         public Name? HelpFlag { get; set; }
 

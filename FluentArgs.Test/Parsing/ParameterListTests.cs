@@ -160,5 +160,20 @@
             parsedA.Should().BeEquivalentWithSameOrdering(1, 2, 3);
             parsedB.Should().BeEquivalentWithSameOrdering(3, 4, 5);
         }
+
+        [Fact]
+        public static void GivenAListAssignedByAnOperator_ShouldBeParsable()
+        {
+            var args = new[] { "-a=1,2,3" };
+            IReadOnlyList<int>? parsedA = default;
+            var builder = FluentArgsBuilder.New()
+                .ParameterList<int>("-a").IsRequired()
+                .Call(a => parsedA = a);
+
+            var parseSuccess = builder.Parse(args);
+
+            parseSuccess.Should().BeTrue();
+            parsedA.Should().BeEquivalentWithSameOrdering(1, 2, 3);
+        }
     }
 }
