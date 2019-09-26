@@ -134,14 +134,57 @@
         public static void ExtractingArgumentsWithEqualSign_ShouldWork()
         {
             var args = new[] { "-a=1" };
-            IArgumentExtractor extractor = new ArgumentExtractor(args);
+            var extractor = new ArgumentExtractor(args);
 
-            var success = extractor.TryExtractNamedArgument("-a", out var value, out _, new[] {"="});
-
-            true.Should().BeFalse("REMINDER: MORE TESTS with assignment operators");
+            var success = extractor.TryExtractNamedArgument("-a", out var value, out _, new[] { "=" });
 
             success.Should().BeTrue();
             value.Should().Be("1");
+        }
+
+        [Fact]
+        public static void ExtractingArgumentsWithDifferentAssignmentsOperators_ShouldWork()
+        {
+            var args = new[] { "-a=1", "-b:2" };
+            var assignmentOperators = new[] { "=", ":" };
+            IArgumentExtractor extractor = new ArgumentExtractor(args);
+
+            var successA = extractor.TryExtractNamedArgument("-a", out var argA, out extractor, assignmentOperators);
+            var successB = extractor.TryExtractNamedArgument("-b", out var argB, out _, assignmentOperators);
+
+            successA.Should().BeTrue();
+            successB.Should().BeTrue();
+            argA.Should().Be("1");
+            argB.Should().Be("2");
+        }
+
+        [Fact]
+        public static void DespiteDefiningAssignemtnOperatorsExtractionWithout_ShouldWork()
+        {
+            var args = new[] { "-a", "1" };
+            var extractor = new ArgumentExtractor(args);
+
+            var success = extractor.TryExtractNamedArgument("-a", out var argA, out _, new[] { "=" });
+
+            success.Should().BeTrue();
+            argA.Should().Be("1");
+        }
+
+        [Theory]
+        [InlineData("")]
+        [InlineData(" ")]
+        [InlineData("\n")]
+        [InlineData("\t")]
+        [InlineData(" \t ")]
+        public static void WhitespaceAssignmentOperators_ShouldBeValid(string assignmentOperator)
+        {
+            var args = new[] { $"-a{assignmentOperator}xyz" };
+            var extractor = new ArgumentExtractor(args);
+
+            var success = extractor.TryExtractNamedArgument("-a", out var argA, out _, new[] { assignmentOperator });
+
+            success.Should().BeTrue();
+            argA.Should().Be("xyz");
         }
 
         [Fact]
