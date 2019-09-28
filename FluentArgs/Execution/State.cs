@@ -8,27 +8,30 @@
     {
         private readonly IImmutableList<object?> parameters;
         private readonly IArgumentExtractor argumentExtractor;
+        private readonly IReadOnlyCollection<string>? assignmentOperators;
 
-        private State(IImmutableList<object?> parameters, IArgumentExtractor argumentExtractor)
+        private State(IImmutableList<object?> parameters, IArgumentExtractor argumentExtractor, IReadOnlyCollection<string>? assignmentOperators = null)
         {
             this.parameters = parameters;
             this.argumentExtractor = argumentExtractor;
+            this.assignmentOperators = assignmentOperators;
         }
 
-        private State(IImmutableList<object?> parameters, IImmutableList<string> arguments)
+        private State(IImmutableList<object?> parameters, IImmutableList<string> arguments, IReadOnlyCollection<string>? assignmentOperators = null)
         {
             this.parameters = parameters;
             this.argumentExtractor = new ArgumentExtractor(arguments);
+            this.assignmentOperators = assignmentOperators;
         }
 
-        public static State InitialState(IEnumerable<string> arguments)
+        public static State InitialState(IEnumerable<string> arguments, IReadOnlyCollection<string>? assignmentOperators = null)
         {
-            return new State(ImmutableList<object?>.Empty, arguments.ToImmutableList());
+            return new State(ImmutableList<object?>.Empty, arguments.ToImmutableList(), assignmentOperators);
         }
 
         public State AddParameter(object? parameter)
         {
-            return new State(parameters.Add(parameter), argumentExtractor);
+            return new State(parameters.Add(parameter), argumentExtractor, assignmentOperators);
         }
 
         public bool TryExtractFlag(IEnumerable<string> validFlagNames, out string flag, out State newState)
@@ -48,7 +51,7 @@
 
         public bool TryExtractNamedArgument(IEnumerable<string> validArgumentNames, out string argument, out string value, out State newState)
         {
-            var result = argumentExtractor.TryExtractNamedArgument(validArgumentNames, out argument, out value, out var newArgumentExtractor);
+            var result = argumentExtractor.TryExtractNamedArgument(validArgumentNames, out argument, out value, out var newArgumentExtractor, assignmentOperators);
             if (result)
             {
                 newState = new State(parameters, newArgumentExtractor);

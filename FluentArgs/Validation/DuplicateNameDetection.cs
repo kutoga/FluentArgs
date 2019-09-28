@@ -18,6 +18,11 @@ namespace FluentArgs.Validation
             this.registeredNames = registeredNames;
         }
 
+        public DuplicateNameDetection()
+            : this(ImmutableHashSet<string>.Empty)
+        {
+        }
+
         public Task Visit(CallStep step)
         {
             return Task.CompletedTask;

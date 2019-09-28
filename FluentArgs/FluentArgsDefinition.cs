@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.ExceptionServices;
 using System.Threading.Tasks;
@@ -6,6 +7,7 @@ using FluentArgs.Description;
 using FluentArgs.Execution;
 using FluentArgs.Extensions;
 using FluentArgs.Help;
+using FluentArgs.Validation;
 
 namespace FluentArgs
 {
@@ -39,13 +41,14 @@ namespace FluentArgs
 
         public Task<bool> ParseAsync(params string[] args)
         {
-            return ParseFromState(State.InitialState(args));
+            return ParseFromState(State.InitialState(args, InitialStep.ParserSettings?.AssignmentOperators));
         }
 
         public async Task<bool> ParseFromState(State state)
         {
             try
             {
+                await ExecuteValidations();
                 await InitialStep.Execute(state).ConfigureAwait(false);
                 return true;
             }
@@ -64,6 +67,28 @@ namespace FluentArgs
                     ex.Description,
                     InitialStep.ParserSettings.HelpFlag?.Names).ConfigureAwait(false);
                 return false;
+            }
+        }
+
+        private async Task ExecuteValidations()
+        {
+            if (InitialStep.ParserSettings == null)
+            {
+                return;
+            }
+
+            var validators = GetValidators(InitialStep.ParserSettings);
+            foreach (var validator in validators)
+            {
+                await validator.Visit(InitialStep).ConfigureAwait(false);
+            }
+        }
+
+        private static IEnumerable<IStepVisitor> GetValidators(ParserSettings settings)
+        {
+            if (settings.WarnOnDuplicateNames)
+            {
+                yield return new DuplicateNameDetection();
             }
         }
     }

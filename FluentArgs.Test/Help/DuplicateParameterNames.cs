@@ -141,10 +141,10 @@ namespace FluentArgs.Test.Help
                         .Call(_ => called = true))
                 .Call(() => called = true);
 
-            Action parseAction = () => builder.Parse();
+            bool parseSuccess = builder.Parse();
 
-            parseAction.Should().Throw<Exception>();
-            called.Should().BeFalse();
+            parseSuccess.Should().BeTrue();
+            called.Should().BeTrue();
         }
 
         [Fact]
@@ -155,10 +155,10 @@ namespace FluentArgs.Test.Help
                 .Parameter("-x", "-x").IsOptional()
                 .Call(_ => called = true);
 
-            var parseSuccess = builder.Parse();
+            Action parseAction = () => builder.Parse();
 
-            parseSuccess.Should().BeTrue();
-            called.Should().BeTrue();
+            parseAction.Should().Throw<Exception>();
+            called.Should().BeFalse();
         }
     }
 }
