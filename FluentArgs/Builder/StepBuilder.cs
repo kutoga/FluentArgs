@@ -90,19 +90,20 @@ namespace FluentArgs.Builder
 
         public IInitialFluentArgsBuilder ThrowOnDuplicateNames(bool enable)
         {
-            ((InitialStep)Step).ParserSettings.WarnOnDuplicateNames = enable;
+            ((InitialStep)Step).ParserSettings.ThrowOnDuplicateNames = enable;
             return this;
         }
 
         public IInitialFluentArgsBuilder ThrowOnNonMinusStartingNames(bool enable)
         {
-            ((InitialStep)Step).ParserSettings.WarnOnNonMinusStartingNames = enable;
+            ((InitialStep)Step).ParserSettings.ThrowOnNonMinusStartingNames = enable;
             return this;
         }
 
         public IInitialFluentArgsBuilder ThrowIfUnusedArgumentsArePresent(bool enable = true)
         {
-            throw new NotImplementedException();
+            ((InitialStep)Step).ParserSettings.ThrowIfUnusedArgumentsArePresent = enable;
+            return this;
         }
 
         public IInitialFluentArgsBuilder WithApplicationDescription(string description)

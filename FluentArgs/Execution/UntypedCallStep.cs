@@ -21,6 +21,7 @@
 
         public override Task Execute(State state)
         {
+            state.PostValidation();
             var arguments = state.GetParameters();
 
             if (targetFunction.AsyncTarget != null)

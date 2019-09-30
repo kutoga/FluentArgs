@@ -1,5 +1,6 @@
 ﻿namespace FluentArgs.Execution
 {
+    using System;
     using System.Collections.Generic;
     using System.Collections.Immutable;
     using FluentArgs.ArgumentExtraction;
@@ -9,29 +10,32 @@
         private readonly IImmutableList<object?> parameters;
         private readonly IArgumentExtractor argumentExtractor;
         private readonly IReadOnlyCollection<string>? assignmentOperators;
+        private readonly IEnumerable<Action<State>> postValidations;
 
-        private State(IImmutableList<object?> parameters, IArgumentExtractor argumentExtractor, IReadOnlyCollection<string>? assignmentOperators = null)
+        private State(IImmutableList<object?> parameters, IArgumentExtractor argumentExtractor, IEnumerable<Action<State>> postValidations, IReadOnlyCollection<string>? assignmentOperators)
         {
             this.parameters = parameters;
             this.argumentExtractor = argumentExtractor;
             this.assignmentOperators = assignmentOperators;
+            this.postValidations = postValidations;
         }
 
-        private State(IImmutableList<object?> parameters, IImmutableList<string> arguments, IReadOnlyCollection<string>? assignmentOperators = null)
+        private State(IImmutableList<object?> parameters, IImmutableList<string> arguments, IEnumerable<Action<State>> postValidations, IReadOnlyCollection<string>? assignmentOperators)
         {
             this.parameters = parameters;
             this.argumentExtractor = new ArgumentExtractor(arguments);
             this.assignmentOperators = assignmentOperators;
+            this.postValidations = postValidations;
         }
 
-        public static State InitialState(IEnumerable<string> arguments, IReadOnlyCollection<string>? assignmentOperators = null)
+        public static State InitialState(IEnumerable<string> arguments, IEnumerable<Action<State>> postValidations, IReadOnlyCollection<string>? assignmentOperators)
         {
-            return new State(ImmutableList<object?>.Empty, arguments.ToImmutableList(), assignmentOperators);
+            return new State(ImmutableList<object?>.Empty, arguments.ToImmutableList(), postValidations, assignmentOperators);
         }
 
         public State AddParameter(object? parameter)
         {
-            return new State(parameters.Add(parameter), argumentExtractor, assignmentOperators);
+            return new State(parameters.Add(parameter), argumentExtractor, postValidations, assignmentOperators);
         }
 
         public bool TryExtractFlag(IEnumerable<string> validFlagNames, out string flag, out State newState)
@@ -39,7 +43,7 @@
             var result = argumentExtractor.TryExtractFlag(validFlagNames, out flag, out var newArgumentExtractor);
             if (result)
             {
-                newState = new State(parameters, newArgumentExtractor);
+                newState = new State(parameters, newArgumentExtractor, postValidations, assignmentOperators);
             }
             else
             {
@@ -54,7 +58,7 @@
             var result = argumentExtractor.TryExtractNamedArgument(validArgumentNames, out argument, out value, out var newArgumentExtractor, assignmentOperators);
             if (result)
             {
-                newState = new State(parameters, newArgumentExtractor);
+                newState = new State(parameters, newArgumentExtractor, postValidations, assignmentOperators);
             }
             else
             {
@@ -66,7 +70,7 @@
 
         public IEnumerable<string> GetRemainingArguments(out State newState)
         {
-            newState = new State(parameters, ArgumentExtractor.Empty);
+            newState = new State(parameters, ArgumentExtractor.Empty, postValidations, assignmentOperators);
             return argumentExtractor.GetRemainingArguments();
         }
 
@@ -81,7 +85,7 @@
             if (success)
             {
                 argument = poppedArgument;
-                newState = new State(parameters, newArgumentExtractor);
+                newState = new State(parameters, newArgumentExtractor, postValidations, assignmentOperators);
             }
             else
             {
@@ -90,6 +94,14 @@
             }
 
             return success;
+        }
+
+        public void PostValidation()
+        {
+            foreach (var postValidation in postValidations)
+            {
+                postValidation(this);
+            }
         }
     }
 }

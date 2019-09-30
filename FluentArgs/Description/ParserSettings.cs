@@ -22,10 +22,10 @@ namespace FluentArgs.Description
 
         public IParsingErrorPrinter ParsingErrorPrinter { get; set; }
 
-        //TODO: Write Visitor
-        public bool WarnOnDuplicateNames { get; set; }
+        public bool ThrowOnDuplicateNames { get; set; }
 
-        //TODO: Write Visitor
-        public bool WarnOnNonMinusStartingNames { get; set; }
+        public bool ThrowOnNonMinusStartingNames { get; set; }
+
+        public bool ThrowIfUnusedArgumentsArePresent { get; set; }
     }
 }

@@ -22,6 +22,7 @@
 
         public override Task Execute(State state)
         {
+            state.PostValidation();
             var result = Reflection.Method.InvokeWrappedMethod(targetFunction.Target, state.GetParameters(), true);
             if (result is null)
             {

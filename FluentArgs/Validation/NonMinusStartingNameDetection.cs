@@ -1,74 +1,80 @@
-﻿using FluentArgs.Description;
-using FluentArgs.Execution;
-using System;
-using System.Globalization;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace FluentArgs.Validation
+﻿namespace FluentArgs.Validation
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Globalization;
+    using System.Linq;
+    using System.Text;
+    using System.Threading.Tasks;
+    using FluentArgs.Description;
+    using FluentArgs.Execution;
+
     internal class NonMinusStartingNameDetection : IStepVisitor
     {
         public Task Visit(CallStep step)
         {
-            throw new NotImplementedException();
+            return Task.CompletedTask;
         }
 
         public Task Visit(UntypedCallStep step)
         {
-            throw new NotImplementedException();
+            return Task.CompletedTask;
         }
 
         public Task Visit(FlagStep step)
         {
-            throw new NotImplementedException();
+            ValidateAliases(step.Description.Name.Names);
+            return step.Next.Accept(this);
         }
 
         public Task Visit(GivenCommandStep step)
         {
-            throw new NotImplementedException();
+            ValidateAliases(step.Name.Names);
+            return step.Next.Accept(this);
         }
 
         public Task Visit(GivenFlagStep step)
         {
-            throw new NotImplementedException();
+            ValidateAliases(step.Description.Name.Names);
+            return step.Next.Accept(this);
         }
 
         public Task Visit(GivenParameterStep step)
         {
-            throw new NotImplementedException();
+            ValidateAliases(step.Description.Name.Names);
+            return step.Next.Accept(this);
         }
 
         public Task Visit(InitialStep step)
         {
-            throw new NotImplementedException();
+            return step.Next.Accept(this);
         }
 
         public Task Visit(InvalidStep step)
         {
-            throw new NotImplementedException();
+            return Task.CompletedTask;
         }
 
         public Task Visit(ParameterListStep step)
         {
-            throw new NotImplementedException();
+            ValidateAliases(step.Description.Name.Names);
+            return step.Next.Accept(this);
         }
 
         public Task Visit(ParameterStep step)
         {
-            throw new NotImplementedException();
+            ValidateAliases(step.Description.Name.Names);
+            return step.Next.Accept(this);
         }
 
         public Task Visit(PositionalArgumentStep step)
         {
-            throw new NotImplementedException();
+            return step.Next.Accept(this);
         }
 
         public Task Visit(RemainingArgumentsStep step)
         {
-            throw new NotImplementedException();
+            return step.Next.Accept(this);
         }
 
         private static void ValidateAliases(IEnumerable<string> aliases)
@@ -76,10 +82,10 @@ namespace FluentArgs.Validation
             var nonMinusStartingAliases = aliases.Where(StartsNotWithMinus).ToArray();
             if (nonMinusStartingAliases.Any())
             {
-                throw new Exception("The")
+                throw new Exception($"The following defined aliases do not start with a minus '-': {string.Join(", ", nonMinusStartingAliases.OrderBy(a => a))}");
             }
 
-            bool StartsNotWithMinus(string alias) => !alias.StartsWith("-", CultureInfo.InvariantCulture);
+            bool StartsNotWithMinus(string alias) => !alias.StartsWith("-", StringComparison.InvariantCulture);
         }
     }
 }

@@ -41,7 +41,7 @@ namespace FluentArgs
 
         public Task<bool> ParseAsync(params string[] args)
         {
-            return ParseFromState(State.InitialState(args, InitialStep.ParserSettings?.AssignmentOperators));
+            return ParseFromState(State.InitialState(args, GetPostValidators(InitialStep.ParserSettings), InitialStep.ParserSettings?.AssignmentOperators));
         }
 
         public async Task<bool> ParseFromState(State state)
@@ -84,11 +84,31 @@ namespace FluentArgs
             }
         }
 
+        private static IEnumerable<Action<State>> GetPostValidators(ParserSettings settings)
+        {
+            if (settings.ThrowIfUnusedArgumentsArePresent)
+            {
+                yield return state =>
+                {
+                    var remainingArguments = state.GetRemainingArguments(out _).ToArray();
+                    if (remainingArguments.Any())
+                    {
+                        throw new Exception($"Not all arguments are used / parsed: {string.Join(" ", remainingArguments)}");
+                    }
+                };
+            }
+        }
+
         private static IEnumerable<IStepVisitor> GetValidators(ParserSettings settings)
         {
-            if (settings.WarnOnDuplicateNames)
+            if (settings.ThrowOnDuplicateNames)
             {
                 yield return new DuplicateNameDetection();
+            }
+
+            if (settings.ThrowOnNonMinusStartingNames)
+            {
+                yield return new NonMinusStartingNameDetection();
             }
         }
     }

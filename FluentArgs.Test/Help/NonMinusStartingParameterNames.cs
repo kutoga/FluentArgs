@@ -70,12 +70,17 @@ namespace FluentArgs.Test.Help
         [InlineData("Today is a good day, I guess...")]
         public static void IfConfiguredNonMinusStatingNames_ShouldThrow(string name)
         {
-            Action buildAction = () => FluentArgsBuilder.New()
+            var args = new[] { name };
+            var called = false;
+            var builder = FluentArgsBuilder.New()
                 .ThrowOnNonMinusStartingNames()
                 .Flag(name)
-                .Call(_ => { });
+                .Call(_ => called = true);
 
-            buildAction.Should().Throw<Exception>();
+            Action parseAction = () => builder.Parse(args);
+
+            parseAction.Should().Throw<Exception>();
+            called.Should().BeFalse();
         }
     }
 }

@@ -9,7 +9,7 @@ namespace FluentArgs.Test.Help
     public static class UnusedArguments
     {
         [Fact]
-        public static void UnusedArguments_ShouldbeIgnored()
+        public static void UnusedArguments_ShouldBeIgnored()
         {
             var args = new[] {"-a", "-b"};
             var called = false;
@@ -29,6 +29,19 @@ namespace FluentArgs.Test.Help
             var builder = FluentArgsBuilder.New()
                 .ThrowIfUnusedArgumentsArePresent()
                 .Call(() => { });
+
+            Action parseAction = () => builder.Parse(args);
+
+            parseAction.Should().Throw<Exception>();
+        }
+
+        [Fact]
+        public static void UnusedArgumentsGivenTheRightConfigAndAnUntypedCall_ShouldThrow()
+        {
+            var args = new[] { "-a", "-b" };
+            var builder = FluentArgsBuilder.New()
+                .ThrowIfUnusedArgumentsArePresent()
+                .CallUntyped(_ => { });
 
             Action parseAction = () => builder.Parse(args);
 
