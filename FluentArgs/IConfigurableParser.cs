@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System.Collections.Generic;
+using System.IO;
 
 namespace FluentArgs
 {
@@ -7,15 +8,21 @@ namespace FluentArgs
     {
         TArgsParser WithApplicationDescription(string description);
 
+        TArgsParser WithAssignmentOperators(string assignmentOperator, params string[] moreAssignmentOperators);
+
+        TArgsParser WithoutAssignmentOperators();
+
         TArgsParser RegisterHelpFlag(string name, params string[] moreNames);
 
         TArgsParser RegisterHelpPrinter(IHelpPrinter helpPrinter);
 
         TArgsParser RegisterParsingErrorPrinter(IParsingErrorPrinter parsingErrorPrinter);
 
-        TArgsParser ThrowOnDuplicateNames();
+        TArgsParser ThrowOnDuplicateNames(bool enable = true);
 
-        TArgsParser ThrowOnNonMinusStartingNames();
+        TArgsParser ThrowOnNonMinusStartingNames(bool enable = true);
+
+        TArgsParser ThrowIfUnusedArgumentsArePresent(bool enable = true);
     }
 
     public static class IConfigurableParserExtensions
@@ -34,7 +41,8 @@ namespace FluentArgs
             return configurableParser
                 .RegisterDefaultHelpFlags()
                 .ThrowOnDuplicateNames()
-                .ThrowOnNonMinusStartingNames();
+                .ThrowOnNonMinusStartingNames()
+                .ThrowIfUnusedArgumentsArePresent();
         }
 
         public static TArgsParser DefaultConfigsWithAppDescription<TArgsParser>(

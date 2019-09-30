@@ -8,15 +8,16 @@
 
     internal class GivenParameterStep : Step
     {
-        private readonly GivenParameter parameter;
-        private readonly IParsableFromState thenStep;
-
-        public GivenParameterStep(Step previous, GivenParameter parameter, IParsableFromState thenStep)
+        public GivenParameterStep(Step previous, GivenParameter description, IParsableFromState thenStep)
             : base(previous)
         {
-            this.parameter = parameter;
-            this.thenStep = thenStep;
+            Description = description;
+            ThenStep = thenStep;
         }
+
+        public GivenParameter Description { get; }
+
+        public IParsableFromState ThenStep { get; }
 
         public override Task Accept(IStepVisitor visitor)
         {
@@ -25,24 +26,24 @@
 
         public override Task Execute(State state)
         {
-            if (!state.TryExtractArguments(parameter.Name.Names, out var arguments, out var newState, 1))
+            if (!state.TryExtractNamedArgument(Description.Name.Names, out _, out var value, out var newState))
             {
                 return Next.Execute(state);
             }
             else
             {
-                if (!parameter.RequireExactValue)
+                if (!Description.RequireExactValue)
                 {
                     //TODO: Do we really want to work here with the old state? -> create a test
-                    return thenStep.ParseFromState(state);
+                    return ThenStep.ParseFromState(state);
                 }
                 else
                 {
                     state = newState;
 
-                    if (object.Equals(Parse(arguments[1]), parameter.RequiredValue))
+                    if (object.Equals(Parse(value), Description.RequiredValue))
                     {
-                        return thenStep.ParseFromState(state);
+                        return ThenStep.ParseFromState(state);
                     }
 
                     return Next.Execute(state);
@@ -53,17 +54,17 @@
         //TODO: Remove duplicate code (see parametersetp.cs)
         private object Parse(string parameter)
         {
-            if (this.parameter.Parser != null)
+            if (this.Description.Parser != null)
             {
-                return this.parameter.Parser(parameter);
+                return this.Description.Parser(parameter);
             }
 
-            if (DefaultStringParsers.TryGetParser(this.parameter.Type, out var parser))
+            if (DefaultStringParsers.TryGetParser(this.Description.Type, out var parser))
             {
                 return parser!(parameter);
             }
 
-            throw new ArgumentParsingException($"No parse for the type '{this.parameter.Type.Name}' available!", this.parameter.Name);
+            throw new ArgumentParsingException($"No parse for the type '{this.Description.Type.Name}' available!", this.Description.Name);
         }
     }
 }

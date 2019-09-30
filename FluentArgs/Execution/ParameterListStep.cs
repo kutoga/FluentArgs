@@ -23,7 +23,7 @@
 
         public override Task Execute(State state)
         {
-            if (!state.TryExtractArguments(Description.Name.Names, out var arguments, out var newState, 1))
+            if (!state.TryExtractNamedArgument(Description.Name.Names, out var argument, out var value, out var newState))
             {
                 if (Description.IsRequired)
                 {
@@ -41,7 +41,7 @@
             }
             else
             {
-                state = newState.AddParameter(Parse(arguments[1]));
+                state = newState.AddParameter(Parse(value));
             }
 
             return Next.Execute(state);
@@ -58,10 +58,10 @@
 
             if (DefaultStringParsers.TryGetParser(Description.Type, out var parser))
             {
-                return ParseWithParser(parser);
+                return ArgumentParsingException.ParseWrapper(() => ParseWithParser(parser), Description.Name);
             }
 
-            throw new Exception("TODO: IMPLEMENT MORE DEFAULTS");
+            throw ArgumentParsingException.NoParserFound(Description.Name);
 
             object ParseWithParser(Func<string, object?> parser)
             {

@@ -40,12 +40,12 @@
                 return false;
             }
 
-            if (!state.TryExtractArguments(helpFlags, out var _, out var newState))
+            if (!state.TryExtractFlag(helpFlags, out _, out var newState))
             {
                 return false;
             }
 
-            return newState.GetRemainingArguments(out newState).Count() == 0;
+            return !newState.GetRemainingArguments(out newState).Any();
         }
     }
 }

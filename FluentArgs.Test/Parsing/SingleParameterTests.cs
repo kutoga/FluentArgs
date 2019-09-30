@@ -25,6 +25,21 @@
         }
 
         [Fact]
+        public static void GivenASingleRequiredStringArgumentWithAnAssigmentOperator_ShouldBeParsable()
+        {
+            var args = new[] { "--name=beni" };
+            string? parsedName = null;
+            var builder = FluentArgsBuilder.New()
+                .Parameter("--name").IsRequired()
+                .Call(name => parsedName = name);
+
+            var parseSuccess = builder.Parse(args);
+
+            parseSuccess.Should().BeTrue();
+            parsedName.Should().Be("beni");
+        }
+
+        [Fact]
         public static void GivenASingleRequiredIntArgument_ShouldBeParsable()
         {
             var args = new[] { "--age", "28" };

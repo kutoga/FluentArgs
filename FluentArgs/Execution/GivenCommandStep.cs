@@ -28,13 +28,12 @@
 
         public override Task Execute(State state)
         {
-            if (!state.TryExtractArguments(Name.Names, out var arguments, out var newState, 1))
+            if (!state.TryExtractNamedArgument(Name.Names, out _, out var value, out var newState))
             {
                 return Next.Execute(state);
             }
             else
             {
-                var parameterValue = arguments[1];
                 state = newState;
 
                 foreach (var branch in Branches)
@@ -62,7 +61,7 @@
                             throw new Exception("Invalid 'Given'-branch type.");
                     }
 
-                    var (result, matches) = handler(state, parameterValue, branch.branch, branch.then);
+                    var (result, matches) = handler(state, value, branch.branch, branch.then);
                     //TODO: EInfach Task? zurückgeben; falls dieser null ist, wars nicht ok (=matches ist false)
                     if (matches)
                     {
@@ -117,10 +116,10 @@
 
             if (DefaultStringParsers.TryGetParser(type, out var defaultParser))
             {
-                return defaultParser!(parameter);
+                return ArgumentParsingException.ParseWrapper(() => defaultParser!(parameter), Name);
             }
 
-            throw new ArgumentParsingException($"No parse for the type '{type.Name}' available!", Name);
+            throw ArgumentParsingException.NoParserFound(Name);
         }
     }
 }

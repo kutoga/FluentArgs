@@ -16,11 +16,19 @@ namespace FluentArgs.Help
             errorLineWriter = new LineWriter(errorWriter);
         }
 
-        public async Task PrintArgumentMissingError(IReadOnlyCollection<string> aliases, string description, IReadOnlyCollection<string>? helpFlagAliases)
+        public async Task PrintArgumentMissingError(IReadOnlyCollection<string>? aliases, string description, IReadOnlyCollection<string>? helpFlagAliases)
         {
-            await errorLineWriter
-                .WriteLine($"Required argument '{aliases.StringifyAliases()}' not found!")
-                .ConfigureAwait(false);
+            if (aliases != null)
+            {
+                await errorLineWriter
+                    .WriteLine($"Required argument '{aliases.StringifyAliases()}' not found!")
+                    .ConfigureAwait(false);
+            }
+            else
+            {
+                await errorLineWriter.WriteLine("Required positional argument not found!").ConfigureAwait(false);
+            }
+
             await errorLineWriter.WriteLine($"Description: {description}").ConfigureAwait(false);
             await WriteHelpFlagInfo(helpFlagAliases).ConfigureAwait(false);
         }

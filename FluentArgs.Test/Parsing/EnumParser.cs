@@ -54,9 +54,9 @@
                 .Parameter<MyEnum>("-m").IsRequired()
                 .Call(m => { });
 
-            Action parseAction = () => builder.Parse(args);
+            var parseSuccess = builder.Parse(args);
 
-            parseAction.Should().Throw<ArgumentException>();
+            parseSuccess.Should().BeFalse();
         }
     }
 }

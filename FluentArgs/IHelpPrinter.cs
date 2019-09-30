@@ -34,6 +34,15 @@
             IReadOnlyCollection<string> examples,
             IReadOnlyCollection<(IReadOnlyCollection<string> aliases, string description)> givenHints);
 
+        Task WritePositionalArgumentInfos(
+            string? description,
+            Type type,
+            bool optional,
+            bool hasDefaultValue,
+            object? defaultValue,
+            IReadOnlyCollection<string> examples,
+            IReadOnlyCollection<(IReadOnlyCollection<string> aliases, string description)> givenHints);
+
         Task WriteRemainingArgumentsAreUsed(
             string? description,
             Type type,

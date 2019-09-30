@@ -27,6 +27,8 @@ namespace FluentArgs.Execution
 
         Task Visit(ParameterStep step);
 
+        Task Visit(PositionalArgumentStep step);
+
         Task Visit(RemainingArgumentsStep step);
     }
 }

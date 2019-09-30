@@ -11,4 +11,7 @@
     <WarningsAsErrors />
   </PropertyGroup>
   <Import Project="..\.paket\Paket.Restore.targets" />
+  <ItemGroup>
+    <ProjectReference Include="..\FluentArgs\FluentArgs.csproj" />
+  </ItemGroup>
 </Project>

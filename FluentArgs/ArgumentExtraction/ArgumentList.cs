@@ -14,36 +14,46 @@
 
         public IImmutableList<string> Arguments { get; }
 
-        public IEnumerable<DetectedArguments> DetectArgument(string firstArgument, int followingNumberOfArguments)
+        public IEnumerable<DetectedNamedArgument> DetectNamedArgument(string firstArgument, IReadOnlyCollection<string>? assignmentOperators)
         {
-            if (followingNumberOfArguments < 0)
-            {
-                throw new Exception($"{nameof(followingNumberOfArguments)} must be non-negative!");
-            }
+            var detectedAssignments = (assignmentOperators ?? Enumerable.Empty<string>()).SelectMany(o => Arguments
+                .Select((a, i) => (argument: a, index: i))
+                .Where(a => a.argument.StartsWith($"{firstArgument}{o}", StringComparison.InvariantCulture))
+                .Select(a => new DetectedNamedArgument(
+                    firstArgument,
+                    a.argument.Substring($"{firstArgument}{o}".Length),
+                    Arguments.Take(a.index).ToImmutableList(),
+                    Arguments.Skip(a.index + 1).ToImmutableList()
+                )));
 
             var possibleIndices = Arguments
                 .Select((a, i) => (argument: a, index: i))
                 .Where(a => a.argument == firstArgument);
-            //.ToImmutableList(); //TODO: Use ToList (instead of ToImmutableList) everywhere (where possible)
-            //var invalidIndices = possibleIndices
-            //    .Where(a => (a.index + followingNumberOfArguments) >= Arguments.Count)
-            //    .ToList();
-
-            //TODO: cleanup
-            //if (invalidIndices.Count > 0)
-            //{
-            //    throw new Exception($"Found argument '{firstArgument}', but its parameters are not present!");
-            //}
 
             var validIndices = possibleIndices
-                .Where(a => (a.index + followingNumberOfArguments) < Arguments.Count)
+                .Where(a => (a.index + 1) < Arguments.Count)
                 .Select(a => a.index);
-                //.ToList();
 
-            return validIndices.Select(i => new DetectedArguments(
-                Arguments.Skip(i).Take(1 + followingNumberOfArguments).ToImmutableList(),
+            var detectedArguments = validIndices.Select(i => new DetectedNamedArgument(
+                Arguments[i],
+                Arguments[i + 1],
                 Arguments.Take(i).ToImmutableList(),
-                Arguments.Skip(i + 1 + followingNumberOfArguments).ToImmutableList()));
+                Arguments.Skip(i + 2).ToImmutableList()));
+
+            return detectedArguments.Concat(detectedAssignments);
+        }
+
+        public IEnumerable<DetectedFlagArgument> DetectFlagArgument(string flagName)
+        {
+            var validIndices = Arguments
+                .Select((a, i) => (argument: a, index: i))
+                .Where(a => a.argument == flagName)
+                .Select(a => a.index);
+
+            return validIndices.Select(i => new DetectedFlagArgument(
+                Arguments[i],
+                Arguments.Take(i).ToImmutableList(),
+                Arguments.Skip(i + 1).ToImmutableList()));
         }
     }
 }

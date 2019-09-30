@@ -141,24 +141,20 @@ namespace FluentArgs.Test.Help
                         .Call(_ => called = true))
                 .Call(() => called = true);
 
-            Action parseAction = () => builder.Parse();
+            bool parseSuccess = builder.Parse();
 
-            parseAction.Should().Throw<Exception>();
-            called.Should().BeFalse();
+            parseSuccess.Should().BeTrue();
+            called.Should().BeTrue();
         }
 
         [Fact]
         public static void IncludingTheSameParameterNameMultipleTimesInTheSameDefinition_ShouldAlwaysThrow()
         {
-            var called = false;
-            var builder = FluentArgsBuilder.New()
+            Action buildAction = () => FluentArgsBuilder.New()
                 .Parameter("-x", "-x").IsOptional()
-                .Call(_ => called = true);
+                .Call(_ => { });
 
-            var parseSuccess = builder.Parse();
-
-            parseSuccess.Should().BeTrue();
-            called.Should().BeTrue();
+            buildAction.Should().Throw<Exception>();
         }
     }
 }

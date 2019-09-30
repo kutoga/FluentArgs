@@ -8,7 +8,7 @@ namespace FluentArgs
     public interface IParsingErrorPrinter
     {
         Task PrintArgumentMissingError(
-            IReadOnlyCollection<string> aliases,
+            IReadOnlyCollection<string>? aliases,
             string description,
             IReadOnlyCollection<string>? helpFlagAliases);
 

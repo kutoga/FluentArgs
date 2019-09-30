@@ -12,22 +12,20 @@ namespace FluentArgs.Help
     {
         private const string Tab = "    ";
         private const int MaxLineLength = 80;
-        private readonly Stack<ILineWriter> outputWriters;
         private readonly IList<(string parameterName, string description)> parameters;
+        private readonly ILineWriter outputWriter;
 
-        private ILineWriter OutputWriter => outputWriters.Peek();
 
         public SimpleHelpPrinter(TextWriter outputWriter)
         {
-            outputWriters = new Stack<ILineWriter>();
+            this.outputWriter = new LineWriter(outputWriter);
             parameters = new List<(string, string)>();
-            outputWriters.Push(new LineWriter(outputWriter));
         }
 
         public async Task WriteApplicationDescription(string description)
         {
-            await OutputWriter.WriteLines(SplitLine(description, MaxLineLength)).ConfigureAwait(false);
-            await OutputWriter.WriteLine(string.Empty).ConfigureAwait(false);
+            await outputWriter.WriteLines(SplitLine(description, MaxLineLength)).ConfigureAwait(false);
+            await outputWriter.WriteLine(string.Empty).ConfigureAwait(false);
         }
 
         public Task WriteParameterInfos(
@@ -162,6 +160,51 @@ namespace FluentArgs.Help
             return Task.CompletedTask;
         }
 
+        public Task WritePositionalArgumentInfos(string description, Type type, bool optional, bool hasDefaultValue, object defaultValue,
+            IReadOnlyCollection<string> examples, IReadOnlyCollection<(IReadOnlyCollection<string> aliases, string description)> givenHints)
+        {
+            var descriptionStr = "Positional argument. ";
+
+            if (optional)
+            {
+                if (hasDefaultValue)
+                {
+                    descriptionStr = $"Optional with default '{defaultValue}'. ";
+                }
+                else
+                {
+                    descriptionStr = "Optional. ";
+                }
+            }
+
+            if (givenHints.Count > 0)
+            {
+                descriptionStr += GetGivenHintsOutput(givenHints);
+            }
+
+            if (description != null)
+            {
+                descriptionStr += description + " ";
+            }
+            else
+            {
+                descriptionStr += $"Type: {type.Name} ";
+            }
+
+            if (examples.Count > 0)
+            {
+                descriptionStr += "Examples: " + string.Join(", ", examples);
+            }
+            else if (type.IsEnum)
+            {
+                descriptionStr += "Possible values: " + string.Join(", ", Enum.GetValues(type).Cast<object>().ToArray());
+            }
+
+            parameters.Add(("[ARG]", descriptionStr));
+
+            return Task.CompletedTask;
+        }
+
         private static IEnumerable<string> SplitLine(string line, int maxLineLength)
         {
             while (line.Length > maxLineLength)
@@ -201,8 +244,8 @@ namespace FluentArgs.Help
             {
                 foreach (var parameter in parameters)
                 {
-                    await OutputWriter.WriteLines(SplitLine(parameter.parameterName, MaxLineLength)).ConfigureAwait(false);
-                    await OutputWriter.WriteLines(SplitLine(parameter.description, MaxLineLength - Tab.Length).Select(l => $"{Tab}{l}")).ConfigureAwait(false);
+                    await outputWriter.WriteLines(SplitLine(parameter.parameterName, MaxLineLength)).ConfigureAwait(false);
+                    await outputWriter.WriteLines(SplitLine(parameter.description, MaxLineLength - Tab.Length).Select(l => $"{Tab}{l}")).ConfigureAwait(false);
                 }
             }
             else
@@ -211,7 +254,7 @@ namespace FluentArgs.Help
                 var descriptionLength = MaxLineLength - maxNameLength - separator.Length;
                 var linesPrefix = string.Concat(Enumerable.Repeat(" ", maxNameLength + separator.Length));
 
-                await OutputWriter.WriteLines(parameters.SelectMany(p =>
+                await outputWriter.WriteLines(parameters.SelectMany(p =>
                 {
                     var lines = SplitLine(p.description, descriptionLength).ToArray();
                     var firstLine = p.parameterName.PadRight(maxNameLength) + separator + lines.First();

@@ -7,14 +7,14 @@
     using FluentArgs.Parser;
     using FluentArgs.Reflection;
 
-    internal class ParameterStep : Step
+    internal class PositionalArgumentStep : Step
     {
-        public Parameter Description { get; }
+        public PositionalArgument Description { get; }
 
-        public ParameterStep(Step previous, Parameter parameter)
+        public PositionalArgumentStep(Step previous, PositionalArgument positionalArgument)
             : base(previous)
         {
-            this.Description = parameter;
+            this.Description = positionalArgument;
         }
 
         public override Task Accept(IStepVisitor visitor)
@@ -24,15 +24,15 @@
 
         public override Task Execute(State state)
         {
-            if (state.TryExtractNamedArgument(Description.Name.Names, out var argument, out var value, out var newState))
+            if (state.PopArgument(out var argument, out var newState))
             {
-                state = newState.AddParameter(Parse(value));
+                state = newState.AddParameter(Parse(argument));
             }
             else
             {
                 if (Description.IsRequired)
                 {
-                    throw new ArgumentMissingException("Required parameter not found!", Description.Name);
+                    throw new ArgumentMissingException($"Required positionalArgument not found! Argument description: {Description.Description}");
                 }
 
                 if (Description.HasDefaultValue)
@@ -57,10 +57,10 @@
 
             if (DefaultStringParsers.TryGetParser(this.Description.Type, out var parser))
             {
-                return ArgumentParsingException.ParseWrapper(() => parser!(parameter), Description.Name);
+                return parser!(parameter);
             }
 
-            throw ArgumentParsingException.NoParserFound(Description.Name);
+            throw new Exception("TODO: IMPLEMENT MORE DEFAULTS");
         }
     }
 }

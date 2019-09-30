@@ -59,7 +59,8 @@ namespace FluentArgs.Playground
                 .DefaultConfigs()
                 .Parameter("-a").IsRequired()
                 .Parameter("-b").IsRequired()
-                .Call(b => a =>
+                .PositionalArgument().IsOptional()
+                .Call(c => b => a =>
                 {
                     Console.WriteLine($"a={a}");
                     Console.WriteLine($"b={b}");

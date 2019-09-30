@@ -159,6 +159,20 @@
             await step.Next.Accept(this).ConfigureAwait(false);
         }
 
+        public async Task Visit(PositionalArgumentStep step)
+        {
+            var parameter = step.Description;
+            await helpPrinter.WritePositionalArgumentInfos(
+                parameter.Description,
+                parameter.Type,
+                !parameter.IsRequired,
+                parameter.HasDefaultValue,
+                parameter.DefaultValue,
+                parameter.Examples ?? Array.Empty<string>(),
+                GetGivenHints()).ConfigureAwait(false);
+            await step.Next.Accept(this).ConfigureAwait(false);
+        }
+
         public async Task Visit(RemainingArgumentsStep step)
         {
             var description = step.Description;

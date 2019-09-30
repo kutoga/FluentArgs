@@ -2,16 +2,19 @@
 {
     using System.Collections.Immutable;
 
-    internal class DetectedArguments
+    internal class DetectedNamedArgument
     {
-        public DetectedArguments(IImmutableList<string> arguments, IImmutableList<string> leftSideArguments, IImmutableList<string> rightSideArguments)
+        public DetectedNamedArgument(string argument, string value, IImmutableList<string> leftSideArguments, IImmutableList<string> rightSideArguments)
         {
-            Arguments = arguments;
+            Argument = argument;
+            Value = value;
             LeftSideArguments = leftSideArguments;
             RightSideArguments = rightSideArguments;
         }
 
-        public IImmutableList<string> Arguments { get; }
+        public string Argument { get; }
+
+        public string Value { get; }
 
         public IImmutableList<string> LeftSideArguments { get; }
 
