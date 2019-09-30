@@ -53,6 +53,7 @@ namespace FluentArgs.Test.Parsing
             var dummyParsingErrorPrinter = new DummyParsingErrorPrinter();
             var called = false;
             var builder = FluentArgsBuilder.New()
+                .RegisterParsingErrorPrinter(dummyParsingErrorPrinter)
                 .Parameter<int>("-n").IsRequired()
                 .Call(_ => called = true);
 
@@ -63,7 +64,6 @@ namespace FluentArgs.Test.Parsing
             dummyParsingErrorPrinter.ArgumentMissingErrors.Should().BeEmpty();
             dummyParsingErrorPrinter.ArgumentParsingErrors.Count.Should().Be(1);
             dummyParsingErrorPrinter.ArgumentParsingErrors.First().aliases.Should().BeEquivalentTo("-n");
-            dummyParsingErrorPrinter.ArgumentMissingErrors.First().helpFlagAliases.Should().BeNull();
         }
 
         [Fact]
@@ -73,6 +73,7 @@ namespace FluentArgs.Test.Parsing
             var dummyParsingErrorPrinter = new DummyParsingErrorPrinter();
             var builder = FluentArgsBuilder.New()
                 .RegisterHelpFlag("-h", "--help")
+                .RegisterParsingErrorPrinter(dummyParsingErrorPrinter)
                 .Parameter<int>("-n").IsRequired()
                 .Call(_ => { });
 

@@ -150,15 +150,11 @@ namespace FluentArgs.Test.Help
         [Fact]
         public static void IncludingTheSameParameterNameMultipleTimesInTheSameDefinition_ShouldAlwaysThrow()
         {
-            var called = false;
-            var builder = FluentArgsBuilder.New()
+            Action buildAction = () => FluentArgsBuilder.New()
                 .Parameter("-x", "-x").IsOptional()
-                .Call(_ => called = true);
+                .Call(_ => { });
 
-            Action parseAction = () => builder.Parse();
-
-            parseAction.Should().Throw<Exception>();
-            called.Should().BeFalse();
+            buildAction.Should().Throw<Exception>();
         }
     }
 }
