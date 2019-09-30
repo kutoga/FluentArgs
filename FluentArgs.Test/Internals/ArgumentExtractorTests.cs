@@ -50,26 +50,28 @@
         }
 
         [Fact]
-        public static void ExtractingArgumentsWithMultipleCandidates_ShouldFail()
+        public static void ExtractingArgumentsWithMultipleCandidates_ShouldReturnTheFirst()
         {
             var args = new[] { "-a", "1", "-a", "2" };
             IArgumentExtractor extractor = new ArgumentExtractor(args);
 
-            var success = extractor.TryExtractNamedArgument("-a", out var extractedArguments, out _);
+            var success = extractor.TryExtractNamedArgument("-a", out var extractedArgument, out _);
 
-            success.Should().BeFalse();
+            success.Should().BeTrue();
+            extractedArgument.Should().Be("1");
             //extractAction.Should().Throw<ArgumentException>(); //TODO: ugly interface~?
         }
 
         [Fact]
-        public static void ExtractingArgumentsWithMultipleOverlappingCandidates_ShouldFail()
+        public static void ExtractingArgumentsWithMultipleOverlappingCandidates_ShouldReturnTheFirst()
         {
             var args = new[] { "-a", "-a", "2" };
             IArgumentExtractor extractor = new ArgumentExtractor(args);
 
-            var success = extractor.TryExtractNamedArgument("-a", out var extractedArguments, out _);
+            var success = extractor.TryExtractNamedArgument("-a", out var extractedArgument, out _);
 
-            success.Should().BeFalse();
+            success.Should().BeTrue();
+            extractedArgument.Should().Be("-a");
             //extractAction.Should().Throw<ArgumentException>(); //TODO: ugly interface~?
         }
 

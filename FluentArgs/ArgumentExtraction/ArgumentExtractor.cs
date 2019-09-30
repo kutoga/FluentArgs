@@ -28,7 +28,7 @@
             IReadOnlyCollection<string>? assignmentOperators = null)
         {
             return TryExtractNamedArgument(
-                new[] {firstArgument},
+                new[] { firstArgument },
                 out _,
                 out value,
                 out newArgumentExtractor,
@@ -48,12 +48,12 @@
                 return false;
             }
 
-            if (detectedArgumentsPossibilities.Count > 1)
-            {
-                flag = default;
-                newArgumentExtractor = default;
-                return false;
-            }
+            //if (detectedArgumentsPossibilities.Count > 1)
+            //{
+            //    flag = default;
+            //    newArgumentExtractor = default;
+            //    return false;
+            //}
 
             var foundArgument = detectedArgumentsPossibilities[0];
             newArgumentExtractor = new ArgumentExtractor(foundArgument.splitArgumentList());
@@ -63,7 +63,7 @@
 
         public bool TryExtractFlag(string flagName, out IArgumentExtractor newArgumentExtractor)
         {
-            return TryExtractFlag(new[] {flagName}, out _, out newArgumentExtractor);
+            return TryExtractFlag(new[] { flagName }, out _, out newArgumentExtractor);
         }
 
         public bool TryPopArgument(out string argument, out IArgumentExtractor newArgumentExtractor)
@@ -71,7 +71,7 @@
             var firstArgumentGroupsWithElements = argumentGroups
                 .Select((g, i) => (group: g, index: i))
                 .SkipWhile(g => g.group.Arguments.Count == 0)
-                .Select(g => (int?) g.index)
+                .Select(g => (int?)g.index)
                 .FirstOrDefault();
 
             if (firstArgumentGroupsWithElements == null)
@@ -118,13 +118,13 @@
                 return false;
             }
 
-            if (detectedArgumentsPossibilities.Count > 1)
-            {
-                argument = default; //How to propagate this error to the outside world? 
-                value = default;
-                newArgumentExtractor = default;
-                return false;
-            }
+            //if (detectedArgumentsPossibilities.Count > 1)
+            //{
+            //    argument = default; //How to propagate this error to the outside world? 
+            //    value = default;
+            //    newArgumentExtractor = default;
+            //    return false;
+            //}
 
             var foundArgument = detectedArgumentsPossibilities[0];
             newArgumentExtractor = new ArgumentExtractor(foundArgument.splitArgumentList());
@@ -147,7 +147,7 @@
                     .Select(a =>
                     {
                         Func<IEnumerable<ArgumentList>> splitArgumentList = () => SplitArgumentList(g, a);
-                        return (argument: a.Argument, value: a.Value,  splitArgumentList);
+                        return (argument: a.Argument, value: a.Value, splitArgumentList);
                     }));
 
             IEnumerable<ArgumentList> SplitArgumentList(ArgumentList arguments, DetectedNamedArgument detectedArguments)
