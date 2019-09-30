@@ -116,10 +116,10 @@
 
             if (DefaultStringParsers.TryGetParser(type, out var defaultParser))
             {
-                return defaultParser!(parameter);
+                return ArgumentParsingException.ParseWrapper(() => defaultParser!(parameter), Name);
             }
 
-            throw new ArgumentParsingException($"No parse for the type '{type.Name}' available!", Name);
+            throw ArgumentParsingException.NoParserFound(Name);
         }
     }
 }

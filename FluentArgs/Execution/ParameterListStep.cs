@@ -58,10 +58,10 @@
 
             if (DefaultStringParsers.TryGetParser(Description.Type, out var parser))
             {
-                return ParseWithParser(parser);
+                return ArgumentParsingException.ParseWrapper(() => ParseWithParser(parser), Description.Name);
             }
 
-            throw new Exception("TODO: IMPLEMENT MORE DEFAULTS");
+            throw ArgumentParsingException.NoParserFound(Description.Name);
 
             object ParseWithParser(Func<string, object?> parser)
             {

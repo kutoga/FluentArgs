@@ -57,10 +57,10 @@
 
             if (DefaultStringParsers.TryGetParser(this.Description.Type, out var parser))
             {
-                return parser!(parameter);
+                return ArgumentParsingException.ParseWrapper(() => parser!(parameter), Description.Name);
             }
 
-            throw new Exception("TODO: IMPLEMENT MORE DEFAULTS");
+            throw ArgumentParsingException.NoParserFound(Description.Name);
         }
     }
 }
