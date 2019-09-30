@@ -14,7 +14,29 @@ namespace FluentArgs.Playground
             Randomon
         }
 
-        static void Main(string[] args)
+        public static Task MainImgConvert(string[] args)
+        {
+            return FluentArgsBuilder.New()
+                .DefaultConfigsWithAppDescription("An app to convert png files to jpg files.")
+                .Parameter("-i", "--input")
+                    .WithDescription("Input png file")
+                    .WithExamples("input.png")
+                    .IsRequired()
+                .Parameter("-o", "--output")
+                    .WithDescription("Output jpg file")
+                    .WithExamples("output.jpg")
+                    .IsRequired()
+                .Parameter<ushort>("-q", "--quality")
+                    .WithDescription("Quality of the conversion")
+                    .IsOptionalWithDefault(ushort.MaxValue)
+                .Call(quality => outputFile => inputFile =>
+                {
+                    return Task.CompletedTask;
+                })
+                .ParseAsync(args);
+        }
+
+        static void Main2(string[] args)
         {
             //FluentArgsBuilder.New()
             //    .DefaultConfigs()
