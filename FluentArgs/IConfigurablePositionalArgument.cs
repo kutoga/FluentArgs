@@ -5,6 +5,7 @@ using System.Text;
 namespace FluentArgs
 {
     public interface IConfigurablePositionalArgument<TArgsBuilder, TParam>
+        : IWithConfigurableValidator<IConfigurablePositionalArgument<TArgsBuilder, TParam>, TParam>
     {
         IConfigurablePositionalArgument<TArgsBuilder, TParam> WithDescription(string description);
 

@@ -3,6 +3,7 @@
     using System;
 
     public interface IConfigurableParameter<TArgsBuilder, TParam>
+        : IWithConfigurableValidator<IConfigurableParameter<TArgsBuilder, TParam>, TParam>
     {
         IConfigurableParameter<TArgsBuilder, TParam> WithDescription(string description);
 
