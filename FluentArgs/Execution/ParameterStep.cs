@@ -26,7 +26,7 @@
         {
             if (state.TryExtractNamedArgument(Description.Name.Names, out var argument, out var value, out var newState))
             {
-                state = newState.AddParameter(Parse(value));
+                state = newState.AddParameter(Parse(value).ValidateIfRequired(Description.Validator, Description.Name));
             }
             else
             {

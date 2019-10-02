@@ -2,6 +2,7 @@
 {
     using FluentArgs.Validation;
     using System;
+    using System.Collections.Generic;
     using System.Collections.Immutable;
 
     internal class ParameterList
@@ -26,7 +27,7 @@
 
         public IValidator? Validator { get; set; }
 
-        public string[] Examples { get; set; }
+        public IReadOnlyCollection<string> Examples { get; set; }
 
         public object? DefaultValue { get; set; }
 

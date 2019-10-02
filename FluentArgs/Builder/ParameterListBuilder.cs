@@ -56,12 +56,14 @@
 
         public IConfigurableParameterList<TArgsBuilder, TParam> WithExamples(IReadOnlyCollection<TParam> example, params IReadOnlyCollection<TParam>[] moreExamples)
         {
-            throw new NotImplementedException();
+            parameterList.Examples = Examples.Pack(example, moreExamples);
+            return this;
         }
 
         public IConfigurableParameterList<TArgsBuilder, TParam> WithExamples(string example, params string[] moreExamples)
         {
-            throw new NotImplementedException();
+            parameterList.Examples = Examples.Pack(example, moreExamples);
+            return this;
         }
 
         public IConfigurableParameterList<TArgsBuilder, TParam> WithParser(Func<string, TParam> parser)

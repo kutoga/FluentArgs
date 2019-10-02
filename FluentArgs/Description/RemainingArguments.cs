@@ -2,6 +2,7 @@
 {
     using FluentArgs.Validation;
     using System;
+    using System.Collections.Generic;
 
     internal class RemainingArguments
     {
@@ -13,6 +14,8 @@
         public string? Description { get; set; }
 
         public Type Type { get; }
+
+        public IReadOnlyCollection<string> Examples { get; set; }
 
         public IValidator Validator { get; set; }
 

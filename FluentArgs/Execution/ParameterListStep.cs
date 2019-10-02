@@ -23,7 +23,11 @@
 
         public override Task Execute(State state)
         {
-            if (!state.TryExtractNamedArgument(Description.Name.Names, out var argument, out var value, out var newState))
+            if (state.TryExtractNamedArgument(Description.Name.Names, out var argument, out var value, out var newState))
+            {
+                state = newState.AddParameter(Parse(value));
+            }
+            else
             {
                 if (Description.IsRequired)
                 {
@@ -38,10 +42,6 @@
                 {
                     state = state.AddParameter(null);
                 }
-            }
-            else
-            {
-                state = newState.AddParameter(Parse(value));
             }
 
             return Next.Execute(state);
@@ -65,7 +65,8 @@
 
             object ParseWithParser(Func<string, object?> parser)
             {
-                return Reflection.Array.Create(Description.Type, splitParameters.Select(p => parser(p)).ToArray());
+                return Reflection.Array.Create(Description.Type, splitParameters.Select(p => parser(p))
+                    .ValidateIfRequired(Description.Validator, Description.Name).ToArray());
             }
         }
     }

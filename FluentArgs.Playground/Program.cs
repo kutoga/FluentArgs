@@ -10,11 +10,11 @@ namespace FluentArgs.Playground
         enum MyEnum
         {
             Pikachu,
-            Glurak,
+            
             Randomon
         }
 
-        public static Task MainImgConvert(string[] args)
+        public static Task Main(string[] args)
         {
             return FluentArgsBuilder.New()
                 .DefaultConfigsWithAppDescription("An app to convert png files to jpg files.")

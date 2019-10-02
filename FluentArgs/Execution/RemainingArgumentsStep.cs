@@ -24,7 +24,8 @@
         public override Task Execute(State state)
         {
             var remainingArguments = state.GetRemainingArguments(out state);
-            var parameter = Reflection.Array.Create(this.Description.Type, remainingArguments.Select(a => Parse(a)).ToArray());
+            var parameter = Reflection.Array.Create(this.Description.Type, remainingArguments.Select(a => Parse(a))
+                .ValidateIfRequired(Description.Validator).ToArray());
             state = state.AddParameter(parameter);
             return Next.Execute(state);
         }

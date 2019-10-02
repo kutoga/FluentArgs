@@ -45,10 +45,14 @@
 
         public IConfigurablePositionalArgument<TArgsBuilder, TParam> WithExamples(TParam example, params TParam[] moreExamples)
         {
+            positionalArgument.Examples = Examples.Pack(example, moreExamples);
+            return this;
         }
 
         public IConfigurablePositionalArgument<TArgsBuilder, TParam> WithExamples(string example, params string[] moreExamples)
         {
+            positionalArgument.Examples = Examples.Pack(example, moreExamples);
+            return this;
         }
 
         public IConfigurablePositionalArgument<TArgsBuilder, TParam> WithParser(Func<string, TParam> parser)

@@ -278,7 +278,7 @@ namespace FluentArgs.Help
             return Task.CompletedTask;
         }
 
-        public Task WriteRemainingArgumentsAreUsed(string? description, Type type, IReadOnlyCollection<(IReadOnlyCollection<string> aliases, string description)> givenHints)
+        public Task WriteRemainingArgumentsAreUsed(string? description, Type type, IReadOnlyCollection<string> examples, IReadOnlyCollection<(IReadOnlyCollection<string> aliases, string description)> givenHints)
         {
             var descriptionStr = string.Empty;
             if (givenHints.Count > 0)
@@ -293,6 +293,15 @@ namespace FluentArgs.Help
             else
             {
                 descriptionStr += $"All remaining arguments are parsed. Type: {type.Name} ";
+            }
+
+            if (examples.Count > 0)
+            {
+                descriptionStr += "Examples: " + string.Join(", ", examples);
+            }
+            else if (type.IsEnum)
+            {
+                descriptionStr += "Possible values: " + string.Join(", ", Enum.GetValues(type).Cast<object>().ToArray()) + ". ";
             }
 
             parameters.Add(("[...]", descriptionStr));

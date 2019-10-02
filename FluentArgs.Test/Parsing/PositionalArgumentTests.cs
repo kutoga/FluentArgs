@@ -115,7 +115,7 @@ namespace FluentArgs.Test.Parsing
         [Fact]
         public static void GivenAValidatorAndOptionalInvalidInput_ShouldNotBeParsable()
         {
-            var args = new[] { "-n", "110" };
+            var args = new[] { "110" };
             int? parsedN = null;
             var builder = FluentArgsBuilder.New()
                 .PositionalArgument<int>()

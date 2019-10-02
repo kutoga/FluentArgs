@@ -45,12 +45,14 @@
 
         public IConfigurableParameter<TArgsBuilder, TParam> WithExamples(TParam example, params TParam[] moreExamples)
         {
-            throw new NotImplementedException();
+            parameter.Examples = Examples.Pack(example, moreExamples);
+            return this;
         }
 
         public IConfigurableParameter<TArgsBuilder, TParam> WithExamples(string example, params string[] moreExamples)
         {
-            throw new NotImplementedException();
+            parameter.Examples = Examples.Pack(example, moreExamples);
+            return this;
         }
 
         public IConfigurableParameter<TArgsBuilder, TParam> WithParser(Func<string, TParam> parser)

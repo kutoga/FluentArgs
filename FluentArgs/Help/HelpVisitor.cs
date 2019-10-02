@@ -179,6 +179,7 @@
             await helpPrinter.WriteRemainingArgumentsAreUsed(
                 description.Description,
                 description.Type,
+                description.Examples ?? Array.Empty<string>(),
                 GetGivenHints()).ConfigureAwait(false);
             await step.Next.Accept(this).ConfigureAwait(false);
         }
