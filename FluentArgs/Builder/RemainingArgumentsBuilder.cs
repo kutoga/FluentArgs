@@ -5,6 +5,7 @@
     using System.Threading.Tasks;
     using FluentArgs.Description;
     using FluentArgs.Execution;
+    using FluentArgs.Validation;
 
     internal class RemainingArgumentsBuilder<TFunc, TFuncAsync, TParam> : IConfigurableRemainingArguments<TFunc, TFuncAsync, TParam>
     {
@@ -66,6 +67,12 @@
         public IBuildable CallUntyped(Func<IReadOnlyCollection<object?>, Task> callback)
         {
             return Finalize().CallUntyped(callback);
+        }
+
+        public IConfigurableRemainingArguments<TFunc, TFuncAsync, TParam> WithValidator(IValidator<TParam> validator)
+        {
+            remainingArguments.Validator = validator.ToObjectValidator();
+            return this;
         }
     }
 }

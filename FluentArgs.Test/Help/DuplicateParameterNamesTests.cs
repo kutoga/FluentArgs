@@ -6,7 +6,7 @@ using Xunit;
 
 namespace FluentArgs.Test.Help
 {
-    public static class DuplicateParameterNames
+    public static class DuplicateParameterNamesTests
     {
         [Fact]
         public static void GivenTwoIdenticalParameterNames_ShouldNotThrow()

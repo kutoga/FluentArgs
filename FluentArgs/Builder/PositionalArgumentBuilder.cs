@@ -2,6 +2,7 @@
 {
     using System;
     using FluentArgs.Description;
+    using FluentArgs.Validation;
 
     internal class PositionalArgumentBuilder<TArgsBuilder, TParam> : IConfigurablePositionalArgument<TArgsBuilder, TParam>
     {
@@ -44,17 +45,21 @@
 
         public IConfigurablePositionalArgument<TArgsBuilder, TParam> WithExamples(TParam example, params TParam[] moreExamples)
         {
-            throw new NotImplementedException();
         }
 
         public IConfigurablePositionalArgument<TArgsBuilder, TParam> WithExamples(string example, params string[] moreExamples)
         {
-            throw new NotImplementedException();
         }
 
         public IConfigurablePositionalArgument<TArgsBuilder, TParam> WithParser(Func<string, TParam> parser)
         {
             positionalArgument.Parser = s => parser(s);
+            return this;
+        }
+
+        public IConfigurablePositionalArgument<TArgsBuilder, TParam> WithValidator(IValidator<TParam> validator)
+        {
+            positionalArgument.Validator = validator.ToObjectValidator();
             return this;
         }
 

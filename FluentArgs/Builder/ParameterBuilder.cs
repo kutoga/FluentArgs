@@ -2,6 +2,7 @@
 {
     using System;
     using FluentArgs.Description;
+    using FluentArgs.Validation;
 
     internal class ParameterBuilder<TArgsBuilder, TParam> : IConfigurableParameter<TArgsBuilder, TParam>
     {
@@ -55,6 +56,12 @@
         public IConfigurableParameter<TArgsBuilder, TParam> WithParser(Func<string, TParam> parser)
         {
             parameter.Parser = s => parser(s);
+            return this;
+        }
+
+        public IConfigurableParameter<TArgsBuilder, TParam> WithValidator(IValidator<TParam> validator)
+        {
+            parameter.Validator = validator.ToObjectValidator();
             return this;
         }
 

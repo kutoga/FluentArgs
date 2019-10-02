@@ -5,6 +5,7 @@
     using System.Collections.Immutable;
     using System.Linq;
     using FluentArgs.Description;
+    using FluentArgs.Validation;
 
     internal class ParameterListBuilder<TArgsBuilder, TParam> : IConfigurableParameterList<TArgsBuilder, TParam>
     {
@@ -72,6 +73,12 @@
         public IConfigurableParameterList<TArgsBuilder, TParam> WithSeparator(string separator, params string[] moreSeparators)
         {
             parameterList.Separators = new[] { separator }.Concat(moreSeparators).ToImmutableHashSet();
+            return this;
+        }
+
+        public IConfigurableParameterList<TArgsBuilder, TParam> WithValidator(IValidator<TParam> validator)
+        {
+            parameterList.Validator = validator.ToObjectValidator();
             return this;
         }
 

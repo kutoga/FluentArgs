@@ -6,7 +6,7 @@ using Xunit;
 
 namespace FluentArgs.Test.Help
 {
-    public static class UnusedArguments
+    public static class UnusedArgumentsTests
     {
         [Fact]
         public static void UnusedArguments_ShouldBeIgnored()

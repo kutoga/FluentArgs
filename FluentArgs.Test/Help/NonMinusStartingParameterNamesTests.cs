@@ -7,7 +7,7 @@ using Xunit;
 
 namespace FluentArgs.Test.Help
 {
-    public static class NonMinusStartingParameterNames
+    public static class NonMinusStartingParameterNamesTests
     {
         [Theory]
         [InlineData("x")]
