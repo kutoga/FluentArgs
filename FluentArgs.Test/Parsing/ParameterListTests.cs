@@ -175,5 +175,39 @@
             parseSuccess.Should().BeTrue();
             parsedA.Should().BeEquivalentWithSameOrdering(1, 2, 3);
         }
+
+        [Fact]
+        public static void GivenAValidatorAndRequiredInvalidInput_ShouldNotBeParsable()
+        {
+            var args = new[] { "-n", "1,2,110" };
+            IReadOnlyCollection<int>? parsedN = null;
+            var builder = FluentArgsBuilder.New()
+                .ParameterList<int>("-n")
+                    .WithValidator(n => n >= 0 && n <= 100)
+                    .IsRequired()
+                .Call(n => parsedN = n);
+
+            var parseSuccess = builder.Parse(args);
+
+            parseSuccess.Should().BeFalse();
+            parsedN.Should().BeNull();
+        }
+
+        [Fact]
+        public static void GivenAValidatorAndOptionalInvalidInput_ShouldNotBeParsable()
+        {
+            var args = new[] { "-n", "1,2,110" };
+            IReadOnlyCollection<int>? parsedN = null;
+            var builder = FluentArgsBuilder.New()
+                .ParameterList<int>("-n")
+                    .WithValidator(n => n >= 0 && n <= 100)
+                    .IsOptional()
+                .Call(n => parsedN = n);
+
+            var parseSuccess = builder.Parse(args);
+
+            parseSuccess.Should().BeFalse();
+            parsedN.Should().BeNull();
+        }
     }
 }

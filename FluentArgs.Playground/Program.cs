@@ -28,6 +28,7 @@ namespace FluentArgs.Playground
                     .IsRequired()
                 .Parameter<ushort>("-q", "--quality")
                     .WithDescription("Quality of the conversion")
+                    .WithValidator(n => n >= 0 && n <= 100)
                     .IsOptionalWithDefault(ushort.MaxValue)
                 .Call(quality => outputFile => inputFile =>
                 {

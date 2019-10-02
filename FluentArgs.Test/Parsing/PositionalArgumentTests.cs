@@ -94,5 +94,39 @@ namespace FluentArgs.Test.Parsing
             parsedA2.Should().Be("b");
             parsedA3.Should().Be("c");
         }
+
+        [Fact]
+        public static void GivenAValidatorAndRequiredInvalidInput_ShouldNotBeParsable()
+        {
+            var args = new[] { "110" };
+            int? parsedN = null;
+            var builder = FluentArgsBuilder.New()
+                .PositionalArgument<int>()
+                    .WithValidator(n => n >= 0 && n <= 100)
+                    .IsRequired()
+                .Call(n => parsedN = n);
+
+            var parseSuccess = builder.Parse(args);
+
+            parseSuccess.Should().BeFalse();
+            parsedN.Should().BeNull();
+        }
+
+        [Fact]
+        public static void GivenAValidatorAndOptionalInvalidInput_ShouldNotBeParsable()
+        {
+            var args = new[] { "-n", "110" };
+            int? parsedN = null;
+            var builder = FluentArgsBuilder.New()
+                .PositionalArgument<int>()
+                    .WithValidator(n => n >= 0 && n <= 100)
+                    .IsOptional()
+                .Call(n => parsedN = n);
+
+            var parseSuccess = builder.Parse(args);
+
+            parseSuccess.Should().BeFalse();
+            parsedN.Should().BeNull();
+        }
     }
 }
