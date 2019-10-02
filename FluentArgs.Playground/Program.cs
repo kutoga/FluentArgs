@@ -10,7 +10,6 @@ namespace FluentArgs.Playground
         enum MyEnum
         {
             Pikachu,
-            
             Randomon
         }
 
@@ -29,12 +28,39 @@ namespace FluentArgs.Playground
                 .Parameter<ushort>("-q", "--quality")
                     .WithDescription("Quality of the conversion")
                     .WithValidator(n => n >= 0 && n <= 100)
-                    .IsOptionalWithDefault(ushort.MaxValue)
+                    .IsOptionalWithDefault(50)
                 .Call(quality => outputFile => inputFile =>
                 {
+                    /* ... */
+                    Console.WriteLine($"Convert {inputFile} to {outputFile} with qualiyt {quality}...");
+                    /* ... */
                     return Task.CompletedTask;
                 })
                 .ParseAsync(args);
+        }
+
+        public static void Main2(string[] args)
+        {
+            FluentArgsBuilder.New()
+                .Given.Command("-c", "--command")
+                    .HasValue("copy").Then(_ => _
+                        .Parameter("-s", "--source").IsRequired()
+                        .Parameter("-t", "--target").IsRequired()
+                        .Call(target => source =>
+                        {
+                            Console.WriteLine($"Copy from {source} to {target}...");
+                        }))
+                    .HasValue("delete").Then(_ => _
+                        .LoadRemainingArguments()
+                        .Call(files =>
+                        {
+                            /* ... */
+                            Console.WriteLine($"Delete {string.Join(", ", files)}...");
+                            /* ... */
+                        }))
+                    .ElseIgnore()
+                .Invalid()
+                .Parse(args);
         }
 
         static void Main2(string[] args)

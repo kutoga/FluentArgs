@@ -1,116 +1,89 @@
-﻿# FluentArgs v0.0.2-alpha
+﻿# FluentArgs: Fluent Arguments Parsing for .NET
 
-**Very important: This repo is currently in a very instable state. Almost nothing
-is coded; therefore still much work has to be done (and will be done in the next
-days).**
+FluentArgs is an easy-to-use library that provides command line argument parsing and also generating a
+simple help for users of the command line tool.
 
+# Why FluentArgs?
 
-Argument parsing is a quite usual task. There are tons of libraries out there, which already
-do it great. This library tries to solve this problem in a very fluent and type-safe way.
+The API is optimized to be as readable as possible. Therefore, anyone can learn how to use this library
+in just a few minutes.
 
-Assuming you have a CLI which allows to use these parameters: `xyz -f file -n number --key apikey`
+![](doc/test.gif)
 
-This can be implemented in this way:
+# Example: Parse simple arguments and flags
 
-```cs
+```csharp
+namespace Example
+{
+    using FluentArgs;
+    using System;
+    using System.Threading.Tasks;
+
     class Program
     {
-        static void Main(string[] args)
+        public static Task Main(string[] args)
         {
-            FluentArgsBuilder.New()
-                .Parameter("-f", "--file", "--anotheralias").IsRequired()
-                .Parameter<int>("-n", "--number").IsOptionalWithDefault(999)
-                .Parameter("-k", "--key").IsRequired()
-                .Call(key => number => file =>
+            return FluentArgsBuilder.New()
+                .DefaultConfigs()
+                .Parameter("-i", "--input").IsRequired()
+                .Parameter("-o", "--output").IsRequired()
+                .Parameter<ushort>("-q", "--quality")
+                    .WithValidator(n => n >= 0 && n <= 100)
+                    .IsOptionalWithDefault(50)
+                .Call(quality => outputFile => inputFile =>
                 {
-                    // file is string
-                    // number is int
-                    // key is string
+                    /* ... */
+                    Console.WriteLine($"Convert {inputFile} to {outputFile} with quality {quality}...");
+                    /* ... */
+                    return Task.CompletedTask;
                 })
-                .Parse(args);
+                .ParseAsync(args);
         }
     }
+}
 ```
 
-In a second way, you also might like to add more meta-data to the parameters:
+It is possible to add some meta-information to the parameters (e.g. description and examples):
+```csharp
+namespace Example
+{
+    using FluentArgs;
+    using System;
+    using System.Threading.Tasks;
 
-```cs
     class Program
     {
-        static void Main(string[] args)
+        public static Task Main(string[] args)
         {
-            FluentArgsBuilder.New()
-                .Parameter("-f", "--file", "--anotheralias")
-                    .WithDescription("Input file")
-                    .WithExamples("my_file.txt", "another_file.txt")
+            return FluentArgsBuilder.New()
+                .DefaultConfigsWithAppDescription("An app to convert png files to jpg files.")
+                .Parameter("-i", "--input")
+                    .WithDescription("Input png file")
+                    .WithExamples("input.png")
                     .IsRequired()
-                .Parameter<int>("-n", "--number")
-                    .WithDescription("Just a test parameter")
-                    .IsOptionalWithDefault(999)
-                .Parameter("-k", "--key")
-                    .WithDescription("An API key")
+                .Parameter("-o", "--output")
+                    .WithDescription("Output jpg file")
+                    .WithExamples("output.jpg")
                     .IsRequired()
-                .Call(key => number => file =>
+                .Parameter<ushort>("-q", "--quality")
+                    .WithDescription("Quality of the conversion")
+                    .WithValidator(n => n >= 0 && n <= 100)
+                    .IsOptionalWithDefault(50)
+                .Call(quality => outputFile => inputFile =>
                 {
-                    // file is string
-                    // number is int
-                    // key is string
+                    /* ... */
+                    Console.WriteLine($"Convert {inputFile} to {outputFile} with quality {quality}...");
+                    /* ... */
+                    return Task.CompletedTask;
                 })
-                .Parse(args);
+                .ParseAsync(args);
         }
     }
+}
 ```
 
-Given you have a more complex tool, that supports different *operations*. E.g. it can copy or delete
-a file. A secret API key is required to do this. For deleting an optional timeout is seconds can be defined
-(this doesnt make sense; it should just demonstrate the api).
-Possible calls are:
+# Example: Parse positional and remaining arguments
 
-`xyz -c copy -k API_KEY --source source_file.txt --target target_file.txt`
+# Example: Parse conditional arguments / commands
 
-`xyz -c delete -k API_KEY --file my_file.txt --timeout 10`
-
-The important point is, that some parameters are only required **given** other parameters. The described
-configuration can be conducted with this code:
-
-```cs
-    class Program
-    {
-        static void Main(string[] args)
-        {
-            FluentArgsBuilder.New()
-                .Parameter("-k", "--key")
-                    .WithDescription("API key")
-                    .IsRequired()
-                .Given.Command("-c", "--command")
-                    .HasValue("move").Then(b => b
-                        .Parameter("-s", "--source")
-                            .WithDescription("Source file.")
-                            .IsRequired()
-                        .Parameter("-t", "--target")
-                            .WithDescription("Target file.")
-                            .IsRequired()
-                        .Call(target => source => key =>
-                        {
-                            // key is string
-                            // source is string
-                            // target is string
-                        }))
-                    .HasValue("delete").Then(b => b
-                        .Parameter("-f", "--file")
-                            .WithDescription("The file to delete")
-                            .IsRequired()
-                        .Parameter<int?>("-t", "--timeout")
-                            .WithDescription("Timeout in seconds")
-                            .IsOptional()
-                        .Call(timeout => file => key =>
-                        {
-                            // key is string
-                            // file is string
-                            // timeout is int?
-                        }))
-                    .ElseIsInvalid()
-                .Parse(args)
-        }
-    }
-```
+# Example: Help
