@@ -150,10 +150,7 @@ namespace FluentArgs.Playground
                     .WithDescription("")
                     .WithExamples("")
                     .IsRequired()
-                .Call(name => numbers =>
-                {
-
-                })
+                .Call(name => numbers => { })
                 .Parse(args);
 
             FluentArgsBuilder.New()

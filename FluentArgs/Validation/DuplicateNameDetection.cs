@@ -13,14 +13,19 @@ namespace FluentArgs.Validation
     {
         private readonly IImmutableSet<string> registeredNames;
 
+        public DuplicateNameDetection()
+            : this(ImmutableHashSet<string>.Empty)
+        {
+        }
+
         private DuplicateNameDetection(IImmutableSet<string> registeredNames)
         {
             this.registeredNames = registeredNames;
         }
 
-        public DuplicateNameDetection()
-            : this(ImmutableHashSet<string>.Empty)
+        private DuplicateNameDetection(IImmutableSet<string> registeredNames)
         {
+            this.registeredNames = registeredNames;
         }
 
         public Task Visit(CallStep step)
@@ -130,5 +135,5 @@ namespace FluentArgs.Validation
 
             return new DuplicateNameDetection(registeredNames);
         }
-    }
+   }
 }

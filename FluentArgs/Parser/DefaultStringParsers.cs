@@ -44,6 +44,28 @@
 
         private delegate bool TryParseNumberFunc<T>(string input, NumberStyles style, IFormatProvider provider, out T result);
 
+        public static bool TryGetParser(Type targetType, out Func<string, object>? parser)
+        {
+            if (Parsers.ContainsKey(targetType))
+            {
+                parser = Parsers[targetType];
+                return true;
+            }
+
+            if (TryGetNullableTypeParser(targetType, out parser))
+            {
+                return true;
+            }
+
+            if (TryGetEnumParser(targetType, out parser))
+            {
+                return true;
+            }
+
+            parser = default;
+            return false;
+        }
+
         private static T ParseNumber<T>(string input, ParseNumberFunc<T> parse, TryParseNumberFunc<T> tryParseWithFormat)
         {
             if (input.StartsWith("0x", StringComparison.InvariantCultureIgnoreCase) &&
@@ -116,28 +138,6 @@
             }
 
             throw new ArgumentException($"Cannot parse boolean '{s}'!");
-        }
-
-        public static bool TryGetParser(Type targetType, out Func<string, object>? parser)
-        {
-            if (Parsers.ContainsKey(targetType))
-            {
-                parser = Parsers[targetType];
-                return true;
-            }
-
-            if (TryGetNullableTypeParser(targetType, out parser))
-            {
-                return true;
-            }
-
-            if (TryGetEnumParser(targetType, out parser))
-            {
-                return true;
-            }
-
-            parser = default;
-            return false;
         }
     }
 }

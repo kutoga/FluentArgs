@@ -20,12 +20,6 @@
             remainingArguments = new RemainingArguments(typeof(TParam));
         }
 
-        private ICallable<TFunc, TFuncAsync> Finalize()
-        {
-            var step = new RemainingArgumentsStep(previousStep, remainingArguments);
-            return stepWrapper(step);
-        }
-
         public IBuildable Call(TFunc callback)
         {
             return Finalize().Call(callback);
@@ -74,6 +68,12 @@
         {
             remainingArguments.Validator = validator.ToObjectValidator();
             return this;
+        }
+
+        private ICallable<TFunc, TFuncAsync> Finalize()
+        {
+            var step = new RemainingArgumentsStep(previousStep, remainingArguments);
+            return stepWrapper(step);
         }
     }
 }

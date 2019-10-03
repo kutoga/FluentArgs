@@ -8,7 +8,6 @@
 
     public static class SingleParameterTests
     {
-
         [Fact]
         public static void GivenASingleRequiredStringArgument_ShouldBeParsable()
         {

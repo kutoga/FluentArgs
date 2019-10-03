@@ -18,14 +18,14 @@
 
         private class CastedValidator : IValidator
         {
-            private delegate bool IsValidFunc(object value, out string? errorMessage);
-
             private readonly IsValidFunc wrappedValidator;
 
             private CastedValidator(IsValidFunc wrappedValidator)
             {
                 this.wrappedValidator = wrappedValidator;
             }
+
+            private delegate bool IsValidFunc(object value, out string? errorMessage);
 
             public bool IsValid(object value, out string? errorMessage)
             {

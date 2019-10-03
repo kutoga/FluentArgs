@@ -49,10 +49,12 @@ namespace FluentArgs.Help
         private Task WriteHelpFlagInfo(IReadOnlyCollection<string>? helpFlagAliases)
         {
             if (helpFlagAliases != null)
+            {
                 return errorLineWriter.WriteLines(
                     string.Empty,
                     "Show help for more information:",
                     $"  {Environment.GetCommandLineArgs()[0]} {helpFlagAliases.AliasesOrdering().FirstOrDefault()}");
+            }
 
             return Task.CompletedTask;
         }

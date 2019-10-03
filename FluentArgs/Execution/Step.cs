@@ -5,10 +5,6 @@
 
     internal abstract class Step
     {
-        public Step? Previous { get; private set; }
-
-        public Step? Next { get; private set; }
-
         protected Step(Step previous)
         {
             if (previous.Next != null)
@@ -24,6 +20,10 @@
         protected Step()
         {
         }
+
+        public Step? Previous { get; private set; }
+
+        public Step? Next { get; private set; }
 
         public abstract Task Execute(State state);
 

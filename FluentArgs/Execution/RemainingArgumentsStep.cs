@@ -8,13 +8,13 @@
 
     internal class RemainingArgumentsStep : Step
     {
-        public RemainingArguments Description { get; }
-
         public RemainingArgumentsStep(Step previousStep, RemainingArguments remainingArguments)
             : base(previousStep)
         {
             Description = remainingArguments;
         }
+
+        public RemainingArguments Description { get; }
 
         public override Task Accept(IStepVisitor visitor)
         {

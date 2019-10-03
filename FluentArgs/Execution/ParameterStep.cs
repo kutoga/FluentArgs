@@ -9,13 +9,13 @@
 
     internal class ParameterStep : Step
     {
-        public Parameter Description { get; }
-
         public ParameterStep(Step previous, Parameter parameter)
             : base(previous)
         {
             this.Description = parameter;
         }
+
+        public Parameter Description { get; }
 
         public override Task Accept(IStepVisitor visitor)
         {

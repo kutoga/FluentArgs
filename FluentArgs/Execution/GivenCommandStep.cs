@@ -10,16 +10,16 @@
 
     internal class GivenCommandStep : Step
     {
-        //TODO: Put the branches & the name in a GivenCommand description or something like that
-        public Name Name { get; }
-        public IImmutableList<(GivenCommandBranch branch, IParsableFromState then)> Branches { get; }
-
         public GivenCommandStep(Step previousStep, Name name, IEnumerable<(GivenCommandBranch branch, IParsableFromState then)> branches)
             : base(previousStep)
         {
             Name = name;
             Branches = branches.ToImmutableList();
         }
+
+        //TODO: Put the branches & the name in a GivenCommand description or something like that
+        public Name Name { get; }
+        public IImmutableList<(GivenCommandBranch branch, IParsableFromState then)> Branches { get; }
 
         public override Task Accept(IStepVisitor visitor)
         {

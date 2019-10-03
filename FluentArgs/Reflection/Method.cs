@@ -5,11 +5,6 @@
 
     internal static class Method
     {
-        private static object InvokeMethod(object targetMethod, IEnumerable<object> arguments)
-        {
-            return targetMethod.GetType().GetMethod("Invoke").Invoke(targetMethod, arguments.ToArray());
-        }
-
         internal static object? InvokeWrappedMethod(object targetMethod, IEnumerable<object> arguments, bool invokeAtleastOnce)
         {
             var currentValue = targetMethod;
@@ -30,6 +25,11 @@
             }
 
             return currentValue;
+        }
+
+        private static object InvokeMethod(object targetMethod, IEnumerable<object> arguments)
+        {
+            return targetMethod.GetType().GetMethod("Invoke").Invoke(targetMethod, arguments.ToArray());
         }
     }
 }

@@ -81,22 +81,6 @@ namespace FluentArgs.Help
             return Task.CompletedTask;
         }
 
-        private static string GetGivenHintsOutput(IReadOnlyCollection<(IReadOnlyCollection<string> aliases, string description)> givenHints)
-        {
-            var descriptions = givenHints.Reverse().Select(h => $"{h.aliases.OrderBy(a => a.Length).First()} {h.description}").ToArray();
-            var descriptionStr = "Only available if ";
-            if (descriptions.Length > 1)
-            {
-                descriptionStr += $"{string.Join(", ", descriptions.Take(descriptions.Length - 1))} and {descriptions.Last()}. ";
-            }
-            else
-            {
-                descriptionStr += $"{descriptions.First()}. ";
-            }
-
-            return descriptionStr;
-        }
-
         public Task WriteParameterListInfos(
             IReadOnlyCollection<string> aliases,
             string description,
@@ -205,33 +189,6 @@ namespace FluentArgs.Help
             return Task.CompletedTask;
         }
 
-        private static IEnumerable<string> SplitLine(string line, int maxLineLength)
-        {
-            while (line.Length > maxLineLength)
-            {
-                var spaceIndices = line
-                    .Take(maxLineLength)
-                    .Select((c, i) => (character: c, index: i))
-                    .Where(c => c.character == ' ')
-                    .Select(c => c.index)
-                    .ToList();
-
-                var charsForCurrentLine = maxLineLength;
-                if (spaceIndices.Count > 0)
-                {
-                    charsForCurrentLine = spaceIndices.Last() + 1;
-                }
-
-                yield return string.Concat(line.Take(charsForCurrentLine));
-                line = string.Concat(line.Skip(charsForCurrentLine));
-            }
-
-            if (line.Length > 0)
-            {
-                yield return line;
-            }
-        }
-
         public async Task Finalize()
         {
             if (parameters.Count == 0)
@@ -306,6 +263,49 @@ namespace FluentArgs.Help
 
             parameters.Add(("[...]", descriptionStr));
             return Task.CompletedTask;
+        }
+
+        private static IEnumerable<string> SplitLine(string line, int maxLineLength)
+        {
+            while (line.Length > maxLineLength)
+            {
+                var spaceIndices = line
+                    .Take(maxLineLength)
+                    .Select((c, i) => (character: c, index: i))
+                    .Where(c => c.character == ' ')
+                    .Select(c => c.index)
+                    .ToList();
+
+                var charsForCurrentLine = maxLineLength;
+                if (spaceIndices.Count > 0)
+                {
+                    charsForCurrentLine = spaceIndices.Last() + 1;
+                }
+
+                yield return string.Concat(line.Take(charsForCurrentLine));
+                line = string.Concat(line.Skip(charsForCurrentLine));
+            }
+
+            if (line.Length > 0)
+            {
+                yield return line;
+            }
+        }
+
+        private static string GetGivenHintsOutput(IReadOnlyCollection<(IReadOnlyCollection<string> aliases, string description)> givenHints)
+        {
+            var descriptions = givenHints.Reverse().Select(h => $"{h.aliases.OrderBy(a => a.Length).First()} {h.description}").ToArray();
+            var descriptionStr = "Only available if ";
+            if (descriptions.Length > 1)
+            {
+                descriptionStr += $"{string.Join(", ", descriptions.Take(descriptions.Length - 1))} and {descriptions.Last()}. ";
+            }
+            else
+            {
+                descriptionStr += $"{descriptions.First()}. ";
+            }
+
+            return descriptionStr;
         }
     }
 }

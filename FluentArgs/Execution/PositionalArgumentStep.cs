@@ -9,13 +9,13 @@
 
     internal class PositionalArgumentStep : Step
     {
-        public PositionalArgument Description { get; }
-
         public PositionalArgumentStep(Step previous, PositionalArgument positionalArgument)
             : base(previous)
         {
             this.Description = positionalArgument;
         }
+
+        public PositionalArgument Description { get; }
 
         public override Task Accept(IStepVisitor visitor)
         {

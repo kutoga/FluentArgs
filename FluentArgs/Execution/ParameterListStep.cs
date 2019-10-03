@@ -8,13 +8,13 @@
 
     internal class ParameterListStep : Step
     {
-        public ParameterList Description { get; } //TODO: rename to "description" (everywhere)
-
         public ParameterListStep(Step previous, ParameterList parameterList)
             : base(previous)
         {
             this.Description = parameterList;
         }
+
+        public ParameterList Description { get; } //TODO: rename to "description" (everywhere)
 
         public override Task Accept(IStepVisitor visitor)
         {
