@@ -42,7 +42,6 @@
                 // or just throw an error if this case happens (at runtime)
             }
 
-            // TODO: push command info
             await step.Branches.Select(async b =>
             {
                 var giventextsAdded = false;
@@ -76,7 +75,6 @@
                         break;
                 }
 
-                // Write info
                 if (b.then is FluentArgsDefinition argsBuilder)
                 {
                     await argsBuilder.InitialStep.Accept(this).ConfigureAwait(false);
@@ -89,14 +87,10 @@
             }).Serialize().ConfigureAwait(false);
 
             await step.Next.Accept(this).ConfigureAwait(false);
-            // TODO: pop command info
-
-            //throw new NotImplementedException();
         }
 
         public async Task Visit(GivenFlagStep step)
         {
-            // TODO: push command info
             givenTexts.Push((step.Description.Name, " is set"));
 
             if (step.ThenStep is FluentArgsDefinition argsBuilder)
@@ -105,11 +99,29 @@
             }
 
             givenTexts.Pop();
+
+            await step.Next.Accept(this).ConfigureAwait(false);
         }
 
-        public Task Visit(GivenParameterStep step)
+        public async Task Visit(GivenParameterStep step)
         {
-            throw new System.NotImplementedException();
+            if (step.Description.RequireExactValue)
+            {
+                givenTexts.Push((step.Description.Name, $" is {step.Description.RequiredValue}"));
+            }
+            else
+            {
+                givenTexts.Push((step.Description.Name, $" is set"));
+            }
+
+            if (step.ThenStep is FluentArgsDefinition argsBuilder)
+            {
+                await argsBuilder.InitialStep.Accept(this).ConfigureAwait(false);
+            }
+
+            givenTexts.Pop();
+
+            await step.Next.Accept(this).ConfigureAwait(false);
         }
 
         public async Task Visit(InitialStep step)

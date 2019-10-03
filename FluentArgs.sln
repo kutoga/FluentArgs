@@ -21,6 +21,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FluentArgs.Playground", "Fl
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FluentArgs.Test.Helpers", "FluentArgs.Test.Helpers\FluentArgs.Test.Helpers.csproj", "{CA2DC929-1330-4A22-B476-9BEBCC46F8B7}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Test", "Test", "{24D63926-46AC-4AC8-9D98-04159D5DF258}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -50,6 +52,11 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{33ED20E2-2826-4DF4-B8D6-08C79FFF618F} = {24D63926-46AC-4AC8-9D98-04159D5DF258}
+		{4B7B23EC-7445-49FA-B08D-BDA731A65250} = {24D63926-46AC-4AC8-9D98-04159D5DF258}
+		{CA2DC929-1330-4A22-B476-9BEBCC46F8B7} = {24D63926-46AC-4AC8-9D98-04159D5DF258}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {E7BD06D7-EA3B-4F25-B621-59CE75E61602}

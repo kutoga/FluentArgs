@@ -29,7 +29,6 @@
         public IBuildable Call(TFunc callback)
         {
             return Finalize().Call(callback);
-            throw new NotImplementedException();
         }
 
         public IBuildable Call(TFuncAsync callback)

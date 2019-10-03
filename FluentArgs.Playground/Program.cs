@@ -63,7 +63,7 @@ namespace FluentArgs.Playground
                 .Parse(args);
         }
 
-        static void Main2(string[] args)
+        static void Main3(string[] args)
         {
             //FluentArgsBuilder.New()
             //    .DefaultConfigs()
