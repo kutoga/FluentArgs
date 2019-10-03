@@ -6,6 +6,7 @@
     <Rule Id="CA1034" Action="None" />
     <Rule Id="CA1062" Action="None" />
     <Rule Id="CA1303" Action="None" />
+    <Rule Id="CA1707" Action="None" />
     <Rule Id="CA1716" Action="None" />
   </Rules>
   <Rules AnalyzerId="StyleCop.Analyzers" RuleNamespace="StyleCop.Analyzers">
