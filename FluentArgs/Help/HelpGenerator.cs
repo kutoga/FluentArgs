@@ -14,7 +14,7 @@
 
         public async Task Write()
         {
-            var visitor = new HelpVisitor(initialStep.ParserSettings.HelpPrinter);
+            var visitor = new HelpVisitor(initialStep.ParserSettings!.HelpPrinter);
             await visitor.Visit(initialStep).ConfigureAwait(false);
             await initialStep.ParserSettings.HelpPrinter.Finalize().ConfigureAwait(false);
         }

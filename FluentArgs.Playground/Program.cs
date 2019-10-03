@@ -150,10 +150,7 @@ namespace FluentArgs.Playground
                     .WithDescription("")
                     .WithExamples("")
                     .IsRequired()
-                .Call(name => numbers =>
-                {
-
-                })
+                .Call(name => numbers => { })
                 .Parse(args);
 
             FluentArgsBuilder.New()
@@ -186,16 +183,10 @@ namespace FluentArgs.Playground
                     .HasValue("copy").Then(b => b
                         .Parameter("-i", "--input").IsRequired()
                         .Parameter<int>("-b", "--blocksize").IsOptionalWithDefault(-1)
-                        .Call(b => i => key =>
-                        {
-
-                        }))
+                        .Call(b => i => key => { }))
                     .HasValue("delete").Then(b => b
                         .Parameter("-f", "--file").IsRequired()
-                        .Call(file => key =>
-                        {
-
-                        }))
+                        .Call(file => key => { }))
                     .ElseIgnore()
 
                 .Given.Command("-x", "--execute")
@@ -209,29 +200,15 @@ namespace FluentArgs.Playground
                         .Given.Command("-c2")
                             .HasValue(2).Then(b => b
                                 .Parameter<double>("v").IsRequired()
-                                .Call(v => u => key =>
-                                {
-
-                                }))
+                                .Call(v => u => key => { }))
                             .ElseIsInvalid()
                         .Invalid())
                     .ElseIgnore()
                 .Call(_ =>
                 {
                     throw new Exception("blabla");
-                    return;
                 })
                 .ParseAsync(args);
-
-
-            /*
-             *TODO:
-             * .ConfigureDefaults() ->
- 
-.ThrowOnNonMinusStartingNames() // basiert auf RegisterOnBuiltCallback(Action<…>)
-.WarnOnDuplicateUsedNames() // nur im selben branch
-.ShowHelp("-h", "--help")
-*/
         }
     }
 }

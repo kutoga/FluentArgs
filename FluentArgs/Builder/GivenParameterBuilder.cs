@@ -4,7 +4,9 @@
     using FluentArgs.Description;
     using FluentArgs.Execution;
 
-    internal class GivenParameterBuilder<TArgsBuilder> : IGivenParameter<TArgsBuilder>
+    internal class GivenParameterBuilder<TArgsBuilder> :
+        IGivenParameter<TArgsBuilder>
+        where TArgsBuilder : class
     {
         private readonly Name name;
         private readonly TArgsBuilder argsBuilder;
@@ -21,12 +23,10 @@
 
         public IGivenThen<TArgsBuilder, TArgsBuilder> Exists()
         {
-            //TODO: Simplify: Why not implementing IGivenThen<TArgsBuilder, TArgsBuilder> in this class?
-
-            TArgsBuilder result = default;
+            TArgsBuilder? result = default;
             return new GivenThenBuilder<TArgsBuilder, TArgsBuilder>(
                 ThenExpressionBuilt,
-                argsBuilder, //TODO: new builder inside the resulting givenstep
+                argsBuilder,
                 () => result);
 
             void ThenExpressionBuilt(IParsable parsable)
@@ -38,19 +38,19 @@
             }
         }
 
-        public IGivenThen<TArgsBuilder, TArgsBuilder> HasValue<TParam>(TParam value, Func<string, TParam> parser = null)
+        public IGivenThen<TArgsBuilder, TArgsBuilder> HasValue<TParam>(TParam value, Func<string, TParam>? parser = null)
         {
-            TArgsBuilder result = default;
+            TArgsBuilder? result = default;
             return new GivenThenBuilder<TArgsBuilder, TArgsBuilder>(
                 ThenExpressionBuilt,
-                argsBuilder, //TODO: new builder inside the resulting givenstep
+                argsBuilder,
                 () => result);
 
             void ThenExpressionBuilt(IParsable parsable)
             {
                 result = stepWrapper(new GivenParameterStep(
                     previousStep,
-                    GivenParameter.HasValue(name, typeof(TParam), value, GetParser()),
+                    GivenParameter.HasValue(name, typeof(TParam), value!, GetParser()),
                     parsable as IParsableFromState ?? throw new Exception("TODO")));
             }
 
@@ -61,7 +61,7 @@
                     return null;
                 }
 
-                return s => parser(s);
+                return s => parser!(s) !;
             }
         }
     }

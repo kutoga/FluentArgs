@@ -7,7 +7,8 @@
     using FluentArgs.Execution;
     using FluentArgs.Validation;
 
-    internal class RemainingArgumentsBuilder<TFunc, TFuncAsync, TParam> : IConfigurableRemainingArguments<TFunc, TFuncAsync, TParam>
+    internal class RemainingArgumentsBuilder<TFunc, TFuncAsync, TParam> :
+        IConfigurableRemainingArguments<TFunc, TFuncAsync, TParam>
     {
         private readonly Func<Step, ICallable<TFunc, TFuncAsync>> stepWrapper;
         private readonly Step previousStep;
@@ -18,12 +19,6 @@
             this.stepWrapper = stepWrapper;
             this.previousStep = previousStep;
             remainingArguments = new RemainingArguments(typeof(TParam));
-        }
-
-        private ICallable<TFunc, TFuncAsync> Finalize()
-        {
-            var step = new RemainingArgumentsStep(previousStep, remainingArguments);
-            return stepWrapper(step);
         }
 
         public IBuildable Call(TFunc callback)
@@ -56,7 +51,7 @@
 
         public IConfigurableRemainingArguments<TFunc, TFuncAsync, TParam> WithParser(Func<string, TParam> parser)
         {
-            remainingArguments.Parser = s => parser(s);
+            remainingArguments.Parser = s => parser(s) !;
             return this;
         }
 
@@ -74,6 +69,12 @@
         {
             remainingArguments.Validator = validator.ToObjectValidator();
             return this;
+        }
+
+        private ICallable<TFunc, TFuncAsync> Finalize()
+        {
+            var step = new RemainingArgumentsStep(previousStep, remainingArguments);
+            return stepWrapper(step);
         }
     }
 }

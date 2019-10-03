@@ -5,6 +5,7 @@
     using FluentArgs.Execution;
 
     internal class GivenBuilder<TArgsBuilder> : IGiven<TArgsBuilder>
+        where TArgsBuilder : class
     {
         private readonly Func<TArgsBuilder> argsBuilderFactory;
         private readonly Step previousStep;
@@ -28,10 +29,10 @@
 
         public IGivenThen<TArgsBuilder, TArgsBuilder> Flag(string name, params string[] moreNames)
         {
-            TArgsBuilder result = default;
+            TArgsBuilder? result = default;
             return new GivenThenBuilder<TArgsBuilder, TArgsBuilder>(
                 ThenExpressionBuilt,
-                argsBuilderFactory(), //TODO: new builder inside the resulting givenstep
+                argsBuilderFactory(),
                 () => result);
 
             void ThenExpressionBuilt(IParsable parsable)

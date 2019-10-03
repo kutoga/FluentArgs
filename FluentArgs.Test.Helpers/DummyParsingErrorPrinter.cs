@@ -1,11 +1,11 @@
-﻿using System;
-using System.Collections.Concurrent;
-using System.Collections.Generic;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace FluentArgs.Test.Helpers
+﻿namespace FluentArgs.Test.Helpers
 {
+    using System;
+    using System.Collections.Concurrent;
+    using System.Collections.Generic;
+    using System.Text;
+    using System.Threading.Tasks;
+
     public class DummyParsingErrorPrinter : IParsingErrorPrinter
     {
         private readonly ConcurrentBag<(IReadOnlyCollection<string> aliases, string description, IReadOnlyCollection<string> helpFlagAliases)> argumentMissingErrors =

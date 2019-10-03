@@ -1,22 +1,21 @@
 ﻿namespace FluentArgs.Test.Parsing
 {
     using FluentAssertions;
-    using System;
     using Xunit;
 
-    public static class EnumParser
+    public static class EnumParserTests
     {
         public enum MyEnum
         {
             NameA,
             NameB,
-            nameb
+            Nameb
         }
 
         [Theory]
         [InlineData("NameA", MyEnum.NameA)]
         [InlineData("NameB", MyEnum.NameB)]
-        [InlineData("nameb", MyEnum.nameb)]
+        [InlineData("Nameb", MyEnum.Nameb)]
         public static void GivenAnEnumParameter_ParsingShouldWork(string argument, MyEnum expectedM)
         {
             var args = new[] { "-m", argument };

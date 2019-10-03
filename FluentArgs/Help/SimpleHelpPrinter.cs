@@ -1,12 +1,11 @@
-﻿using FluentArgs.Extensions;
-
-namespace FluentArgs.Help
+﻿namespace FluentArgs.Help
 {
     using System;
     using System.Collections.Generic;
     using System.IO;
     using System.Linq;
     using System.Threading.Tasks;
+    using FluentArgs.Extensions;
 
     public class SimpleHelpPrinter : IHelpPrinter
     {
@@ -14,7 +13,6 @@ namespace FluentArgs.Help
         private const int MaxLineLength = 80;
         private readonly IList<(string parameterName, string description)> parameters;
         private readonly ILineWriter outputWriter;
-
 
         public SimpleHelpPrinter(TextWriter outputWriter)
         {
@@ -30,16 +28,16 @@ namespace FluentArgs.Help
 
         public Task WriteParameterInfos(
             IReadOnlyCollection<string> aliases,
-            string description,
+            string? description,
             Type type,
             bool optional,
             bool hasDefaultValue,
-            object defaultValue,
+            object? defaultValue,
             IReadOnlyCollection<string> examples,
             IReadOnlyCollection<(IReadOnlyCollection<string> aliases, string description)> givenHints)
         {
             var aliasStr = aliases.StringifyAliases();
-            var descriptionStr = "";
+            var descriptionStr = string.Empty;
 
             if (optional)
             {
@@ -81,35 +79,19 @@ namespace FluentArgs.Help
             return Task.CompletedTask;
         }
 
-        private static string GetGivenHintsOutput(IReadOnlyCollection<(IReadOnlyCollection<string> aliases, string description)> givenHints)
-        {
-            var descriptions = givenHints.Reverse().Select(h => $"{h.aliases.OrderBy(a => a.Length).First()} {h.description}").ToArray();
-            var descriptionStr = "Only available if ";
-            if (descriptions.Length > 1)
-            {
-                descriptionStr += $"{string.Join(", ", descriptions.Take(descriptions.Length - 1))} and {descriptions.Last()}. ";
-            }
-            else
-            {
-                descriptionStr += $"{descriptions.First()}. ";
-            }
-
-            return descriptionStr;
-        }
-
         public Task WriteParameterListInfos(
             IReadOnlyCollection<string> aliases,
-            string description,
+            string? description,
             Type type,
             bool optional,
             IReadOnlyCollection<string> separators,
             bool hasDefaultValue,
-            object defaultValue,
+            object? defaultValue,
             IReadOnlyCollection<string> examples,
             IReadOnlyCollection<(IReadOnlyCollection<string> aliases, string description)> givenHints)
         {
             var aliasStr = aliases.StringifyAliases(); // TODO: Test stringify aliases
-            var descriptionStr = "";
+            var descriptionStr = string.Empty;
             if (optional)
             {
                 if (hasDefaultValue)
@@ -160,8 +142,14 @@ namespace FluentArgs.Help
             return Task.CompletedTask;
         }
 
-        public Task WritePositionalArgumentInfos(string description, Type type, bool optional, bool hasDefaultValue, object defaultValue,
-            IReadOnlyCollection<string> examples, IReadOnlyCollection<(IReadOnlyCollection<string> aliases, string description)> givenHints)
+        public Task WritePositionalArgumentInfos(
+            string? description,
+            Type type,
+            bool optional,
+            bool hasDefaultValue,
+            object? defaultValue,
+            IReadOnlyCollection<string> examples,
+            IReadOnlyCollection<(IReadOnlyCollection<string> aliases, string description)> givenHints)
         {
             var descriptionStr = "Positional argument. ";
 
@@ -205,33 +193,6 @@ namespace FluentArgs.Help
             return Task.CompletedTask;
         }
 
-        private static IEnumerable<string> SplitLine(string line, int maxLineLength)
-        {
-            while (line.Length > maxLineLength)
-            {
-                var spaceIndices = line
-                    .Take(maxLineLength)
-                    .Select((c, i) => (character: c, index: i))
-                    .Where(c => c.character == ' ')
-                    .Select(c => c.index)
-                    .ToList();
-
-                var charsForCurrentLine = maxLineLength;
-                if (spaceIndices.Count > 0)
-                {
-                    charsForCurrentLine = spaceIndices.Last() + 1;
-                }
-
-                yield return string.Concat(line.Take(charsForCurrentLine));
-                line = string.Concat(line.Skip(charsForCurrentLine));
-            }
-
-            if (line.Length > 0)
-            {
-                yield return line;
-            }
-        }
-
         public async Task Finalize()
         {
             if (parameters.Count == 0)
@@ -263,7 +224,7 @@ namespace FluentArgs.Help
             }
         }
 
-        public Task WriteFlagInfos(IReadOnlyCollection<string> aliases, string description, IReadOnlyCollection<(IReadOnlyCollection<string> aliases, string description)> givenHints)
+        public Task WriteFlagInfos(IReadOnlyCollection<string> aliases, string? description, IReadOnlyCollection<(IReadOnlyCollection<string> aliases, string description)> givenHints)
         {
             var aliasStr = aliases.StringifyAliases();
             var descriptionStr = string.Empty;
@@ -306,6 +267,49 @@ namespace FluentArgs.Help
 
             parameters.Add(("[...]", descriptionStr));
             return Task.CompletedTask;
+        }
+
+        private static IEnumerable<string> SplitLine(string line, int maxLineLength)
+        {
+            while (line.Length > maxLineLength)
+            {
+                var spaceIndices = line
+                    .Take(maxLineLength)
+                    .Select((c, i) => (character: c, index: i))
+                    .Where(c => c.character == ' ')
+                    .Select(c => c.index)
+                    .ToList();
+
+                var charsForCurrentLine = maxLineLength;
+                if (spaceIndices.Count > 0)
+                {
+                    charsForCurrentLine = spaceIndices.Last() + 1;
+                }
+
+                yield return string.Concat(line.Take(charsForCurrentLine));
+                line = string.Concat(line.Skip(charsForCurrentLine));
+            }
+
+            if (line.Length > 0)
+            {
+                yield return line;
+            }
+        }
+
+        private static string GetGivenHintsOutput(IReadOnlyCollection<(IReadOnlyCollection<string> aliases, string description)> givenHints)
+        {
+            var descriptions = givenHints.Reverse().Select(h => $"{h.aliases.OrderBy(a => a.Length).First()} {h.description}").ToArray();
+            var descriptionStr = "Only available if ";
+            if (descriptions.Length > 1)
+            {
+                descriptionStr += $"{string.Join(", ", descriptions.Take(descriptions.Length - 1))} and {descriptions.Last()}. ";
+            }
+            else
+            {
+                descriptionStr += $"{descriptions.First()}. ";
+            }
+
+            return descriptionStr;
         }
     }
 }

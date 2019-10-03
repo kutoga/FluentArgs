@@ -8,13 +8,13 @@
 
     internal class ParameterListStep : Step
     {
-        public ParameterList Description { get; } //TODO: rename to "description" (everywhere)
-
         public ParameterListStep(Step previous, ParameterList parameterList)
             : base(previous)
         {
             this.Description = parameterList;
         }
+
+        public ParameterList Description { get; } //TODO: rename to "description" (everywhere)
 
         public override Task Accept(IStepVisitor visitor)
         {
@@ -25,7 +25,7 @@
         {
             if (state.TryExtractNamedArgument(Description.Name.Names, out var argument, out var value, out var newState))
             {
-                state = newState.AddParameter(Parse(value));
+                state = newState.AddParameter(Parse(value!));
             }
             else
             {
@@ -44,7 +44,7 @@
                 }
             }
 
-            return Next.Execute(state);
+            return GetNextStep().Execute(state);
         }
 
         private object Parse(string parameter)

@@ -3,7 +3,7 @@
     using FluentAssertions;
     using Xunit;
 
-    public static class BoolParser
+    public static class BooleanParserTests
     {
         [Theory]
         [InlineData("true")]

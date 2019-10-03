@@ -1,8 +1,6 @@
 ﻿namespace FluentArgs
 {
     using System;
-    using System.Collections.Generic;
-    using System.Text;
 
     public interface IConfigurableRemainingArguments<TFunc, TFuncAsync, TParam> : //TODO: überall den : auf die Zeile mit dem Klassennamen
         ICallable<TFunc, TFuncAsync>,

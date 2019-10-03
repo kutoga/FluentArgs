@@ -1,10 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.Immutable;
-using System.Text;
-
-namespace FluentArgs.ArgumentExtraction
+﻿namespace FluentArgs.ArgumentExtraction
 {
+    using System.Collections.Immutable;
+
     internal class DetectedFlagArgument
     {
         public DetectedFlagArgument(string flagName, IImmutableList<string> leftSideArguments, IImmutableList<string> rightSideArguments)

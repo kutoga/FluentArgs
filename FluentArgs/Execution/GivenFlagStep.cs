@@ -14,6 +14,7 @@
         }
 
         public IParsableFromState ThenStep { get; }
+
         public Flag Description { get; }
 
         public override Task Accept(IStepVisitor visitor)
@@ -25,7 +26,7 @@
         {
             if (!state.TryExtractFlag(Description.Name.Names, out _, out var newState))
             {
-                return Next.Execute(state);
+                return GetNextStep().Execute(state);
             }
             else
             {

@@ -9,13 +9,13 @@
 
     internal class PositionalArgumentStep : Step
     {
-        public PositionalArgument Description { get; }
-
         public PositionalArgumentStep(Step previous, PositionalArgument positionalArgument)
             : base(previous)
         {
             this.Description = positionalArgument;
         }
+
+        public PositionalArgument Description { get; }
 
         public override Task Accept(IStepVisitor visitor)
         {
@@ -26,7 +26,7 @@
         {
             if (state.PopArgument(out var argument, out var newState))
             {
-                state = newState.AddParameter(Parse(argument).ValidateIfRequired(Description.Validator));
+                state = newState.AddParameter(Parse(argument!).ValidateIfRequired(Description.Validator));
             }
             else
             {
@@ -45,7 +45,7 @@
                 }
             }
 
-            return Next.Execute(state);
+            return GetNextStep().Execute(state);
         }
 
         private object Parse(string parameter)

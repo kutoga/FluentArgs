@@ -29,8 +29,13 @@
                 return targetFunction.AsyncTarget(arguments);
             }
 
-            targetFunction.Target(arguments);
-            return Task.CompletedTask;
+            if (targetFunction.Target != null)
+            {
+                targetFunction.Target(arguments);
+                return Task.CompletedTask;
+            }
+
+            throw new Exception("Undefined target function!");
         }
     }
 }

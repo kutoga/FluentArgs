@@ -18,8 +18,6 @@
 
         private class CastedValidator : IValidator
         {
-            private delegate bool IsValidFunc(object value, out string? errorMessage);
-
             private readonly IsValidFunc wrappedValidator;
 
             private CastedValidator(IsValidFunc wrappedValidator)
@@ -27,10 +25,7 @@
                 this.wrappedValidator = wrappedValidator;
             }
 
-            public bool IsValid(object value, out string? errorMessage)
-            {
-                return wrappedValidator(value, out errorMessage);
-            }
+            private delegate bool IsValidFunc(object value, out string? errorMessage);
 
             public static CastedValidator FromValidator<T>(IValidator<T> validator)
             {
@@ -38,6 +33,11 @@
 
                 bool IsValid(object value, out string? errorMessage) =>
                     validator.IsValid((T)value, out errorMessage);
+            }
+
+            public bool IsValid(object value, out string? errorMessage)
+            {
+                return wrappedValidator(value, out errorMessage);
             }
         }
     }

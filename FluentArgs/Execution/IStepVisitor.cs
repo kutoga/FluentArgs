@@ -1,10 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace FluentArgs.Execution
+﻿namespace FluentArgs.Execution
 {
+    using System.Threading.Tasks;
+
     internal interface IStepVisitor
     {
         Task Visit(CallStep step);

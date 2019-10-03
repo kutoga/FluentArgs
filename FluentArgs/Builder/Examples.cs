@@ -1,10 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-namespace FluentArgs.Builder
+﻿namespace FluentArgs.Builder
 {
+    using System.Collections.Generic;
+    using System.Linq;
+
     public static class Examples
     {
         public static IReadOnlyCollection<string> Pack(string example, params string[] moreExamples)

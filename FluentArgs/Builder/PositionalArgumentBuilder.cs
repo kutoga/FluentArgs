@@ -5,6 +5,7 @@
     using FluentArgs.Validation;
 
     internal class PositionalArgumentBuilder<TArgsBuilder, TParam> : IConfigurablePositionalArgument<TArgsBuilder, TParam>
+        where TArgsBuilder : class
     {
         private readonly Action<PositionalArgument> positionalArgumentBuilt;
         private readonly PositionalArgument positionalArgument;
@@ -57,7 +58,7 @@
 
         public IConfigurablePositionalArgument<TArgsBuilder, TParam> WithParser(Func<string, TParam> parser)
         {
-            positionalArgument.Parser = s => parser(s);
+            positionalArgument.Parser = s => parser(s) !;
             return this;
         }
 

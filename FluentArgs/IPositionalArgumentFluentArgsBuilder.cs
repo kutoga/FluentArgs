@@ -1,10 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace FluentArgs
+﻿namespace FluentArgs
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Threading.Tasks;
+
     public interface IPositionalArgumentFluentArgsBuilder :
         ICallable<Action, Func<Task>>
     {

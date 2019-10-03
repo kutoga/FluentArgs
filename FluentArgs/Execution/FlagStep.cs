@@ -5,13 +5,13 @@
 
     internal class FlagStep : Step
     {
-        public Flag Description { get; }
-
         public FlagStep(Step previousStep, Flag flag)
             : base(previousStep)
         {
             this.Description = flag;
         }
+
+        public Flag Description { get; }
 
         public override Task Accept(IStepVisitor visitor)
         {
@@ -29,7 +29,7 @@
                 state = state.AddParameter(false);
             }
 
-            return Next.Execute(state);
+            return GetNextStep().Execute(state);
         }
     }
 }

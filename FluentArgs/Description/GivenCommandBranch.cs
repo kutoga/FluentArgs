@@ -4,7 +4,7 @@
 
     internal class GivenCommandBranch
     {
-        public GivenCommandBranch(GivenCommandBranchType type, object[] possibleValues, Type valueType, Func<string, object>? parser, Func<object, bool>? predicate = null)
+        public GivenCommandBranch(GivenCommandBranchType type, object[]? possibleValues, Type? valueType, Func<string, object>? parser, Func<object, bool>? predicate = null)
         {
             Type = type;
             PossibleValues = possibleValues;
@@ -19,9 +19,9 @@
 
         public GivenCommandBranchType Type { get; }
 
-        public object[] PossibleValues { get; }
+        public object[]? PossibleValues { get; }
 
-        public Type ValueType { get; }
+        public Type? ValueType { get; }
 
         public Func<string, object>? Parser { get; }
 

@@ -1,13 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using FluentArgs.Test.Helpers;
-using FluentAssertions;
-using Xunit;
-
-namespace FluentArgs.Test.Parsing
+﻿namespace FluentArgs.Test.Parsing
 {
+    using System;
+    using System.Linq;
+    using FluentArgs.Test.Helpers;
+    using FluentAssertions;
+    using Xunit;
+
     public static class ErrorTests
     {
         [Fact]
@@ -49,7 +47,7 @@ namespace FluentArgs.Test.Parsing
         [Fact]
         public static void IfArgumentCannotBeParsed_ShouldFailAndPropagateError()
         {
-            var args = new[] {"-n", "ARGUS"};
+            var args = new[] { "-n", "ARGUS" };
             var dummyParsingErrorPrinter = new DummyParsingErrorPrinter();
             var called = false;
             var builder = FluentArgsBuilder.New()

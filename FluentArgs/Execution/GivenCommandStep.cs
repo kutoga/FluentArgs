@@ -10,16 +10,17 @@
 
     internal class GivenCommandStep : Step
     {
-        //TODO: Put the branches & the name in a GivenCommand description or something like that
-        public Name Name { get; }
-        public IImmutableList<(GivenCommandBranch branch, IParsableFromState then)> Branches { get; }
-
-        public GivenCommandStep(Step previousStep, Name name, IEnumerable<(GivenCommandBranch branch, IParsableFromState then)> branches)
+        public GivenCommandStep(Step previousStep, Name name, IEnumerable<(GivenCommandBranch branch, IParsableFromState? then)> branches)
             : base(previousStep)
         {
             Name = name;
             Branches = branches.ToImmutableList();
         }
+
+        //TODO: Put the branches & the name in a GivenCommand description or something like that
+        public Name Name { get; }
+
+        public IImmutableList<(GivenCommandBranch branch, IParsableFromState? then)> Branches { get; }
 
         public override Task Accept(IStepVisitor visitor)
         {
@@ -30,7 +31,7 @@
         {
             if (!state.TryExtractNamedArgument(Name.Names, out _, out var value, out var newState))
             {
-                return Next.Execute(state);
+                return GetNextStep().Execute(state);
             }
             else
             {
@@ -38,7 +39,7 @@
 
                 foreach (var branch in Branches)
                 {
-                    Func<State, string, GivenCommandBranch, IParsableFromState, (Task? result, bool matches)> handler;
+                    Func<State, string, GivenCommandBranch, IParsableFromState?, Task?> handler;
                     switch (branch.branch.Type)
                     {
                         case GivenCommandBranchType.HasValue:
@@ -61,48 +62,66 @@
                             throw new Exception("Invalid 'Given'-branch type.");
                     }
 
-                    var (result, matches) = handler(state, value, branch.branch, branch.then);
-                    //TODO: EInfach Task? zurückgeben; falls dieser null ist, wars nicht ok (=matches ist false)
-                    if (matches)
+                    var result = handler(state, value!, branch.branch, branch.then);
+                    if (result != null)
                     {
                         return result;
                     }
                 }
             }
 
-            throw new Exception("TODO: something");
+            throw new Exception("Invalid GivenCommand step: Cannot continue!");
         }
 
-        private (Task? result, bool matches) ExecuteHasValue(State state, string parameterValue, GivenCommandBranch branch, IParsableFromState then)
+        private Task? ExecuteHasValue(State state, string parameterValue, GivenCommandBranch branch, IParsableFromState? then)
         {
+            if (branch.ValueType == null)
+            {
+                throw new ArgumentException("Value type cannot be null.");
+            }
+
             var value = Parse(parameterValue, branch.Parser, branch.ValueType);
             if (branch.PossibleValues.Any(p => object.Equals(value, p)))
             {
-                return (then.ParseFromState(state), true);
+                if (then == null)
+                {
+                    throw new Exception("No then-code defined!");
+                }
+
+                return then.ParseFromState(state);
             }
 
-            return (default, false);
+            return null;
         }
 
-        private (Task? result, bool matches) ExecuteMatches(State state, string parameterValue, GivenCommandBranch branch, IParsableFromState then)
+        private Task? ExecuteMatches(State state, string parameterValue, GivenCommandBranch branch, IParsableFromState? then)
         {
-            var value = Parse(parameterValue, branch.Parser, branch.ValueType);
-            var matches = branch.Predicate(value);
-            Task? result = default;
-            if (matches)
+            if (branch.ValueType == null)
             {
-                result = then.ParseFromState(state);
+                throw new ArgumentException("Value type cannot be null.");
             }
 
-            return (result, matches);
+            var value = Parse(parameterValue, branch.Parser, branch.ValueType);
+            var matches = branch.Predicate?.Invoke(value) ?? false;
+            if (!matches)
+            {
+                return null;
+            }
+
+            if (then == null)
+            {
+                throw new Exception("No then-code defined!");
+            }
+
+            return then.ParseFromState(state);
         }
 
-        private (Task? result, bool matches) ExecuteIgnore(State state, string parameterValue, GivenCommandBranch branch, IParsableFromState then)
+        private Task? ExecuteIgnore(State state, string parameterValue, GivenCommandBranch branch, IParsableFromState? then)
         {
-            return (Next.Execute(state), true);
+            return GetNextStep().Execute(state);
         }
 
-        private (Task? result, bool matches) ExecuteInvalid(State state, string parameterValue, GivenCommandBranch branch, IParsableFromState then)
+        private Task? ExecuteInvalid(State state, string parameterValue, GivenCommandBranch branch, IParsableFromState? then)
         {
             throw new ArgumentParsingException("Invalid command value.", Name);
         }

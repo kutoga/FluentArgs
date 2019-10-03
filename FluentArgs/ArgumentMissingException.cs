@@ -1,8 +1,8 @@
-﻿using System;
-using FluentArgs.Description;
-
-namespace FluentArgs
+﻿namespace FluentArgs
 {
+    using System;
+    using FluentArgs.Description;
+
     internal class ArgumentMissingException : Exception
     {
         public ArgumentMissingException(string description, Name? argumentName = null)

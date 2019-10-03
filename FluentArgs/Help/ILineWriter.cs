@@ -1,9 +1,9 @@
 ﻿namespace FluentArgs.Help
 {
-    using FluentArgs.Extensions;
     using System.Collections.Generic;
     using System.Linq;
     using System.Threading.Tasks;
+    using FluentArgs.Extensions;
 
     internal interface ILineWriter
     {

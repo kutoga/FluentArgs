@@ -27,11 +27,7 @@
             [typeof(byte)] = s => ParseNumber<byte>(s, byte.Parse, byte.TryParse),
 
             //TODO: Does parsing 1, 0 usw. work?
-            [typeof(bool)] = s => ParseBool(s), //bool.Parse(s),
-
-            //TODO: Add date types etc.
-
-            //TODO: test all parsers
+            [typeof(bool)] = s => ParseBool(s),
 
             [typeof(DateTime)] = s => DateTime.Parse(s, CultureInfo.InvariantCulture),
             [typeof(DateTimeOffset)] = s => DateTimeOffset.Parse(s, CultureInfo.InvariantCulture),
@@ -43,6 +39,28 @@
         private delegate T ParseNumberFunc<out T>(string input);
 
         private delegate bool TryParseNumberFunc<T>(string input, NumberStyles style, IFormatProvider provider, out T result);
+
+        public static bool TryGetParser(Type targetType, out Func<string, object>? parser)
+        {
+            if (Parsers.ContainsKey(targetType))
+            {
+                parser = Parsers[targetType];
+                return true;
+            }
+
+            if (TryGetNullableTypeParser(targetType, out parser))
+            {
+                return true;
+            }
+
+            if (TryGetEnumParser(targetType, out parser))
+            {
+                return true;
+            }
+
+            parser = default;
+            return false;
+        }
 
         private static T ParseNumber<T>(string input, ParseNumberFunc<T> parse, TryParseNumberFunc<T> tryParseWithFormat)
         {
@@ -116,28 +134,6 @@
             }
 
             throw new ArgumentException($"Cannot parse boolean '{s}'!");
-        }
-
-        public static bool TryGetParser(Type targetType, out Func<string, object>? parser)
-        {
-            if (Parsers.ContainsKey(targetType))
-            {
-                parser = Parsers[targetType];
-                return true;
-            }
-
-            if (TryGetNullableTypeParser(targetType, out parser))
-            {
-                return true;
-            }
-
-            if (TryGetEnumParser(targetType, out parser))
-            {
-                return true;
-            }
-
-            parser = default;
-            return false;
         }
     }
 }

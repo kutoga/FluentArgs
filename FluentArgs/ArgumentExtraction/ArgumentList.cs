@@ -23,8 +23,7 @@
                     firstArgument,
                     a.argument.Substring($"{firstArgument}{o}".Length),
                     Arguments.Take(a.index).ToImmutableList(),
-                    Arguments.Skip(a.index + 1).ToImmutableList()
-                )));
+                    Arguments.Skip(a.index + 1).ToImmutableList())));
 
             var possibleIndices = Arguments
                 .Select((a, i) => (argument: a, index: i))

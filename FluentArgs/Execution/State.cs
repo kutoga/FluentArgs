@@ -38,7 +38,7 @@
             return new State(parameters.Add(parameter), argumentExtractor, postValidations, assignmentOperators);
         }
 
-        public bool TryExtractFlag(IEnumerable<string> validFlagNames, out string flag, out State newState)
+        public bool TryExtractFlag(IEnumerable<string> validFlagNames, out string? flag, out State newState)
         {
             var result = argumentExtractor.TryExtractFlag(validFlagNames, out flag, out var newArgumentExtractor);
             if (result)
@@ -47,13 +47,13 @@
             }
             else
             {
-                newState = default;
+                newState = this;
             }
 
             return result;
         }
 
-        public bool TryExtractNamedArgument(IEnumerable<string> validArgumentNames, out string argument, out string value, out State newState)
+        public bool TryExtractNamedArgument(IEnumerable<string> validArgumentNames, out string? argument, out string? value, out State newState)
         {
             var result = argumentExtractor.TryExtractNamedArgument(validArgumentNames, out argument, out value, out var newArgumentExtractor, assignmentOperators);
             if (result)
@@ -62,7 +62,7 @@
             }
             else
             {
-                newState = default;
+                newState = this;
             }
 
             return result;
@@ -79,7 +79,7 @@
             return parameters;
         }
 
-        public bool PopArgument(out string argument, out State newState)
+        public bool PopArgument(out string? argument, out State newState)
         {
             var success = argumentExtractor.TryPopArgument(out var poppedArgument, out var newArgumentExtractor);
             if (success)
@@ -90,7 +90,7 @@
             else
             {
                 argument = default;
-                newState = default;
+                newState = this;
             }
 
             return success;

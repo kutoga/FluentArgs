@@ -1,7 +1,5 @@
 ﻿namespace FluentArgs.Execution
 {
-    using System;
-    using System.Linq;
     using System.Threading.Tasks;
     using FluentArgs.Description;
     using FluentArgs.Parser;
@@ -28,7 +26,7 @@
         {
             if (!state.TryExtractNamedArgument(Description.Name.Names, out _, out var value, out var newState))
             {
-                return Next.Execute(state);
+                return GetNextStep().Execute(state);
             }
             else
             {
@@ -41,12 +39,12 @@
                 {
                     state = newState;
 
-                    if (object.Equals(Parse(value), Description.RequiredValue))
+                    if (object.Equals(Parse(value!), Description.RequiredValue))
                     {
                         return ThenStep.ParseFromState(state);
                     }
 
-                    return Next.Execute(state);
+                    return GetNextStep().Execute(state);
                 }
             }
         }

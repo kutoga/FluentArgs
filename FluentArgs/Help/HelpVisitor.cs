@@ -13,11 +13,6 @@
         private readonly IHelpPrinter helpPrinter;
         private Stack<(Name name, string description)> givenTexts = new Stack<(Name name, string description)>();
 
-        private IReadOnlyCollection<(IReadOnlyCollection<string> aliases, string description)> GetGivenHints()
-        {
-            return givenTexts.Select(t => ((IReadOnlyCollection<string>)t.name.Names, t.description)).ToArray();
-        }
-
         public HelpVisitor(IHelpPrinter helpPrinter)
         {
             this.helpPrinter = helpPrinter;
@@ -31,12 +26,12 @@
         public async Task Visit(FlagStep step)
         {
             await helpPrinter.WriteFlagInfos(step.Description.Name.Names, step.Description.Description, GetGivenHints()).ConfigureAwait(false);
-            await step.Next.Accept(this).ConfigureAwait(false);
+            await step.GetNextStep().Accept(this).ConfigureAwait(false);
         }
 
         public async Task Visit(GivenCommandStep step)
         {
-            if (step.Branches.Last().branch.Type == GivenCommandBranchType.Invalid)
+            if (step.Branches[step.Branches.Count - 1].branch.Type == GivenCommandBranchType.Invalid)
             {
                 // TODO: The command is required; print this somehow
                 // or just throw an error if this case happens (at runtime)
@@ -49,13 +44,13 @@
                 switch (b.branch.Type)
                 {
                     case GivenCommandBranchType.HasValue:
-                        if (b.branch.PossibleValues.Length == 0)
+                        if ((b.branch.PossibleValues?.Length ?? 0) == 0)
                         {
                             givenTexts.Push((step.Name, "has a non-existing value"));
                         }
-                        else if (b.branch.PossibleValues.Length == 1)
+                        else if (b.branch.PossibleValues?.Length == 1)
                         {
-                            givenTexts.Push((step.Name, $"is {b.branch.PossibleValues[0]}"));
+                            givenTexts.Push((step.Name, $"is {b.branch.PossibleValues![0]}"));
                         }
                         else
                         {
@@ -86,7 +81,7 @@
                 }
             }).Serialize().ConfigureAwait(false);
 
-            await step.Next.Accept(this).ConfigureAwait(false);
+            await step.GetNextStep().Accept(this).ConfigureAwait(false);
         }
 
         public async Task Visit(GivenFlagStep step)
@@ -100,7 +95,7 @@
 
             givenTexts.Pop();
 
-            await step.Next.Accept(this).ConfigureAwait(false);
+            await step.GetNextStep().Accept(this).ConfigureAwait(false);
         }
 
         public async Task Visit(GivenParameterStep step)
@@ -121,7 +116,7 @@
 
             givenTexts.Pop();
 
-            await step.Next.Accept(this).ConfigureAwait(false);
+            await step.GetNextStep().Accept(this).ConfigureAwait(false);
         }
 
         public async Task Visit(InitialStep step)
@@ -132,7 +127,7 @@
                 await helpPrinter.WriteApplicationDescription(applicationDescription).ConfigureAwait(false);
             }
 
-            await step.Next.Accept(this).ConfigureAwait(false);
+            await step.GetNextStep().Accept(this).ConfigureAwait(false);
         }
 
         public Task Visit(InvalidStep step)
@@ -153,7 +148,7 @@
                 parameterList.DefaultValue,
                 parameterList.Examples,
                 GetGivenHints()).ConfigureAwait(false);
-            await step.Next.Accept(this).ConfigureAwait(false);
+            await step.GetNextStep().Accept(this).ConfigureAwait(false);
         }
 
         public async Task Visit(ParameterStep step)
@@ -168,7 +163,7 @@
                 parameter.DefaultValue,
                 parameter.Examples ?? Array.Empty<string>(),
                 GetGivenHints()).ConfigureAwait(false);
-            await step.Next.Accept(this).ConfigureAwait(false);
+            await step.GetNextStep().Accept(this).ConfigureAwait(false);
         }
 
         public async Task Visit(PositionalArgumentStep step)
@@ -182,7 +177,7 @@
                 parameter.DefaultValue,
                 parameter.Examples ?? Array.Empty<string>(),
                 GetGivenHints()).ConfigureAwait(false);
-            await step.Next.Accept(this).ConfigureAwait(false);
+            await step.GetNextStep().Accept(this).ConfigureAwait(false);
         }
 
         public async Task Visit(RemainingArgumentsStep step)
@@ -193,12 +188,17 @@
                 description.Type,
                 description.Examples ?? Array.Empty<string>(),
                 GetGivenHints()).ConfigureAwait(false);
-            await step.Next.Accept(this).ConfigureAwait(false);
+            await step.GetNextStep().Accept(this).ConfigureAwait(false);
         }
 
         public Task Visit(UntypedCallStep step)
         {
             return Task.CompletedTask;
+        }
+
+        private IReadOnlyCollection<(IReadOnlyCollection<string> aliases, string description)> GetGivenHints()
+        {
+            return givenTexts.Select(t => ((IReadOnlyCollection<string>)t.name.Names, t.description)).ToArray();
         }
     }
 }

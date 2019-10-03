@@ -1,16 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.ExceptionServices;
-using System.Threading.Tasks;
-using FluentArgs.Description;
-using FluentArgs.Execution;
-using FluentArgs.Extensions;
-using FluentArgs.Help;
-using FluentArgs.Validation;
-
-namespace FluentArgs
+﻿namespace FluentArgs
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Runtime.ExceptionServices;
+    using System.Threading.Tasks;
+    using FluentArgs.Description;
+    using FluentArgs.Execution;
+    using FluentArgs.Validation;
+
     internal class FluentArgsDefinition : IParsableFromState
     {
         public FluentArgsDefinition(InitialStep initialStep)
@@ -41,20 +39,20 @@ namespace FluentArgs
 
         public Task<bool> ParseAsync(params string[] args)
         {
-            return ParseFromState(State.InitialState(args, GetPostValidators(InitialStep.ParserSettings), InitialStep.ParserSettings?.AssignmentOperators));
+            return ParseFromState(State.InitialState(args, GetPostValidators(InitialStep?.ParserSettings), InitialStep.ParserSettings?.AssignmentOperators));
         }
 
         public async Task<bool> ParseFromState(State state)
         {
             try
             {
-                await ExecuteValidations();
+                await ExecuteValidations().ConfigureAwait(false);
                 await InitialStep.Execute(state).ConfigureAwait(false);
                 return true;
             }
             catch (ArgumentMissingException ex)
             {
-                await InitialStep.ParserSettings.ParsingErrorPrinter.PrintArgumentMissingError(
+                await InitialStep.ParserSettings!.ParsingErrorPrinter.PrintArgumentMissingError(
                     ex.ArgumentName?.Names,
                     ex.Description,
                     InitialStep.ParserSettings.HelpFlag?.Names).ConfigureAwait(false);
@@ -62,7 +60,7 @@ namespace FluentArgs
             }
             catch (ArgumentParsingException ex)
             {
-                await InitialStep.ParserSettings.ParsingErrorPrinter.PrintArgumentParsingError(
+                await InitialStep.ParserSettings!.ParsingErrorPrinter.PrintArgumentParsingError(
                     ex.ArgumentName?.Names,
                     ex.Description,
                     InitialStep.ParserSettings.HelpFlag?.Names).ConfigureAwait(false);
@@ -70,22 +68,13 @@ namespace FluentArgs
             }
         }
 
-        private async Task ExecuteValidations()
+        private static IEnumerable<Action<State>> GetPostValidators(ParserSettings? settings)
         {
-            if (InitialStep.ParserSettings == null)
+            if (settings == null)
             {
-                return;
+                yield break;
             }
 
-            var validators = GetValidators(InitialStep.ParserSettings);
-            foreach (var validator in validators)
-            {
-                await validator.Visit(InitialStep).ConfigureAwait(false);
-            }
-        }
-
-        private static IEnumerable<Action<State>> GetPostValidators(ParserSettings settings)
-        {
             if (settings.ThrowIfUnusedArgumentsArePresent)
             {
                 yield return state =>
@@ -109,6 +98,20 @@ namespace FluentArgs
             if (settings.ThrowOnNonMinusStartingNames)
             {
                 yield return new NonMinusStartingNameDetection();
+            }
+        }
+
+        private async Task ExecuteValidations()
+        {
+            if (InitialStep.ParserSettings == null)
+            {
+                return;
+            }
+
+            var validators = GetValidators(InitialStep.ParserSettings);
+            foreach (var validator in validators)
+            {
+                await validator.Visit(InitialStep).ConfigureAwait(false);
             }
         }
     }

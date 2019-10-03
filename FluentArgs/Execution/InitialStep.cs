@@ -26,7 +26,6 @@
             if (Next == null)
             {
                 throw new Exception("TODO: Good message");
-                //return Task.CompletedTask;
             }
 
             return Next.Execute(state);

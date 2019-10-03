@@ -1,9 +1,9 @@
 ﻿namespace FluentArgs.Description
 {
-    using FluentArgs.Validation;
     using System;
     using System.Collections.Generic;
     using System.Collections.Immutable;
+    using FluentArgs.Validation;
 
     internal class ParameterList
     {

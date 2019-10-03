@@ -8,13 +8,13 @@
 
     internal class RemainingArgumentsStep : Step
     {
-        public RemainingArguments Description { get; }
-
         public RemainingArgumentsStep(Step previousStep, RemainingArguments remainingArguments)
             : base(previousStep)
         {
             Description = remainingArguments;
         }
+
+        public RemainingArguments Description { get; }
 
         public override Task Accept(IStepVisitor visitor)
         {
@@ -27,7 +27,7 @@
             var parameter = Reflection.Array.Create(this.Description.Type, remainingArguments.Select(a => Parse(a))
                 .ValidateIfRequired(Description.Validator).ToArray());
             state = state.AddParameter(parameter);
-            return Next.Execute(state);
+            return GetNextStep().Execute(state);
         }
 
         private object Parse(string parameter)

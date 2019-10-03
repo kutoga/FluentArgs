@@ -1,26 +1,24 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.Immutable;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using FluentArgs.Description;
-using FluentArgs.Execution;
-
-namespace FluentArgs.Validation
+﻿namespace FluentArgs.Validation
 {
+    using System;
+    using System.Collections.Immutable;
+    using System.Linq;
+    using System.Threading.Tasks;
+    using FluentArgs.Description;
+    using FluentArgs.Execution;
+
     internal class DuplicateNameDetection : IStepVisitor
     {
         private readonly IImmutableSet<string> registeredNames;
 
-        private DuplicateNameDetection(IImmutableSet<string> registeredNames)
-        {
-            this.registeredNames = registeredNames;
-        }
-
         public DuplicateNameDetection()
             : this(ImmutableHashSet<string>.Empty)
         {
+        }
+
+        private DuplicateNameDetection(IImmutableSet<string> registeredNames)
+        {
+            this.registeredNames = registeredNames;
         }
 
         public Task Visit(CallStep step)
@@ -36,7 +34,7 @@ namespace FluentArgs.Validation
         public Task Visit(FlagStep step)
         {
             var newDuplicationDetection = ValidateName(step.Description.Name);
-            return step.Next.Accept(newDuplicationDetection);
+            return step.GetNextStep().Accept(newDuplicationDetection);
         }
 
         public Task Visit(GivenCommandStep step)
@@ -51,7 +49,7 @@ namespace FluentArgs.Validation
 
                 return Task.CompletedTask;
             }));
-            return Task.WhenAll(branchTasks, step.Next.Accept(newDuplicationDetection));
+            return Task.WhenAll(branchTasks, step.GetNextStep().Accept(newDuplicationDetection));
         }
 
         public Task Visit(GivenFlagStep step)
@@ -63,14 +61,14 @@ namespace FluentArgs.Validation
                 branchTask = argsBuilder.InitialStep.Accept(newDuplicationDetection);
             }
 
-            return Task.WhenAll(branchTask, step.Next.Accept(newDuplicationDetection));
+            return Task.WhenAll(branchTask, step.GetNextStep().Accept(newDuplicationDetection));
         }
 
         public Task Visit(GivenParameterStep step)
         {
             if (!step.Description.RequireExactValue)
             {
-                return step.Next.Accept(this);
+                return step.GetNextStep().Accept(this);
             }
 
             var newDuplicationDetection = ValidateName(step.Description.Name);
@@ -80,12 +78,12 @@ namespace FluentArgs.Validation
                 branchTask = argsBuilder.InitialStep.Accept(newDuplicationDetection);
             }
 
-            return Task.WhenAll(branchTask, step.Next.Accept(newDuplicationDetection));
+            return Task.WhenAll(branchTask, step.GetNextStep().Accept(newDuplicationDetection));
         }
 
         public Task Visit(InitialStep step)
         {
-            return step.Next.Accept(this);
+            return step.GetNextStep().Accept(this);
         }
 
         public Task Visit(InvalidStep step)
@@ -96,23 +94,23 @@ namespace FluentArgs.Validation
         public Task Visit(ParameterListStep step)
         {
             var newDuplicationDetection = ValidateName(step.Description.Name);
-            return step.Next.Accept(newDuplicationDetection);
+            return step.GetNextStep().Accept(newDuplicationDetection);
         }
 
         public Task Visit(ParameterStep step)
         {
             var newDuplicationDetection = ValidateName(step.Description.Name);
-            return step.Next.Accept(newDuplicationDetection);
+            return step.GetNextStep().Accept(newDuplicationDetection);
         }
 
         public Task Visit(PositionalArgumentStep step)
         {
-            return step.Next.Accept(this);
+            return step.GetNextStep().Accept(this);
         }
 
         public Task Visit(RemainingArgumentsStep step)
         {
-            return step.Next.Accept(this);
+            return step.GetNextStep().Accept(this);
         }
 
         private DuplicateNameDetection ValidateName(Name name)
@@ -130,5 +128,5 @@ namespace FluentArgs.Validation
 
             return new DuplicateNameDetection(registeredNames);
         }
-    }
+   }
 }

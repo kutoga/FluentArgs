@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace FluentArgs.Description
+﻿namespace FluentArgs.Description
 {
     internal enum GivenCommandBranchType
     {

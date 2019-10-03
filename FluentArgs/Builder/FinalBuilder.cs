@@ -1,9 +1,8 @@
-﻿using FluentArgs.Description;
-using FluentArgs.Help;
-
-namespace FluentArgs.Builder
+﻿namespace FluentArgs.Builder
 {
+    using FluentArgs.Description;
     using FluentArgs.Execution;
+    using FluentArgs.Help;
 
     internal class FinalBuilder : IBuildable
     {

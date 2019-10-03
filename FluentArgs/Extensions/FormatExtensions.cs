@@ -1,11 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using FluentArgs.Description;
-
-namespace FluentArgs.Extensions
+﻿namespace FluentArgs.Extensions
 {
+    using System.Collections.Generic;
+    using System.Linq;
+
     internal static class FormatExtensions
     {
         public static IEnumerable<string> AliasesOrdering(this IEnumerable<string> aliases)

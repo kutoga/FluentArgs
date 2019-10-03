@@ -68,7 +68,7 @@
 
         public IConfigurableParameterList<TArgsBuilder, TParam> WithParser(Func<string, TParam> parser)
         {
-            parameterList.Parser = s => parser(s);
+            parameterList.Parser = s => parser(s) !;
             return this;
         }
 

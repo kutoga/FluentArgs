@@ -1,9 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-
-namespace FluentArgs.Description
+﻿namespace FluentArgs.Description
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+
     internal class Name
     {
         private Name(string[] names)
@@ -15,7 +15,7 @@ namespace FluentArgs.Description
 
         public static Name ValidateAndBuild(string name, params string[] moreNames)
         {
-            return ValidateAndBuild(moreNames.Concat(new[] {name}).ToArray());
+            return ValidateAndBuild(moreNames.Concat(new[] { name }).ToArray());
         }
 
         public static Name ValidateAndBuild(IReadOnlyCollection<string> names)

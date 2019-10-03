@@ -1,8 +1,8 @@
 ﻿namespace FluentArgs.Description
 {
-    using FluentArgs.Validation;
     using System;
     using System.Collections.Generic;
+    using FluentArgs.Validation;
 
     internal class PositionalArgument
     {

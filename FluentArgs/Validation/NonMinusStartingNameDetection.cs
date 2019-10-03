@@ -24,30 +24,30 @@
         public Task Visit(FlagStep step)
         {
             ValidateAliases(step.Description.Name.Names);
-            return step.Next.Accept(this);
+            return step.GetNextStep().Accept(this);
         }
 
         public Task Visit(GivenCommandStep step)
         {
             ValidateAliases(step.Name.Names);
-            return step.Next.Accept(this);
+            return step.GetNextStep().Accept(this);
         }
 
         public Task Visit(GivenFlagStep step)
         {
             ValidateAliases(step.Description.Name.Names);
-            return step.Next.Accept(this);
+            return step.GetNextStep().Accept(this);
         }
 
         public Task Visit(GivenParameterStep step)
         {
             ValidateAliases(step.Description.Name.Names);
-            return step.Next.Accept(this);
+            return step.GetNextStep().Accept(this);
         }
 
         public Task Visit(InitialStep step)
         {
-            return step.Next.Accept(this);
+            return step.GetNextStep().Accept(this);
         }
 
         public Task Visit(InvalidStep step)
@@ -58,23 +58,23 @@
         public Task Visit(ParameterListStep step)
         {
             ValidateAliases(step.Description.Name.Names);
-            return step.Next.Accept(this);
+            return step.GetNextStep().Accept(this);
         }
 
         public Task Visit(ParameterStep step)
         {
             ValidateAliases(step.Description.Name.Names);
-            return step.Next.Accept(this);
+            return step.GetNextStep().Accept(this);
         }
 
         public Task Visit(PositionalArgumentStep step)
         {
-            return step.Next.Accept(this);
+            return step.GetNextStep().Accept(this);
         }
 
         public Task Visit(RemainingArgumentsStep step)
         {
-            return step.Next.Accept(this);
+            return step.GetNextStep().Accept(this);
         }
 
         private static void ValidateAliases(IEnumerable<string> aliases)

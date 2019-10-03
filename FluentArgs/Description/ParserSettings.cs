@@ -1,8 +1,8 @@
-﻿using System.Collections.Generic;
-using System.Collections.Immutable;
-
-namespace FluentArgs.Description
+﻿namespace FluentArgs.Description
 {
+    using System.Collections.Generic;
+    using System.Collections.Immutable;
+
     internal class ParserSettings
     {
         public ParserSettings(IHelpPrinter helpPrinter, IParsingErrorPrinter parsingErrorPrinter)

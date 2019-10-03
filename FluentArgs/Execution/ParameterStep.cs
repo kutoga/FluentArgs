@@ -9,13 +9,13 @@
 
     internal class ParameterStep : Step
     {
-        public Parameter Description { get; }
-
         public ParameterStep(Step previous, Parameter parameter)
             : base(previous)
         {
             this.Description = parameter;
         }
+
+        public Parameter Description { get; }
 
         public override Task Accept(IStepVisitor visitor)
         {
@@ -24,9 +24,9 @@
 
         public override Task Execute(State state)
         {
-            if (state.TryExtractNamedArgument(Description.Name.Names, out var argument, out var value, out var newState))
+            if (state.TryExtractNamedArgument(Description.Name.Names, out _, out var value, out var newState))
             {
-                state = newState.AddParameter(Parse(value).ValidateIfRequired(Description.Validator, Description.Name));
+                state = newState.AddParameter(Parse(value!).ValidateIfRequired(Description.Validator, Description.Name));
             }
             else
             {
@@ -45,7 +45,7 @@
                 }
             }
 
-            return Next.Execute(state);
+            return GetNextStep().Execute(state);
         }
 
         private object Parse(string parameter)

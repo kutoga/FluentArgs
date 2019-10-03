@@ -1,11 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace FluentArgs
+﻿namespace FluentArgs
 {
+    using System;
+
     public interface IConfigurablePositionalArgument<TArgsBuilder, TParam>
         : IWithConfigurableValidator<IConfigurablePositionalArgument<TArgsBuilder, TParam>, TParam>
+        where TArgsBuilder : class
     {
         IConfigurablePositionalArgument<TArgsBuilder, TParam> WithDescription(string description);
 

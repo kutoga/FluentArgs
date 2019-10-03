@@ -1,8 +1,8 @@
-﻿using System;
-using FluentArgs.Description;
-
-namespace FluentArgs
+﻿namespace FluentArgs
 {
+    using System;
+    using FluentArgs.Description;
+
     internal class ArgumentParsingException : Exception
     {
         public ArgumentParsingException(string description, Name? argumentName = null)

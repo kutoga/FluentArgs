@@ -1,17 +1,15 @@
-﻿using FluentArgs.Description;
-using FluentArgs.Validation;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-namespace FluentArgs.Execution
+﻿namespace FluentArgs.Execution
 {
+    using System.Collections.Generic;
+    using System.Linq;
+    using FluentArgs.Description;
+    using FluentArgs.Validation;
+
     internal static class Validation
     {
         public static T ValidateIfRequired<T>(this T value, IValidator? validator, Name? argumentName = null)
         {
-            if (validator != null && !validator.IsValid(value, out var errorMessage))
+            if (validator != null && !validator.IsValid(value!, out var errorMessage))
             {
                 if (string.IsNullOrEmpty(errorMessage))
                 {

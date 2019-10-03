@@ -10,6 +10,9 @@ in just a few minutes.
 
 ![](doc/test.gif)
 
+# How to install
+TODO
+
 # Example: Parse simple arguments and flags
 
 ```csharp
@@ -41,6 +44,7 @@ namespace Example
         }
     }
 }
+
 ```
 
 It is possible to add some meta-information to the parameters (e.g. description and examples):
@@ -80,6 +84,7 @@ namespace Example
         }
     }
 }
+
 ```
 
 # Example: Parse positional and remaining arguments
@@ -87,3 +92,7 @@ namespace Example
 # Example: Parse conditional arguments / commands
 
 # Example: Help
+
+# Example: Advanced configuration
+
+

@@ -1,12 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Threading.Tasks;
-using FluentArgs.Extensions;
-
-namespace FluentArgs.Help
+﻿namespace FluentArgs.Help
 {
+    using System;
+    using System.Collections.Generic;
+    using System.IO;
+    using System.Linq;
+    using System.Threading.Tasks;
+    using FluentArgs.Extensions;
+
     public class SimpleParsingErrorPrinter : IParsingErrorPrinter
     {
         private readonly ILineWriter errorLineWriter;
@@ -49,10 +49,12 @@ namespace FluentArgs.Help
         private Task WriteHelpFlagInfo(IReadOnlyCollection<string>? helpFlagAliases)
         {
             if (helpFlagAliases != null)
+            {
                 return errorLineWriter.WriteLines(
                     string.Empty,
                     "Show help for more information:",
                     $"  {Environment.GetCommandLineArgs()[0]} {helpFlagAliases.AliasesOrdering().FirstOrDefault()}");
+            }
 
             return Task.CompletedTask;
         }

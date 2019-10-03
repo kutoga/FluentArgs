@@ -1,15 +1,15 @@
-﻿using System.Linq;
-
-namespace FluentArgs.Builder
+﻿namespace FluentArgs.Builder
 {
     using System;
     using System.Collections.Generic;
+    using System.Linq;
     using System.Threading.Tasks;
     using FluentArgs.Description;
     using FluentArgs.Execution;
     using FluentArgs.Help;
 
-    internal class StepBuilder : IInitialFluentArgsBuilder
+    internal class StepBuilder :
+        IInitialFluentArgsBuilder
     {
         public Step Step { get; set; } = new InitialStep()
         {
@@ -66,56 +66,55 @@ namespace FluentArgs.Builder
 
         public IInitialFluentArgsBuilder WithoutAssignmentOperators()
         {
-            ((InitialStep) Step).ParserSettings.AssignmentOperators = Array.Empty<string>();
+            ((InitialStep)Step).ParserSettings!.AssignmentOperators = Array.Empty<string>();
             return this;
         }
 
         public IInitialFluentArgsBuilder RegisterHelpFlag(string name, params string[] moreNames)
         {
-            ((InitialStep)Step).ParserSettings.HelpFlag = Name.ValidateAndBuild(name, moreNames);
+            ((InitialStep)Step).ParserSettings!.HelpFlag = Name.ValidateAndBuild(name, moreNames);
             return this;
         }
 
         public IInitialFluentArgsBuilder RegisterHelpPrinter(IHelpPrinter helpPrinter)
         {
-            ((InitialStep)Step).ParserSettings.HelpPrinter = helpPrinter;
+            ((InitialStep)Step).ParserSettings!.HelpPrinter = helpPrinter;
             return this;
         }
 
         public IInitialFluentArgsBuilder RegisterParsingErrorPrinter(IParsingErrorPrinter parsingErrorPrinter)
         {
-            ((InitialStep)Step).ParserSettings.ParsingErrorPrinter = parsingErrorPrinter;
+            ((InitialStep)Step).ParserSettings!.ParsingErrorPrinter = parsingErrorPrinter;
             return this;
         }
 
         public IInitialFluentArgsBuilder ThrowOnDuplicateNames(bool enable)
         {
-            ((InitialStep)Step).ParserSettings.ThrowOnDuplicateNames = enable;
+            ((InitialStep)Step).ParserSettings!.ThrowOnDuplicateNames = enable;
             return this;
         }
 
         public IInitialFluentArgsBuilder ThrowOnNonMinusStartingNames(bool enable)
         {
-            ((InitialStep)Step).ParserSettings.ThrowOnNonMinusStartingNames = enable;
+            ((InitialStep)Step).ParserSettings!.ThrowOnNonMinusStartingNames = enable;
             return this;
         }
 
         public IInitialFluentArgsBuilder ThrowIfUnusedArgumentsArePresent(bool enable = true)
         {
-            ((InitialStep)Step).ParserSettings.ThrowIfUnusedArgumentsArePresent = enable;
+            ((InitialStep)Step).ParserSettings!.ThrowIfUnusedArgumentsArePresent = enable;
             return this;
         }
 
         public IInitialFluentArgsBuilder WithApplicationDescription(string description)
         {
-            ((InitialStep)Step).ParserSettings.ApplicationDescription = description;
+            ((InitialStep)Step).ParserSettings!.ApplicationDescription = description;
             return this;
         }
 
         public IInitialFluentArgsBuilder WithAssignmentOperators(string assignmentOperator, params string[] moreAssignmentOperators)
         {
-            ((InitialStep) Step).ParserSettings.AssignmentOperators =
-                new[] {assignmentOperator}.Concat(moreAssignmentOperators).ToArray();
+            ((InitialStep)Step).ParserSettings!.AssignmentOperators = new[] { assignmentOperator }.Concat(moreAssignmentOperators).ToArray();
             return this;
         }
 
@@ -155,12 +154,12 @@ namespace FluentArgs.Builder
 
         public IBuildable Call(TFunc callback)
         {
-            return new FinalBuilder(new CallStep(Step, new TargetFunction(callback)));
+            return new FinalBuilder(new CallStep(Step, new TargetFunction(callback!)));
         }
 
         public IBuildable Call(TFuncAsync callback)
         {
-            return new FinalBuilder(new CallStep(Step, new TargetFunction(callback)));
+            return new FinalBuilder(new CallStep(Step, new TargetFunction(callback!)));
         }
 
         public IBuildable CallUntyped(Action<IReadOnlyCollection<object?>> callback)

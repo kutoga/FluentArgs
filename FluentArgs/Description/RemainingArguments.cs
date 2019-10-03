@@ -1,8 +1,8 @@
 ﻿namespace FluentArgs.Description
 {
-    using FluentArgs.Validation;
     using System;
     using System.Collections.Generic;
+    using FluentArgs.Validation;
 
     internal class RemainingArguments
     {
@@ -15,9 +15,9 @@
 
         public Type Type { get; }
 
-        public IReadOnlyCollection<string> Examples { get; set; }
+        public IReadOnlyCollection<string>? Examples { get; set; }
 
-        public IValidator Validator { get; set; }
+        public IValidator? Validator { get; set; }
 
         public Func<string, object>? Parser { get; set; }
     }

@@ -32,12 +32,12 @@
             return Build().Call(callback);
         }
 
-        public IBuildable CallUntyped(Action<IReadOnlyCollection<object>> callback)
+        public IBuildable CallUntyped(Action<IReadOnlyCollection<object?>> callback)
         {
             return Build().CallUntyped(callback);
         }
 
-        public IBuildable CallUntyped(Func<IReadOnlyCollection<object>, Task> callback)
+        public IBuildable CallUntyped(Func<IReadOnlyCollection<object?>, Task> callback)
         {
             return Build().CallUntyped(callback);
         }

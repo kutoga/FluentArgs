@@ -23,7 +23,7 @@
 
         public bool TryExtractNamedArgument(
             string firstArgument,
-            out string value,
+            out string? value,
             out IArgumentExtractor newArgumentExtractor,
             IReadOnlyCollection<string>? assignmentOperators = null)
         {
@@ -35,7 +35,7 @@
                 assignmentOperators);
         }
 
-        public bool TryExtractFlag(IEnumerable<string> flagNamePossibilites, out string flag, out IArgumentExtractor newArgumentExtractor)
+        public bool TryExtractFlag(IEnumerable<string> flagNamePossibilites, out string? flag, out IArgumentExtractor newArgumentExtractor)
         {
             var detectedArgumentsPossibilities = flagNamePossibilites
                 .SelectMany(DetectFlagArgument)
@@ -44,16 +44,9 @@
             if (detectedArgumentsPossibilities.Count == 0)
             {
                 flag = default;
-                newArgumentExtractor = default;
+                newArgumentExtractor = this;
                 return false;
             }
-
-            //if (detectedArgumentsPossibilities.Count > 1)
-            //{
-            //    flag = default;
-            //    newArgumentExtractor = default;
-            //    return false;
-            //}
 
             var foundArgument = detectedArgumentsPossibilities[0];
             newArgumentExtractor = new ArgumentExtractor(foundArgument.splitArgumentList());
@@ -66,7 +59,7 @@
             return TryExtractFlag(new[] { flagName }, out _, out newArgumentExtractor);
         }
 
-        public bool TryPopArgument(out string argument, out IArgumentExtractor newArgumentExtractor)
+        public bool TryPopArgument(out string? argument, out IArgumentExtractor newArgumentExtractor)
         {
             var firstArgumentGroupsWithElements = argumentGroups
                 .Select((g, i) => (group: g, index: i))
@@ -77,12 +70,12 @@
             if (firstArgumentGroupsWithElements == null)
             {
                 argument = default;
-                newArgumentExtractor = default; // TODO: default OR newArgumentExtractor?
+                newArgumentExtractor = this;
                 return false;
             }
 
             var argumentGroup = argumentGroups[firstArgumentGroupsWithElements.Value];
-            argument = argumentGroup.Arguments.First();
+            argument = argumentGroup.Arguments[0];
 
             if (argumentGroup.Arguments.Count == 1)
             {
@@ -101,8 +94,8 @@
 
         public bool TryExtractNamedArgument(
             IEnumerable<string> firstArgumentPossibilities,
-            out string argument,
-            out string value,
+            out string? argument,
+            out string? value,
             out IArgumentExtractor newArgumentExtractor,
             IReadOnlyCollection<string>? assignmentOperators)
         {
@@ -114,17 +107,9 @@
             {
                 argument = default;
                 value = default;
-                newArgumentExtractor = default;
+                newArgumentExtractor = this;
                 return false;
             }
-
-            //if (detectedArgumentsPossibilities.Count > 1)
-            //{
-            //    argument = default; //How to propagate this error to the outside world? 
-            //    value = default;
-            //    newArgumentExtractor = default;
-            //    return false;
-            //}
 
             var foundArgument = detectedArgumentsPossibilities[0];
             newArgumentExtractor = new ArgumentExtractor(foundArgument.splitArgumentList());
@@ -156,7 +141,7 @@
                 var listsToInsert = new[] { detectedArguments.LeftSideArguments, detectedArguments.RightSideArguments }
                     .Where(a => a.Count > 0)
                     .Select(a => new ArgumentList(a))
-                    .ToImmutableList(); //TODO: in the complete project: whenever possible, use immutable data structures
+                    .ToImmutableList();
 
                 return argumentGroups
                     .Take(listToRemoveIndex)
@@ -182,7 +167,7 @@
                 var listsToInsert = new[] { detectedFlag.LeftSideArguments, detectedFlag.RightSideArguments }
                     .Where(a => a.Count > 0)
                     .Select(a => new ArgumentList(a))
-                    .ToImmutableList(); //TODO: in the complete project: whenever possible, use immutable data structures
+                    .ToImmutableList();
 
                 return argumentGroups
                     .Take(listToRemoveIndex)

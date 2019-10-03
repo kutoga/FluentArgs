@@ -5,15 +5,10 @@
 
     internal abstract class Step
     {
-        public Step? Previous { get; private set; }
-
-        public Step? Next { get; private set; }
-
         protected Step(Step previous)
         {
             if (previous.Next != null)
             {
-                //TODO: better error
                 throw new Exception("It is not possible to append two different steps to a given step!");
             }
 
@@ -25,8 +20,22 @@
         {
         }
 
+        public Step? Previous { get; private set; }
+
+        public Step? Next { get; private set; }
+
         public abstract Task Execute(State state);
 
         public abstract Task Accept(IStepVisitor visitor);
+
+        public Step GetNextStep()
+        {
+            if (Next == null)
+            {
+                throw new Exception("Cannot access next step! It is undefined!");
+            }
+
+            return Next;
+        }
     }
 }
