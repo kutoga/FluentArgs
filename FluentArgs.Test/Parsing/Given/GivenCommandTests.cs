@@ -1,6 +1,5 @@
 ﻿namespace FluentArgs.Test.Parsing.Given
 {
-    using System;
     using FluentAssertions;
     using Xunit;
 
@@ -44,9 +43,9 @@
         public static void GivenACommandWithAPredefinedValue_ShouldBeRedirected()
         {
             var args = new[] { "-c", "copy" };
-            string? calledBranch = default; //TODO: ist überall calledBranch = default oder ab und zu = null?
+            string? calledBranch = default; // TODO: ist überall calledBranch = default oder ab und zu = null?
             var builder = FluentArgsBuilder.New()
-                .Given.Command("--command", "-c") //TODO: Extension-Methode für Then, die Then(b => b.Call(...)) aufruft
+                .Given.Command("--command", "-c") // TODO: Extension-Methode für Then, die Then(b => b.Call(...)) aufruft
                     .HasValue("copy").Then(b => b.Call(() => calledBranch = "branch1"))
                     .ElseIgnore()
                 .Call(() => calledBranch = "none");
@@ -115,8 +114,7 @@
             calledBranch.Should().Be(branch);
         }
 
-        //TODO: What if HasValue<T> fails to parse the value? Go to the nest HasValue or ignore it?
-
+        // TODO: What if HasValue<T> fails to parse the value? Go to the nest HasValue or ignore it?
         [Theory]
         [InlineData("v1", "v2", "v1v2")]
         [InlineData("v1", "xx", "v1")]
@@ -142,7 +140,7 @@
             calledBranch.Should().Be(expectedBranch);
         }
 
-        //TODO: serial nested with same command should not work (the command is removed from args)
+        // TODO: serial nested with same command should not work (the command is removed from args)
         [Theory]
         [InlineData("v1", "v2", "v1")]
         [InlineData("v1", "xx", "v1")]

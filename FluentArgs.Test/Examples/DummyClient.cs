@@ -10,7 +10,7 @@
 
         public IImmutableList<int?> ResetAccountCalls { get; private set; } = ImmutableList<int?>.Empty;
 
-        public string ApiKey { get; set; }
+        public string? ApiKey { get; set; }
 
         public void CopyFile(string source, string target)
         {

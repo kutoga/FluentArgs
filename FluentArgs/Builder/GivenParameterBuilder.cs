@@ -27,7 +27,7 @@
             return new GivenThenBuilder<TArgsBuilder, TArgsBuilder>(
                 ThenExpressionBuilt,
                 argsBuilder,
-                () => result);
+                () => result ?? throw new Exception("Resulting builder not defined!"));
 
             void ThenExpressionBuilt(IParsable parsable)
             {
@@ -44,7 +44,7 @@
             return new GivenThenBuilder<TArgsBuilder, TArgsBuilder>(
                 ThenExpressionBuilt,
                 argsBuilder,
-                () => result);
+                () => result ?? throw new Exception("Resulting builder not defined!"));
 
             void ThenExpressionBuilt(IParsable parsable)
             {

@@ -1,6 +1,7 @@
 ﻿namespace FluentArgs.Test.Parsing
 {
     using System.Collections.Generic;
+    using System.Globalization;
     using System.Threading.Tasks;
     using FluentArgs.Test.Helpers;
     using FluentAssertions;
@@ -30,7 +31,11 @@
             IReadOnlyList<string>? parsedArgs = default;
             var builder = FluentArgsBuilder.New()
                 .LoadRemainingArguments()
-                .Call(async args => parsedArgs = args);
+                .Call(args =>
+                {
+                    parsedArgs = args;
+                    return Task.CompletedTask;
+                });
 
             var parseSuccess = builder.Parse(args);
 
@@ -81,7 +86,7 @@
             IReadOnlyList<int>? parsedArgs = default;
             var builder = FluentArgsBuilder.New()
                 .LoadRemainingArguments<int>()
-                    .WithParser(s => int.Parse(s) * 2)
+                    .WithParser(s => int.Parse(s, CultureInfo.InvariantCulture) * 2)
                 .Call(args => parsedArgs = args);
 
             var parseSuccess = builder.Parse(args);

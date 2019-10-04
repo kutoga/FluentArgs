@@ -6,7 +6,7 @@
 
     internal static class Array
     {
-        public static object Create(Type type, IReadOnlyList<object> objects)
+        public static object Create(Type type, IReadOnlyList<object?> objects)
         {
             var arr = System.Array.CreateInstance(type, objects.Count);
             foreach (var (obj, i) in objects.Select((o, i) => (o, i)))

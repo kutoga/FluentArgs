@@ -26,7 +26,7 @@
 
             [typeof(byte)] = s => ParseNumber<byte>(s, byte.Parse, byte.TryParse),
 
-            //TODO: Does parsing 1, 0 usw. work?
+            // TODO: Does parsing 1, 0 usw. work?
             [typeof(bool)] = s => ParseBool(s),
 
             [typeof(DateTime)] = s => DateTime.Parse(s, CultureInfo.InvariantCulture),

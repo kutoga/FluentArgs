@@ -1,4 +1,6 @@
-﻿# FluentArgs: Fluent Arguments Parsing for .NET
+﻿[![Build Status](https://dev.azure.com/benjaminmeier70/PipelinePlayground/_apis/build/status/kutoga.FluentArgs?branchName=master)](https://dev.azure.com/benjaminmeier70/PipelinePlayground/_build/latest?definitionId=3&branchName=master)
+
+# FluentArgs: Fluent Arguments Parsing for .NET
 
 FluentArgs is an easy-to-use library that provides command line argument parsing and also generating a
 simple help for users of the command line tool.

@@ -1,6 +1,5 @@
 ﻿namespace FluentArgs.Test.Parsing
 {
-    using System;
     using FluentAssertions;
     using Xunit;
 
@@ -41,26 +40,5 @@
             parsedA.Should().Be("a");
             parsedB.Should().BeNull();
         }
-
-        //[Fact]
-        //public static void IfAParameterIsUsedAndRemoved_TheSurroundingElementMightBeUsedAsFlag()
-        //{
-        //    var args = new[] { "--b", "--a", "a", "b" };
-        //    string? parsedA = default;
-        //    string? parsedB = default;
-        //    var builder = FluentArgsBuilder.New()
-        //        .Parameter("--a").IsOptional()
-        //        .Flag("--b").IsRequired() //TODO: WTF? A flag is never required (this would not make sense)
-        //        .Call(b => a =>
-        //        {
-        //            parsedA = a;
-        //            parsedB = b;
-        //        });
-
-        //    builder.Parse(args);
-
-        //    parsedA.Should().Be("a");
-        //    parsedB.Should().BeNull();
-        //}
     }
 }

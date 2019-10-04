@@ -1,8 +1,6 @@
 ﻿namespace FluentArgs.Test.Parsing
 {
-    using System;
     using System.Globalization;
-    using System.Threading.Tasks;
     using FluentAssertions;
     using Xunit;
 

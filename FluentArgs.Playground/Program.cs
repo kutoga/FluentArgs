@@ -1,4 +1,15 @@
-﻿using FluentArgs.Help;
+﻿namespace FluentArgs.Playground
+{
+    public static class Program
+    {
+        public static void Main()
+        {
+        }
+    }
+}
+
+/*
+using FluentArgs.Help;
 
 namespace FluentArgs.Playground
 {
@@ -31,9 +42,7 @@ namespace FluentArgs.Playground
                     .IsOptionalWithDefault(50)
                 .Call(quality => outputFile => inputFile =>
                 {
-                    /* ... */
                     Console.WriteLine($"Convert {inputFile} to {outputFile} with qualiyt {quality}...");
-                    /* ... */
                     return Task.CompletedTask;
                 })
                 .ParseAsync(args);
@@ -54,9 +63,7 @@ namespace FluentArgs.Playground
                         .LoadRemainingArguments()
                         .Call(files =>
                         {
-                            /* ... */
                             Console.WriteLine($"Delete {string.Join(", ", files)}...");
-                            /* ... */
                         }))
                     .ElseIgnore()
                 .Invalid()
@@ -118,10 +125,10 @@ namespace FluentArgs.Playground
             Console.ReadLine();
             return;
 
-            //TODO: Given.Command(...) => if the comand is not present there should be a possibility to define this as invalid (the command is required)
+            // TODO: Given.Command(...) => if the comand is not present there should be a possibility to define this as invalid (the command is required)
 
-            //TODO: Call .Build().Parse(xxx) instead of .Parse(); BUT add an extension method or something which just does this for you
-            //TODO: IsOptionalWithDefault(...) -> IsOptional().WithDefault(...); vielleicht
+            // TODO: Call .Build().Parse(xxx) instead of .Parse(); BUT add an extension method or something which just does this for you
+            // TODO: IsOptionalWithDefault(...) -> IsOptional().WithDefault(...); vielleicht
 
             Console.WriteLine("Hello World!");
 
@@ -166,19 +173,16 @@ namespace FluentArgs.Playground
 
             FluentArgsBuilder.New()
 
-                /* Help etc. */
                 .Given.Flag("-h", "--help").Then(b => b.Call(() =>
                 {
                     Console.WriteLine("Show help"); // put this to an extension method
                 }))
 
-                /* general settings / arguments */
                 .Parameter("-k", "--apikey")
                     .WithDescription("the magic super expensive api key")
                     .WithExamples("ABC", "123")
                     .IsRequired()
 
-                /* switch like command parameters */
                 .Given.Command("-c", "--command")
                     .HasValue("copy").Then(b => b
                         .Parameter("-i", "--input").IsRequired()
@@ -212,3 +216,4 @@ namespace FluentArgs.Playground
         }
     }
 }
+*/

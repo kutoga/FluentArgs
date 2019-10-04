@@ -14,7 +14,7 @@
         private readonly Step previousStep;
         private readonly RemainingArguments remainingArguments;
 
-        public RemainingArgumentsBuilder(Func<Step, ICallable<TFunc, TFuncAsync>> stepWrapper, Step previousStep) //TODO: inconsistent naming previous vs previousStep
+        public RemainingArgumentsBuilder(Func<Step, ICallable<TFunc, TFuncAsync>> stepWrapper, Step previousStep) // TODO: inconsistent naming previous vs previousStep
         {
             this.stepWrapper = stepWrapper;
             this.previousStep = previousStep;

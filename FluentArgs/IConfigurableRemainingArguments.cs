@@ -2,7 +2,7 @@
 {
     using System;
 
-    public interface IConfigurableRemainingArguments<TFunc, TFuncAsync, TParam> : //TODO: überall den : auf die Zeile mit dem Klassennamen
+    public interface IConfigurableRemainingArguments<TFunc, TFuncAsync, TParam> : // TODO: überall den : auf die Zeile mit dem Klassennamen
         ICallable<TFunc, TFuncAsync>,
         IWithConfigurableValidator<IConfigurableRemainingArguments<TFunc, TFuncAsync, TParam>, TParam>
     {

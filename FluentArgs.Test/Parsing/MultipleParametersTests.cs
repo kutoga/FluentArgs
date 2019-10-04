@@ -1,10 +1,9 @@
 ﻿namespace FluentArgs.Test.Parsing
 {
-    using FluentAssertions;
-    using FluentArgs.Test.Helpers;
     using System.Collections.Generic;
+    using FluentArgs.Test.Helpers;
+    using FluentAssertions;
     using Xunit;
-    using System.Threading.Tasks;
 
     public static class MultipleParametersTests
     {

@@ -104,8 +104,10 @@
         public static void ClassTypesShouldNotBeNullable(FileInfo project)
         {
             var nullableContextOptions = GetSingleOrDefaultXmlNode(project, "Project/PropertyGroup[not(@*)]/NullableContextOptions[text()='enable']");
+            var nullableOptions = GetSingleOrDefaultXmlNode(project, "Project/PropertyGroup[not(@*)]/Nullable[text()='enable']");
 
             nullableContextOptions.Should().NotBeNull("projects should be configured in a way that in the deafualt behaviour all types are not nullable.");
+            nullableOptions.Should().NotBeNull("projects should be configured in a way that in the deafualt behaviour all types are not nullable.");
         }
 
         private static IEnumerable<object[]> AllProjects()

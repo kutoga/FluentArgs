@@ -1,22 +1,21 @@
 ﻿namespace FluentArgs.Test.Parsing
 {
-    using System;
     using System.Collections.Generic;
     using FluentArgs.Test.Helpers;
     using FluentAssertions;
     using Xunit;
 
-    public class ParameterListTests
+    public static class ParameterListTests
     {
-        //TODO: pack all parameter configs into a single interface
-        //TODO: copy this interface and add:
+        // TODO: pack all parameter configs into a single interface
+        // TODO: copy this interface and add:
         //      WithSeparator(...)
         //      IsOptionalWithEmptyDefault()
         [Fact]
         public static void GivenAParameterList_ShouldBeParsed()
         {
             var args = new[] { "-n", "1,2,3" };
-            IReadOnlyList<int> parsedN = default;
+            IReadOnlyList<int>? parsedN = default;
             var builder = FluentArgsBuilder.New()
                 .ParameterList<int>("-n").IsRequired()
                 .Call(n => parsedN = n);
@@ -31,7 +30,7 @@
         public static void GivenARequiredParameterListWhichIsNotPresent_ShouldNotParseSuccessful()
         {
             var args = new[] { "-x" };
-            IReadOnlyList<int> parsedN = default;
+            IReadOnlyList<int>? parsedN = default;
             var builder = FluentArgsBuilder.New()
                 .ParameterList<int>("-n").IsRequired()
                 .Call(n => parsedN = n);
@@ -60,7 +59,7 @@
         public static void GivenAnOptionaldParameterListWithAnEmptyDefaultWhichIsNotPresent_ShouldReturnAnEmptyArray()
         {
             var args = new[] { "-x" };
-            IReadOnlyList<int> parsedN = default;
+            IReadOnlyList<int>? parsedN = default;
             var builder = FluentArgsBuilder.New()
                 .ParameterList<int>("-n").IsOptionalWithEmptyDefault()
                 .Call(n => parsedN = n);
@@ -75,7 +74,7 @@
         public static void GivenAnOptionaldParameterListWithADefaultWhichIsNotPresent_ShouldReturnDefault()
         {
             var args = new[] { "-x" };
-            IReadOnlyCollection<int> parsedN = default;
+            IReadOnlyCollection<int>? parsedN = default;
             var builder = FluentArgsBuilder.New()
                 .ParameterList<int>("-n").IsOptionalWithDefault(new[] { 1, 2, 4 })
                 .Call(n => parsedN = n);
@@ -83,14 +82,14 @@
             var parseSuccess = builder.Parse(args);
 
             parseSuccess.Should().BeTrue();
-            parsedN.Should().BeEquivalentWithSameOrdering(new[] { 1, 2, 4 }); //TODO: SHould().be(...)
+            parsedN.Should().BeEquivalentWithSameOrdering(new[] { 1, 2, 4 }); // TODO: SHould().be(...)
         }
 
         [Fact]
         public static void GivenAParameterList_UsesDefaultSeparators()
         {
             var args = new[] { "-n", "1,2;3;1;44,1337" };
-            IReadOnlyList<int> parsedN = default;
+            IReadOnlyList<int>? parsedN = default;
             var builder = FluentArgsBuilder.New()
                 .ParameterList<int>("-n").IsRequired()
                 .Call(n => parsedN = n);
@@ -98,7 +97,7 @@
             var parseSuccess = builder.Parse(args);
 
             parseSuccess.Should().BeTrue();
-            parsedN.Should().BeEquivalentWithSameOrdering(new[] { 1, 2, 3, 1, 44, 1337 }); //TODO: SHould().be(...)
+            parsedN.Should().BeEquivalentWithSameOrdering(new[] { 1, 2, 3, 1, 44, 1337 }); // TODO: SHould().be(...)
         }
 
         [Theory]
@@ -109,7 +108,7 @@
         public static void GivenAParameterListWithCustomSeparators_ShouldBeHandledCorrect(string sArg, string separator, string[] expectedValues)
         {
             var args = new[] { "-s", sArg };
-            IReadOnlyList<string> parsedS = default;
+            IReadOnlyList<string>? parsedS = default;
             var builder = FluentArgsBuilder.New()
                 .ParameterList("-s")
                     .WithSeparator(separator)
@@ -119,7 +118,7 @@
             var parseSuccess = builder.Parse(args);
 
             parseSuccess.Should().BeTrue();
-            parsedS.Should().BeEquivalentWithSameOrdering(expectedValues); //TODO: SHould().be(...)
+            parsedS.Should().BeEquivalentWithSameOrdering(expectedValues); // TODO: SHould().be(...)
         }
 
         [Fact]
@@ -136,7 +135,7 @@
             var parseSuccess = builder.Parse(args);
 
             parseSuccess.Should().BeTrue();
-            parsedS.Should().BeEquivalentWithSameOrdering(new[] { "A", "B" }); //TODO: SHould().be(...)
+            parsedS.Should().BeEquivalentWithSameOrdering(new[] { "A", "B" }); // TODO: SHould().be(...)
         }
 
         [Fact]
@@ -180,7 +179,7 @@
         public static void GivenAValidatorAndRequiredInvalidInput_ShouldNotBeParsable()
         {
             var args = new[] { "-n", "1,2,110" };
-            IReadOnlyCollection<int>? parsedN = null;
+            IReadOnlyCollection<int>? parsedN = default;
             var builder = FluentArgsBuilder.New()
                 .ParameterList<int>("-n")
                     .WithValidator(n => n >= 0 && n <= 100)
@@ -197,7 +196,7 @@
         public static void GivenAValidatorAndOptionalInvalidInput_ShouldNotBeParsable()
         {
             var args = new[] { "-n", "1,2,110" };
-            IReadOnlyCollection<int>? parsedN = null;
+            IReadOnlyCollection<int>? parsedN = default;
             var builder = FluentArgsBuilder.New()
                 .ParameterList<int>("-n")
                     .WithValidator(n => n >= 0 && n <= 100)

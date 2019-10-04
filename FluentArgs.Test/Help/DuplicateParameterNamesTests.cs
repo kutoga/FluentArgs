@@ -1,11 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using FluentAssertions;
-using Xunit;
-
-namespace FluentArgs.Test.Help
+﻿namespace FluentArgs.Test.Help
 {
+    using System;
+    using FluentAssertions;
+    using Xunit;
+
     public static class DuplicateParameterNamesTests
     {
         [Fact]

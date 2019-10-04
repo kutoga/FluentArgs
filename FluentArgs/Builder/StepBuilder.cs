@@ -19,7 +19,7 @@
             }
         };
 
-        //TODO: public und interface prefix weg
+        // TODO: public und interface prefix weg
         IGiven<IFluentArgsBuilder> IGivenAppliable<IFluentArgsBuilder>.Given =>
                 new GivenBuilder<IFluentArgsBuilder>(() => new StepBuilder(), Step, s => new StepBuilder() { Step = s });
 
@@ -200,7 +200,7 @@
 
         IConfigurableParameter<IFluentArgsBuilder<Func<TNextParam, TFunc>, Func<TNextParam, TFuncAsync>>, TNextParam> IFluentArgsBuilder<TFunc, TFuncAsync>.Parameter<TNextParam>(string name, params string[] moreNames)
         {
-            //TODO: TNextParam -> TParam
+            // TODO: TNextParam -> TParam
             var nextBuilder = new StepBuilder<Func<TNextParam, TFunc>, Func<TNextParam, TFuncAsync>>();
             return new ParameterBuilder<IFluentArgsBuilder<Func<TNextParam, TFunc>, Func<TNextParam, TFuncAsync>>, TNextParam>(
                 ParameterBuilt, nextBuilder, Name.ValidateAndBuild(name, moreNames));

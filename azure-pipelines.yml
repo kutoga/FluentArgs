@@ -1,17 +1,21 @@
 pool:
-  vmImage: 'Ubuntu 16.04'
+  vmImage: 'Ubuntu 18.04'
 
 trigger:
   batch: true
   branches:
-    include: ['master']
-  
+    include: ['master', 'feature/*']
+
 variables:
   buildConfiguration: 'Release'
   workingDirectory: '$(Build.SourcesDirectory)'
 
 steps:
-- script: dotnet restore ./FluentArgs.sln
+- script: dotnet tool install --global Paket --version 5.203.0
+  displayName: Install Paket
+  workingDirectory: $(workingDirectory)
+
+- script: dotnet restore ./FluentArgs.sln; echo ''
   displayName: Restore
   workingDirectory: $(workingDirectory)
 
@@ -33,5 +37,5 @@ steps:
 - script: dotnet publish ./FluentArgs --configuration $(buildConfiguration) --output $(Build.ArtifactStagingDirectory)
   displayName: Publish
   workingDirectory: $(workingDirectory)
-  
+
 - task: PublishBuildArtifacts@1

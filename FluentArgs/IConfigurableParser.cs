@@ -1,7 +1,7 @@
 ﻿namespace FluentArgs
 {
     public interface IConfigurableParser<TArgsParser>
-        where TArgsParser : class, IConfigurableParser<TArgsParser> //TODO: überall wo möglich so reinmachen
+        where TArgsParser : class, IConfigurableParser<TArgsParser> // TODO: überall wo möglich so reinmachen
     {
         TArgsParser WithApplicationDescription(string description);
 

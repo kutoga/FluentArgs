@@ -1,14 +1,14 @@
-﻿using FluentAssertions;
-using Xunit;
-
-namespace FluentArgs.Test.Parsing
+﻿namespace FluentArgs.Test.Parsing
 {
+    using FluentAssertions;
+    using Xunit;
+
     public static class PositionalArgumentTests
     {
         [Fact]
         public static void PositionalArgument_ShouldReturnTheNextUnusedArgument()
         {
-            var args = new[] {"--timeout", "12", "/dev/stdout"};
+            var args = new[] { "--timeout", "12", "/dev/stdout" };
             string? positionalArg = null;
             var builder = FluentArgsBuilder.New()
                 .Parameter<int>("--timeout").IsRequired()

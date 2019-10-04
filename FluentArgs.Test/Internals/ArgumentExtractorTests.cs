@@ -2,7 +2,6 @@
 {
     using System;
     using FluentArgs.ArgumentExtraction;
-    using FluentArgs.Test.Helpers;
     using FluentAssertions;
     using Xunit;
 
@@ -22,11 +21,10 @@
         }
 
         [Theory]
-        [InlineData("--key", 1, new[] { "--key", "2" }, "2")]
-        [InlineData("c", 1, new[] { "-c", "c", "2" }, "2")]
+        [InlineData("--key", new[] { "--key", "2" }, "2")]
+        [InlineData("c", new[] { "-c", "c", "2" }, "2")]
         public static void ExtractingNamedArgumentWithFollowingArguments_ShouldWork(
             string argument,
-            int followingArguments,
             string[] allArguments,
             string expectedValue)
         {
@@ -59,7 +57,6 @@
 
             success.Should().BeTrue();
             extractedArgument.Should().Be("1");
-            //extractAction.Should().Throw<ArgumentException>(); //TODO: ugly interface~?
         }
 
         [Fact]
@@ -72,7 +69,6 @@
 
             success.Should().BeTrue();
             extractedArgument.Should().Be("-a");
-            //extractAction.Should().Throw<ArgumentException>(); //TODO: ugly interface~?
         }
 
         [Fact]
@@ -192,7 +188,7 @@
         [Fact]
         public static void PositionalArgument_ShouldReturnAndRemoveTheFirstArgument()
         {
-            var args = new[] {"a", "b"};
+            var args = new[] { "a", "b" };
             IArgumentExtractor extractor = new ArgumentExtractor(args);
 
             var successA = extractor.TryPopArgument(out var extractedArgumentA, out extractor);

@@ -43,7 +43,7 @@
 
             parseSuccess.Should().BeTrue();
             dummyClient.ApiKey.Should().Be("secret");
-            dummyClient.ResetAccountCalls.Should().BeEquivalentWithSameOrdering(new object[] { null });
+            dummyClient.ResetAccountCalls.Should().BeEquivalentWithSameOrdering(new object?[] { null });
         }
 
         [Fact]
@@ -54,7 +54,7 @@
             parseSuccess.Should().BeFalse();
         }
 
-        //TODO: Enum parser
+        // TODO: Enum parser
         private static IParsable BuildParser(DummyClient dummyClient)
         {
             return FluentArgsBuilder.New()

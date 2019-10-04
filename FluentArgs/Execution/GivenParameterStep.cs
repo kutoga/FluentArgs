@@ -32,7 +32,7 @@
             {
                 if (!Description.RequireExactValue)
                 {
-                    //TODO: Do we really want to work here with the old state? -> create a test
+                    // TODO: Do we really want to work here with the old state? -> create a test
                     return ThenStep.ParseFromState(state);
                 }
                 else
@@ -49,7 +49,7 @@
             }
         }
 
-        //TODO: Remove duplicate code (see parametersetp.cs)
+        // TODO: Remove duplicate code (see parametersetp.cs)
         private object Parse(string parameter)
         {
             if (this.Description.Parser != null)

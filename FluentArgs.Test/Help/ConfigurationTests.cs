@@ -6,7 +6,7 @@
     using FluentAssertions;
     using Xunit;
 
-    public static class Configuration
+    public static class ConfigurationTests
     {
         [Fact]
         public static void GivenAHelpConfiguration_ShouldBePossibleToPrintHelp()

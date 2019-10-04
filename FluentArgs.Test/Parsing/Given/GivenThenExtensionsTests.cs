@@ -1,7 +1,7 @@
 ﻿namespace FluentArgs.Test.Parsing.Given
 {
-    using FluentAssertions;
     using System.Threading.Tasks;
+    using FluentAssertions;
     using Xunit;
 
     public static class GivenThenExtensionsTests
@@ -27,7 +27,11 @@
             var args = new[] { "-f" };
             bool? redirected = default;
             var builder = FluentArgsBuilder.New()
-                .Given.Flag("-f").Then(async () => redirected = true)
+                .Given.Flag("-f").Then(() =>
+                {
+                    redirected = true;
+                    return Task.CompletedTask;
+                })
                 .Call(() => redirected = false);
 
             var parseSuccess = builder.Parse(args);
@@ -59,7 +63,11 @@
             bool? redirected = default;
             var builder = FluentArgsBuilder.New()
                 .Parameter<int>("-p1").IsRequired()
-                .Given.Flag("-f").Then(async p1 => redirected = true)
+                .Given.Flag("-f").Then(p1 =>
+                {
+                    redirected = true;
+                    return Task.CompletedTask;
+                })
                 .Call(p1 => redirected = false);
 
             var parseSuccess = builder.Parse(args);

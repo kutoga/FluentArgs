@@ -1,17 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using FluentAssertions;
-using Xunit;
-
-namespace FluentArgs.Test.Help
+﻿namespace FluentArgs.Test.Help
 {
+    using System;
+    using FluentAssertions;
+    using Xunit;
+
     public static class UnusedArgumentsTests
     {
         [Fact]
         public static void UnusedArguments_ShouldBeIgnored()
         {
-            var args = new[] {"-a", "-b"};
+            var args = new[] { "-a", "-b" };
             var called = false;
             var builder = FluentArgsBuilder.New()
                 .Call(() => called = true);

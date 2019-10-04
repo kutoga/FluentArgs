@@ -1,13 +1,12 @@
-﻿using FluentAssertions;
-using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Threading.Tasks;
-using Xunit;
-using FluentArgs.Test.Helpers;
-
-namespace FluentArgs.Test.Help
+﻿namespace FluentArgs.Test.Help
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Threading.Tasks;
+    using FluentArgs.Test.Helpers;
+    using FluentAssertions;
+    using Xunit;
+
     public static class ExampleTests
     {
         [Fact]
@@ -83,9 +82,9 @@ namespace FluentArgs.Test.Help
 
         private class ExamplesCollectingHelpPrinter : IHelpPrinter
         {
-            public IReadOnlyCollection<string> Examples { get; private set; }
+            public IReadOnlyCollection<string>? Examples { get; private set; }
 
-            public new Task Finalize()
+            public Task Finalize()
             {
                 return Task.CompletedTask;
             }
@@ -95,30 +94,30 @@ namespace FluentArgs.Test.Help
                 return Task.CompletedTask;
             }
 
-            public Task WriteFlagInfos(IReadOnlyCollection<string> aliases, string description, IReadOnlyCollection<(IReadOnlyCollection<string> aliases, string description)> givenHints)
+            public Task WriteFlagInfos(IReadOnlyCollection<string> aliases, string? description, IReadOnlyCollection<(IReadOnlyCollection<string> aliases, string description)> givenHints)
             {
                 return Task.CompletedTask;
             }
 
-            public Task WriteParameterInfos(IReadOnlyCollection<string> aliases, string description, Type type, bool optional, bool hasDefaultValue, object defaultValue, IReadOnlyCollection<string> examples, IReadOnlyCollection<(IReadOnlyCollection<string> aliases, string description)> givenHints)
-            {
-                Examples = examples;
-                return Task.CompletedTask;
-            }
-
-            public Task WriteParameterListInfos(IReadOnlyCollection<string> aliases, string description, Type type, bool optional, IReadOnlyCollection<string> separators, bool hasDefaultValue, object defaultValue, IReadOnlyCollection<string> examples, IReadOnlyCollection<(IReadOnlyCollection<string> aliases, string description)> givenHints)
+            public Task WriteParameterInfos(IReadOnlyCollection<string> aliases, string? description, Type type, bool optional, bool hasDefaultValue, object? defaultValue, IReadOnlyCollection<string> examples, IReadOnlyCollection<(IReadOnlyCollection<string> aliases, string description)> givenHints)
             {
                 Examples = examples;
                 return Task.CompletedTask;
             }
 
-            public Task WritePositionalArgumentInfos(string description, Type type, bool optional, bool hasDefaultValue, object defaultValue, IReadOnlyCollection<string> examples, IReadOnlyCollection<(IReadOnlyCollection<string> aliases, string description)> givenHints)
+            public Task WriteParameterListInfos(IReadOnlyCollection<string> aliases, string? description, Type type, bool optional, IReadOnlyCollection<string> separators, bool hasDefaultValue, object? defaultValue, IReadOnlyCollection<string> examples, IReadOnlyCollection<(IReadOnlyCollection<string> aliases, string description)> givenHints)
             {
                 Examples = examples;
                 return Task.CompletedTask;
             }
 
-            public Task WriteRemainingArgumentsAreUsed(string description, Type type, IReadOnlyCollection<string> examples, IReadOnlyCollection<(IReadOnlyCollection<string> aliases, string description)> givenHints)
+            public Task WritePositionalArgumentInfos(string? description, Type type, bool optional, bool hasDefaultValue, object? defaultValue, IReadOnlyCollection<string> examples, IReadOnlyCollection<(IReadOnlyCollection<string> aliases, string description)> givenHints)
+            {
+                Examples = examples;
+                return Task.CompletedTask;
+            }
+
+            public Task WriteRemainingArgumentsAreUsed(string? description, Type type, IReadOnlyCollection<string> examples, IReadOnlyCollection<(IReadOnlyCollection<string> aliases, string description)> givenHints)
             {
                 Examples = examples;
                 return Task.CompletedTask;

@@ -80,6 +80,5 @@
             parseSuccess.Should().BeFalse();
             dummyParsingErrorPrinter.ArgumentParsingErrors.First().helpFlagAliases.Should().BeEquivalentTo("-h", "--help");
         }
-
     }
 }

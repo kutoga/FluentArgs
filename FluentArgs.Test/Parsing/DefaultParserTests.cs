@@ -1,13 +1,19 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Configuration;
-using FluentAssertions;
-using Xunit;
-
-namespace FluentArgs.Test.Parsing
+﻿namespace FluentArgs.Test.Parsing
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Threading.Tasks;
+    using FluentAssertions;
+    using Xunit;
+
     public static class DefaultParserTests
     {
+        public enum TestEnum
+        {
+            Value1,
+            Value2
+        }
+
         [Theory]
         [InlineData("")]
         [InlineData("xyz")]
@@ -103,7 +109,7 @@ namespace FluentArgs.Test.Parsing
         [Theory]
         [InlineData("0", 0)]
         [InlineData("333", 333)]
-        [InlineData("0x32", (uint)0x32)]
+        [InlineData("0x32", 0x32u)]
         public static void DefaultUnsignedIntegerParser_ShouldExist(string value, uint expectedParsedValue)
         {
             ParseValueWithDefaultParser<uint>(value)
@@ -113,7 +119,7 @@ namespace FluentArgs.Test.Parsing
         [Theory]
         [InlineData("0", 0)]
         [InlineData("333", 333)]
-        [InlineData("0x32", (uint)0x32)]
+        [InlineData("0x32", 0x32u)]
         public static void DefaultNullableUnsignedIntegerParser_ShouldExist(string value, uint expectedParsedValue)
         {
             ParseValueWithDefaultParser<uint?>(value)
@@ -166,7 +172,7 @@ namespace FluentArgs.Test.Parsing
         [InlineData("-9", -9)]
         [InlineData("0", 0)]
         [InlineData("333", 333)]
-        [InlineData("0x32", (long)0x32)]
+        [InlineData("0x32", 0x32L)]
         public static void DefaultLongParser_ShouldExist(string value, long expectedParsedValue)
         {
             ParseValueWithDefaultParser<long>(value)
@@ -177,7 +183,7 @@ namespace FluentArgs.Test.Parsing
         [InlineData("-9", -9)]
         [InlineData("0", 0)]
         [InlineData("333", 333)]
-        [InlineData("0x32", (long)0x32)]
+        [InlineData("0x32", 0x32L)]
         public static void DefaultNullableLongParser_ShouldExist(string value, long expectedParsedValue)
         {
             ParseValueWithDefaultParser<long?>(value)
@@ -187,7 +193,7 @@ namespace FluentArgs.Test.Parsing
         [Theory]
         [InlineData("0", 0)]
         [InlineData("333", 333)]
-        [InlineData("0x32", (ulong)0x32)]
+        [InlineData("0x32", 0x32L)]
         public static void DefaultUnsignedLongParser_ShouldExist(string value, ulong expectedParsedValue)
         {
             ParseValueWithDefaultParser<ulong>(value)
@@ -197,7 +203,7 @@ namespace FluentArgs.Test.Parsing
         [Theory]
         [InlineData("0", 0)]
         [InlineData("333", 333)]
-        [InlineData("0x32", (ulong)0x32)]
+        [InlineData("0x32", 0x32L)]
         public static void DefaultNullableUnsignedLongParser_ShouldExist(string value, ulong expectedParsedValue)
         {
             ParseValueWithDefaultParser<ulong?>(value)
@@ -299,7 +305,6 @@ namespace FluentArgs.Test.Parsing
                 .Should().Be(expectedParsedValue);
         }
 
-
         [Theory]
         [InlineData(nameof(TestEnum.Value1), TestEnum.Value1)]
         [InlineData(nameof(TestEnum.Value2), TestEnum.Value2)]
@@ -307,12 +312,6 @@ namespace FluentArgs.Test.Parsing
         {
             ParseValueWithDefaultParser<TestEnum?>(value)
                 .Should().Be(expectedParsedValue);
-        }
-
-        public enum TestEnum
-        {
-            Value1,
-            Value2
         }
 
         private static IEnumerable<object[]> GetDateTimeParseValues()
@@ -335,30 +334,25 @@ namespace FluentArgs.Test.Parsing
         {
             return new[]
             {
-                new object[] {"10:32:05", new TimeSpan(10, 32, 5)}
+                new object[] { "10:32:05", new TimeSpan(10, 32, 5) }
             };
         }
 
         private static T ParseValueWithDefaultParser<T>(string value)
         {
-            var args = new[] {"-v", value};
-            var result = default(T);
-            var called = false;
+            var args = new[] { "-v", value };
+            var resultTask = new TaskCompletionSource<T>();
             var builder = FluentArgsBuilder.New()
                 .Parameter<T>("-v").IsRequired()
-                .Call(v =>
-                {
-                    result = v;
-                    called = true;
-                });
+                .Call(v => resultTask.SetResult(v));
 
             var parseSuccess = builder.Parse(args);
-            if (!(parseSuccess && called))
+            if (!(parseSuccess && resultTask.Task.IsCompletedSuccessfully))
             {
                 throw new Exception($"Could not parse value '{value}'!");
             }
 
-            return result;
+            return resultTask.Task.Result;
         }
     }
 }

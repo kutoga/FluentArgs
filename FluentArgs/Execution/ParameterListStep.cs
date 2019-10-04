@@ -14,7 +14,7 @@
             this.Description = parameterList;
         }
 
-        public ParameterList Description { get; } //TODO: rename to "description" (everywhere)
+        public ParameterList Description { get; } // TODO: rename to "description" (everywhere)
 
         public override Task Accept(IStepVisitor visitor)
         {
@@ -53,12 +53,12 @@
 
             if (Description.Parser != null)
             {
-                return ParseWithParser(Description.Parser); //TODO: parseWithParser sounds stupid
+                return ParseWithParser(Description.Parser); // TODO: parseWithParser sounds stupid
             }
 
             if (DefaultStringParsers.TryGetParser(Description.Type, out var parser))
             {
-                return ArgumentParsingException.ParseWrapper(() => ParseWithParser(parser), Description.Name);
+                return ArgumentParsingException.ParseWrapper(() => ParseWithParser(parser!), Description.Name);
             }
 
             throw ArgumentParsingException.NoParserFound(Description.Name);

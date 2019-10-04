@@ -33,7 +33,7 @@
             return new GivenThenBuilder<TArgsBuilder, TArgsBuilder>(
                 ThenExpressionBuilt,
                 argsBuilderFactory(),
-                () => result);
+                () => result ?? throw new Exception("Resulting builder not defined!"));
 
             void ThenExpressionBuilt(IParsable parsable)
             {

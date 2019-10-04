@@ -39,7 +39,7 @@
 
         public Task<bool> ParseAsync(params string[] args)
         {
-            return ParseFromState(State.InitialState(args, GetPostValidators(InitialStep?.ParserSettings), InitialStep.ParserSettings?.AssignmentOperators));
+            return ParseFromState(State.InitialState(args, GetPostValidators(InitialStep.ParserSettings), InitialStep.ParserSettings?.AssignmentOperators));
         }
 
         public async Task<bool> ParseFromState(State state)

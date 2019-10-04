@@ -17,7 +17,7 @@
             Branches = branches.ToImmutableList();
         }
 
-        //TODO: Put the branches & the name in a GivenCommand description or something like that
+        // TODO: Put the branches & the name in a GivenCommand description or something like that
         public Name Name { get; }
 
         public IImmutableList<(GivenCommandBranch branch, IParsableFromState? then)> Branches { get; }
