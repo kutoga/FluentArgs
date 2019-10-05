@@ -8,24 +8,29 @@ trigger:
 
 variables:
   buildConfiguration: 'Release'
-  workingDirectory: '$(Build.SourcesDirectory)'
+  sourceDirectory: '$(Build.SourcesDirectory)/source'
+  docDirectory: '$(Build.SourcesDirectory)/doc'
 
 steps:
 - script: dotnet tool install --global Paket --version 5.203.0
   displayName: Install Paket
-  workingDirectory: $(workingDirectory)
+  workingDirectory: $(sourceDirectory)
 
-- script: dotnet restore ./source/FluentArgs.sln; echo ''
+- script: dotnet restore ./FluentArgs.sln; echo ''
   displayName: Restore
-  workingDirectory: $(workingDirectory)
+  workingDirectory: $(sourceDirectory)
 
-- script: dotnet build ./source/FluentArgs.sln --configuration $(buildConfiguration)
+- script: dotnet build ./FluentArgs.sln --configuration $(buildConfiguration)
   displayName: Build
-  workingDirectory: $(workingDirectory)
+  workingDirectory: $(sourceDirectory)
 
-- script: dotnet test ./source/FluentArgs.sln --configuration $(buildConfiguration) --logger trx
+- script: dotnet test ./FluentArgs.sln --configuration $(buildConfiguration) --logger trx
   displayName: Test
-  workingDirectory: $(workingDirectory)
+  workingDirectory: $(sourceDirectory)
+
+- script: bash ./test_all_example_codes.sh
+  displayName: Test example code snippets
+  workingDirectory: $(docDirectory)
 
 - task: PublishTestResults@2
   displayName: Publish Test Results
@@ -34,8 +39,8 @@ steps:
     testRunner: VSTest
     testResultsFiles: '**/*.trx'
 
-- script: dotnet publish ./source/FluentArgs --configuration $(buildConfiguration) --output $(Build.ArtifactStagingDirectory)
+- script: dotnet publish ./FluentArgs --configuration $(buildConfiguration) --output $(Build.ArtifactStagingDirectory)
   displayName: Publish
-  workingDirectory: $(workingDirectory)
+  workingDirectory: $(sourceDirectory)
 
 - task: PublishBuildArtifacts@1
