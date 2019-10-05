@@ -10,6 +10,9 @@ variables:
   buildConfiguration: 'Release'
   sourceDirectory: '$(Build.SourcesDirectory)/source'
   docDirectory: '$(Build.SourcesDirectory)/doc'
+  major: '0'
+  minor: '9'
+  patch: '0'
 
 steps:
 - script: dotnet tool install --global Paket --version 5.203.0
@@ -42,5 +45,14 @@ steps:
 - script: dotnet publish ./FluentArgs --configuration $(buildConfiguration) --output $(Build.ArtifactStagingDirectory)
   displayName: Publish
   workingDirectory: $(sourceDirectory)
+
+#- task: NuGetCommand@2
+#  inputs:
+#    command: pack
+#    packagesToPack: 'source/FluentArgs/FluentArgs.csproj'
+#    versioningScheme: byPrereleaseNumber
+#    majorVersion: '$(major)'
+#    minorVersion: '$(minor)'
+#    patchVersion: '$(patch)'
 
 - task: PublishBuildArtifacts@1
