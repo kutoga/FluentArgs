@@ -25,7 +25,7 @@
         {
             var remainingArguments = state.GetRemainingArguments(out state);
             var parameter = Reflection.Array.Create(this.Description.Type, remainingArguments.Select(a => Parse(a))
-                .ValidateIfRequired(Description.Validator).ToArray());
+                .ValidateIfRequired(Description.Validation).ToArray());
             state = state.AddParameter(parameter);
             return GetNextStep().Execute(state);
         }

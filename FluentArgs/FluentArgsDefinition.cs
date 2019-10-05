@@ -39,7 +39,7 @@
 
         public Task<bool> ParseAsync(params string[] args)
         {
-            return ParseFromState(State.InitialState(args, GetPostValidators(InitialStep.ParserSettings), InitialStep.ParserSettings?.AssignmentOperators));
+            return ParseFromState(State.InitialState(args, GetPostValidations(InitialStep.ParserSettings), InitialStep.ParserSettings?.AssignmentOperators));
         }
 
         public async Task<bool> ParseFromState(State state)
@@ -68,7 +68,7 @@
             }
         }
 
-        private static IEnumerable<Action<State>> GetPostValidators(ParserSettings? settings)
+        private static IEnumerable<Action<State>> GetPostValidations(ParserSettings? settings)
         {
             if (settings == null)
             {
@@ -88,7 +88,7 @@
             }
         }
 
-        private static IEnumerable<IStepVisitor> GetValidators(ParserSettings settings)
+        private static IEnumerable<IStepVisitor> GetValidations(ParserSettings settings)
         {
             if (settings.ThrowOnDuplicateNames)
             {
@@ -108,10 +108,10 @@
                 return;
             }
 
-            var validators = GetValidators(InitialStep.ParserSettings);
-            foreach (var validator in validators)
+            var validations = GetValidations(InitialStep.ParserSettings);
+            foreach (var validation in validations)
             {
-                await validator.Visit(InitialStep).ConfigureAwait(false);
+                await validation.Visit(InitialStep).ConfigureAwait(false);
             }
         }
     }

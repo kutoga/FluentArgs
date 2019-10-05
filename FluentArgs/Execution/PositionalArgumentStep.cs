@@ -26,7 +26,7 @@
         {
             if (state.PopArgument(out var argument, out var newState))
             {
-                state = newState.AddParameter(Parse(argument!).ValidateIfRequired(Description.Validator));
+                state = newState.AddParameter(Parse(argument!).ValidateIfRequired(Description.Validation));
             }
             else
             {

@@ -96,13 +96,13 @@
         }
 
         [Fact]
-        public static void GivenAValidatorAndRequiredInvalidInput_ShouldNotBeParsable()
+        public static void GivenAValidationAndRequiredInvalidInput_ShouldNotBeParsable()
         {
             var args = new[] { "1", "2", "110" };
             IReadOnlyCollection<int>? parsedN = null;
             var builder = FluentArgsBuilder.New()
                 .LoadRemainingArguments<int>()
-                    .WithValidator(n => n >= 0 && n <= 100)
+                    .WithValidation(n => n >= 0 && n <= 100)
                 .Call(n => parsedN = n);
 
             var parseSuccess = builder.Parse(args);

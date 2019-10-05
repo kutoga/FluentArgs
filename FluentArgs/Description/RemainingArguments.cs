@@ -17,7 +17,7 @@
 
         public IReadOnlyCollection<string>? Examples { get; set; }
 
-        public IValidator? Validator { get; set; }
+        public IValidation? Validation { get; set; }
 
         public Func<string, object>? Parser { get; set; }
     }

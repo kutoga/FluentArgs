@@ -78,9 +78,9 @@
             return this;
         }
 
-        public IConfigurableParameterList<TArgsBuilder, TParam> WithValidator(IValidator<TParam> validator)
+        public IConfigurableParameterList<TArgsBuilder, TParam> WithValidation(IValidation<TParam> validation)
         {
-            parameterList.Validator = validator.ToObjectValidator();
+            parameterList.Validation = validation.ToObjectValidation();
             return this;
         }
 

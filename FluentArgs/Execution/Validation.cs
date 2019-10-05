@@ -7,9 +7,9 @@
 
     internal static class Validation
     {
-        public static T ValidateIfRequired<T>(this T value, IValidator? validator, Name? argumentName = null)
+        public static T ValidateIfRequired<T>(this T value, IValidation? validation, Name? argumentName = null)
         {
-            if (validator != null && !validator.IsValid(value!, out var errorMessage))
+            if (validation != null && !validation.IsValid(value!, out var errorMessage))
             {
                 if (string.IsNullOrEmpty(errorMessage))
                 {
@@ -26,11 +26,11 @@
             return value;
         }
 
-        public static IEnumerable<T> ValidateIfRequired<T>(this IEnumerable<T> values, IValidator? validator, Name? argumentName = null)
+        public static IEnumerable<T> ValidateIfRequired<T>(this IEnumerable<T> values, IValidation? validation, Name? argumentName = null)
         {
             return values.Select(ValidatedValue);
 
-            T ValidatedValue(T value) => value.ValidateIfRequired(validator, argumentName);
+            T ValidatedValue(T value) => value.ValidateIfRequired(validation, argumentName);
         }
     }
 }

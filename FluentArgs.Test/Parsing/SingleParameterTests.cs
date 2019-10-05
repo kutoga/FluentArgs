@@ -185,13 +185,13 @@
         }
 
         [Fact]
-        public static void GivenAValidatorAndRequiredInvalidInput_ShouldNotBeParsable()
+        public static void GivenAValidationAndRequiredInvalidInput_ShouldNotBeParsable()
         {
             var args = new[] { "-n", "110" };
             int? parsedN = null;
             var builder = FluentArgsBuilder.New()
                 .Parameter<int>("-n")
-                    .WithValidator(n => n >= 0 && n <= 100)
+                    .WithValidation(n => n >= 0 && n <= 100)
                     .IsRequired()
                 .Call(n => parsedN = n);
 
@@ -202,13 +202,13 @@
         }
 
         [Fact]
-        public static void GivenAValidatorAndOptionalInvalidInput_ShouldNotBeParsable()
+        public static void GivenAValidationAndOptionalInvalidInput_ShouldNotBeParsable()
         {
             var args = new[] { "-n", "110" };
             int? parsedN = null;
             var builder = FluentArgsBuilder.New()
                 .Parameter<int>("-n")
-                    .WithValidator(n => n >= 0 && n <= 100)
+                    .WithValidation(n => n >= 0 && n <= 100)
                     .IsOptional()
                 .Call(n => parsedN = n);
 

@@ -66,7 +66,7 @@
             object ParseWithParser(Func<string, object?> parser)
             {
                 return Reflection.Array.Create(Description.Type, splitParameters.Select(p => parser(p))
-                    .ValidateIfRequired(Description.Validator, Description.Name).ToArray());
+                    .ValidateIfRequired(Description.Validation, Description.Name).ToArray());
             }
         }
     }

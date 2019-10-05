@@ -62,9 +62,9 @@
             return this;
         }
 
-        public IConfigurablePositionalArgument<TArgsBuilder, TParam> WithValidator(IValidator<TParam> validator)
+        public IConfigurablePositionalArgument<TArgsBuilder, TParam> WithValidation(IValidation<TParam> validation)
         {
-            positionalArgument.Validator = validator.ToObjectValidator();
+            positionalArgument.Validation = validation.ToObjectValidation();
             return this;
         }
 

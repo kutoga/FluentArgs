@@ -6,7 +6,7 @@
     using System.Linq;
 
     public interface IConfigurableParameterList<TArgsBuilder, TParam>
-        : IWithConfigurableValidator<IConfigurableParameterList<TArgsBuilder, TParam>, TParam>
+        : IWithConfigurableValidation<IConfigurableParameterList<TArgsBuilder, TParam>, TParam>
     {
         IConfigurableParameterList<TArgsBuilder, TParam> WithDescription(string description);
 

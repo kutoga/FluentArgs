@@ -4,7 +4,7 @@
 
     public interface IConfigurableRemainingArguments<TFunc, TFuncAsync, TParam> : // TODO: überall den : auf die Zeile mit dem Klassennamen
         ICallable<TFunc, TFuncAsync>,
-        IWithConfigurableValidator<IConfigurableRemainingArguments<TFunc, TFuncAsync, TParam>, TParam>
+        IWithConfigurableValidation<IConfigurableRemainingArguments<TFunc, TFuncAsync, TParam>, TParam>
     {
         IConfigurableRemainingArguments<TFunc, TFuncAsync, TParam> WithDescription(string description);
 

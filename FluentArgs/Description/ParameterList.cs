@@ -25,7 +25,7 @@
 
         public Type Type { get; }
 
-        public IValidator? Validator { get; set; }
+        public IValidation? Validation { get; set; }
 
         public IReadOnlyCollection<string> Examples { get; set; }
 

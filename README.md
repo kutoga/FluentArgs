@@ -32,7 +32,7 @@ namespace Example
                 .Parameter("-i", "--input").IsRequired()
                 .Parameter("-o", "--output").IsRequired()
                 .Parameter<ushort>("-q", "--quality")
-                    .WithValidator(n => n >= 0 && n <= 100)
+                    .WithValidation(n => n >= 0 && n <= 100)
                     .IsOptionalWithDefault(50)
                 .Call(quality => outputFile => inputFile =>
                 {
@@ -72,7 +72,7 @@ namespace Example
                     .IsRequired()
                 .Parameter<ushort>("-q", "--quality")
                     .WithDescription("Quality of the conversion")
-                    .WithValidator(n => n >= 0 && n <= 100)
+                    .WithValidation(n => n >= 0 && n <= 100)
                     .IsOptionalWithDefault(50)
                 .Call(quality => outputFile => inputFile =>
                 {
