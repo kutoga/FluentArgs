@@ -15,15 +15,15 @@ steps:
   displayName: Install Paket
   workingDirectory: $(workingDirectory)
 
-- script: dotnet restore ./FluentArgs.sln; echo ''
+- script: dotnet restore ./source/FluentArgs.sln; echo ''
   displayName: Restore
   workingDirectory: $(workingDirectory)
 
-- script: dotnet build ./FluentArgs.sln --configuration $(buildConfiguration)
+- script: dotnet build ./source/FluentArgs.sln --configuration $(buildConfiguration)
   displayName: Build
   workingDirectory: $(workingDirectory)
 
-- script: dotnet test ./FluentArgs.sln --configuration $(buildConfiguration) --logger trx
+- script: dotnet test ./source/FluentArgs.sln --configuration $(buildConfiguration) --logger trx
   displayName: Test
   workingDirectory: $(workingDirectory)
 
@@ -34,7 +34,7 @@ steps:
     testRunner: VSTest
     testResultsFiles: '**/*.trx'
 
-- script: dotnet publish ./FluentArgs --configuration $(buildConfiguration) --output $(Build.ArtifactStagingDirectory)
+- script: dotnet publish ./source/FluentArgs --configuration $(buildConfiguration) --output $(Build.ArtifactStagingDirectory)
   displayName: Publish
   workingDirectory: $(workingDirectory)
 
