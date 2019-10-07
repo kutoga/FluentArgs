@@ -42,17 +42,12 @@ steps:
     testRunner: VSTest
     testResultsFiles: '**/*.trx'
 
-- script: dotnet publish ./FluentArgs --configuration $(buildConfiguration) --output $(Build.ArtifactStagingDirectory)
-  displayName: Publish
-  workingDirectory: $(sourceDirectory)
+#- script: dotnet publish ./FluentArgs --configuration $(buildConfiguration) --output $(Build.ArtifactStagingDirectory)
+#  displayName: Publish
+#  workingDirectory: $(sourceDirectory)
 
-#- task: NuGetCommand@2
-#  inputs:
-#    command: pack
-#    packagesToPack: 'source/FluentArgs/FluentArgs.csproj'
-#    versioningScheme: byPrereleaseNumber
-#    majorVersion: '$(major)'
-#    minorVersion: '$(minor)'
-#    patchVersion: '$(patch)'
+- script: dotnet pack ./FluentArgs/FluentArgs.csproj -p:PackageVersion=$(major).$(minor).$(patch) --output $(Build.ArtifactStagingDirectory)
+  displayName: Create Package
+  workingDirectory: $(sourceDirectory)
 
 - task: PublishBuildArtifacts@1
