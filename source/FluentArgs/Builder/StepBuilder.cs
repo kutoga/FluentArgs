@@ -177,7 +177,7 @@
             return new FinalBuilder(new InvalidStep(Step));
         }
 
-        public IConfigurablePositionalArgument<IPositionalArgumentFluentArgsBuilder<Func<TNextParam, TFunc>, Func<TNextParam, TFuncAsync>>, TNextParam> PostionalArgument<TNextParam>()
+        public IConfigurablePositionalArgument<IPositionalArgumentFluentArgsBuilder<Func<TNextParam, TFunc>, Func<TNextParam, TFuncAsync>>, TNextParam> PositionalArgument<TNextParam>()
         {
             var nextBuilder = new StepBuilder<Func<TNextParam, TFunc>, Func<TNextParam, TFuncAsync>>();
             return new PositionalArgumentBuilder<IPositionalArgumentFluentArgsBuilder<Func<TNextParam, TFunc>, Func<TNextParam, TFuncAsync>>, TNextParam>(

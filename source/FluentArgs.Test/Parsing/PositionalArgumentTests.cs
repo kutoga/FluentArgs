@@ -60,7 +60,7 @@
             int? positionalArg = null;
             var builder = FluentArgsBuilder.New()
                 .Parameter<int>("--timeout").IsRequired()
-                .PostionalArgument<int>().IsRequired()
+                .PositionalArgument<int>().IsRequired()
                 .Call(arg => timeout => positionalArg = arg);
 
             var parseSuccess = builder.Parse(args);

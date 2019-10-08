@@ -17,7 +17,7 @@
         ICallable<TFunc, TFuncAsync>
     {
         IConfigurablePositionalArgument<IPositionalArgumentFluentArgsBuilder<Func<TNextParam, TFunc>, Func<TNextParam, TFuncAsync>>, TNextParam>
-            PostionalArgument<TNextParam>();
+            PositionalArgument<TNextParam>();
 
         IConfigurableRemainingArguments<Func<IReadOnlyList<TParam>, TFunc>, Func<IReadOnlyList<TParam>, TFuncAsync>, TParam> LoadRemainingArguments<TParam>();
     }
@@ -45,7 +45,7 @@
         public static IConfigurablePositionalArgument<IPositionalArgumentFluentArgsBuilder<Func<string, TFunc>, Func<string, TFuncAsync>>, string>
             PositionalArgument<TFunc, TFuncAsync>(this IPositionalArgumentFluentArgsBuilder<TFunc, TFuncAsync> builder)
         {
-            return builder.PostionalArgument<string>();
+            return builder.PositionalArgument<string>();
         }
     }
 }

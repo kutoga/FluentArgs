@@ -231,6 +231,34 @@
         }
 
         [Theory]
+        [InlineData("a", 'a')]
+        [InlineData("0x32", (char)0x32)]
+        public static void DefaultCharParser_ShouldExist(string value, char expectedParsedValue)
+        {
+            ParseValueWithDefaultParser<char>(value)
+                .Should().Be(expectedParsedValue);
+        }
+
+        [Theory]
+        [InlineData("a", 'a')]
+        [InlineData("0x32", (char)0x32)]
+        public static void DefaultNullableCharParser_ShouldExist(string value, char expectedParsedValue)
+        {
+            ParseValueWithDefaultParser<char?>(value)
+                .Should().Be(expectedParsedValue);
+        }
+
+        [Theory]
+        [InlineData("")]
+        [InlineData("ab")]
+        public static void InvalidCharSequence_Shouldthrow(string value)
+        {
+            Action parseAction = () => ParseValueWithDefaultParser<char>(value);
+
+            parseAction.Should().Throw<Exception>();
+        }
+
+        [Theory]
         [InlineData("true", true)]
         [InlineData("false", false)]
         public static void DefaultBooleanParser_ShouldExist(string value, bool expectedParsedValue)
@@ -246,6 +274,35 @@
         {
             ParseValueWithDefaultParser<bool?>(value)
                 .Should().Be(expectedParsedValue);
+        }
+
+        [Theory]
+        [InlineData("http://www.google.de")]
+        [InlineData("ftp://wiki.com")]
+        public static void DefaultUriParser_ShouldExist(string value)
+        {
+            ParseValueWithDefaultParser<Uri>(value)
+                .Should().Be(new Uri(value));
+        }
+
+        [Theory]
+        [InlineData("http://www.google.de")]
+        [InlineData("ftp://wiki.com")]
+        public static void DefaultNullableUriParser_ShouldExist(string value)
+        {
+            ParseValueWithDefaultParser<Uri?>(value)
+                .Should().Be(new Uri(value));
+        }
+
+        [Theory]
+        [InlineData("")]
+        [InlineData(" ")]
+        [InlineData("1")]
+        public static void UriParseGivenInvalidInput_ShouldThrow(string value)
+        {
+            Action parseAction = () => ParseValueWithDefaultParser<Uri>(value);
+
+            parseAction.Should().Throw<Exception>();
         }
 
         [Theory]

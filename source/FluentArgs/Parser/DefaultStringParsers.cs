@@ -25,8 +25,8 @@
             [typeof(decimal)] = s => decimal.Parse(s, CultureInfo.InvariantCulture),
 
             [typeof(byte)] = s => ParseNumber<byte>(s, byte.Parse, byte.TryParse),
+            [typeof(char)] = s => ParseChar(s),
 
-            // TODO: Does parsing 1, 0 usw. work?
             [typeof(bool)] = s => ParseBool(s),
 
             [typeof(DateTime)] = s => DateTime.Parse(s, CultureInfo.InvariantCulture),
@@ -71,6 +71,17 @@
             }
 
             return parse(input);
+        }
+
+        private static char ParseChar(string input)
+        {
+            if (input.StartsWith("0x", StringComparison.InvariantCultureIgnoreCase) &&
+                byte.TryParse(input.Substring(2), NumberStyles.HexNumber, CultureInfo.InvariantCulture, out var result))
+            {
+                return (char)result;
+            }
+
+            return char.Parse(input);
         }
 
         private static bool TryGetEnumParser(Type enumType, out Func<string, object>? parser)
