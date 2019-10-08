@@ -52,9 +52,9 @@
             return Build().Invalid();
         }
 
-        public IConfigurablePositionalArgument<IPositionalArgumentFluentArgsBuilder<Func<TNextParam, Action<bool>>, Func<TNextParam, Func<bool, Task>>>, TNextParam> PostionalArgument<TNextParam>()
+        public IConfigurablePositionalArgument<IPositionalArgumentFluentArgsBuilder<Func<TNextParam, Action<bool>>, Func<TNextParam, Func<bool, Task>>>, TNextParam> PositionalArgument<TNextParam>()
         {
-            return Build().PostionalArgument<TNextParam>();
+            return Build().PositionalArgument<TNextParam>();
         }
 
         public IConfigurableRemainingArguments<Func<IReadOnlyList<TParam>, Action<bool>>, Func<IReadOnlyList<TParam>, Func<bool, Task>>, TParam> LoadRemainingArguments<TParam>()
@@ -129,9 +129,9 @@
             return Build().Invalid();
         }
 
-        public IConfigurablePositionalArgument<IPositionalArgumentFluentArgsBuilder<Func<TNextParam, Func<bool, TFunc>>, Func<TNextParam, Func<bool, TFuncAsync>>>, TNextParam> PostionalArgument<TNextParam>()
+        public IConfigurablePositionalArgument<IPositionalArgumentFluentArgsBuilder<Func<TNextParam, Func<bool, TFunc>>, Func<TNextParam, Func<bool, TFuncAsync>>>, TNextParam> PositionalArgument<TNextParam>()
         {
-            return Build().PostionalArgument<TNextParam>();
+            return Build().PositionalArgument<TNextParam>();
         }
 
         public IConfigurableRemainingArguments<Func<IReadOnlyList<TParam>, Func<bool, TFunc>>, Func<IReadOnlyList<TParam>, Func<bool, TFuncAsync>>, TParam> LoadRemainingArguments<TParam>()

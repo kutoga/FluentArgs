@@ -6,10 +6,9 @@ namespace Example
 
     class Program
     {
-        public static Task Main(string[] args)
+        public static void Main(string[] args)
         {
-            return FluentArgsBuilder.New()
-                .DefaultConfigs()
+            FluentArgsBuilder.New()
                 .Parameter("-i", "--input").IsRequired()
                 .Parameter("-o", "--output").IsRequired()
                 .Parameter<ushort>("-q", "--quality")
@@ -20,9 +19,8 @@ namespace Example
                     /* ... */
                     Console.WriteLine($"Convert {inputFile} to {outputFile} with quality {quality}...");
                     /* ... */
-                    return Task.CompletedTask;
                 })
-                .ParseAsync(args);
+                .Parse(args);
         }
     }
 }

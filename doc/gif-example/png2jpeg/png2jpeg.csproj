@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
@@ -10,7 +10,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\source\FluentArgs\FluentArgs.csproj" />
+    <ProjectReference Include="..\..\..\source\FluentArgs\FluentArgs.csproj" />
   </ItemGroup>
 
 </Project>
