@@ -11,7 +11,7 @@ final application.
 The API is optimized to be as readable and type-safe as possible. Therefore, anyone can learn how to use this library
 in just a few minutes.
 
-![](doc/test.gif)
+![](doc/gif-example/example.gif)
 
 # How to install
 TODO

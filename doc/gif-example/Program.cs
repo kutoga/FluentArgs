@@ -36,7 +36,7 @@ namespace Example
             }
 
             /* Application implementation */
-            var encoderParameters = new EncoderParameters(1);
+            using var encoderParameters = new EncoderParameters(1);
             encoderParameters.Param[0] = new EncoderParameter(Encoder.Quality, quality);
             var img = Image.FromFile(inputFile);
             img.Save(outputFile, ImageCodecInfo.GetImageEncoders().First(e => e.MimeType == "image/jpeg"), encoderParameters);

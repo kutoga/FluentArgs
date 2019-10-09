@@ -1,10 +1,10 @@
 namespace Example
 {
-    using FluentArgs;
     using System;
     using System.Threading.Tasks;
+    using FluentArgs;
 
-    class Program
+    public static class Program
     {
         public static Task Main(string[] args)
         {
@@ -25,4 +25,3 @@ namespace Example
         }
     }
 }
-

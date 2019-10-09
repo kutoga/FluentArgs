@@ -1,8 +1,10 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
+    <LangVersion>8.0</LangVersion>
     <OutputType>Exe</OutputType>
     <TargetFramework>netcoreapp2.2</TargetFramework>
+    <NoWarn>SA1633;SA1400;CA1303;SA0001</NoWarn>
   </PropertyGroup>
 
   <ItemGroup>

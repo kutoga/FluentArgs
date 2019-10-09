@@ -11,7 +11,7 @@ final application.
 The API is optimized to be as readable and type-safe as possible. Therefore, anyone can learn how to use this library
 in just a few minutes.
 
-![](doc/test.gif)
+![](doc/gif-example/example.gif)
 
 # How to install
 TODO
@@ -54,6 +54,10 @@ namespace Example
 }
 
 ```
+
+You might wonder why the order of parameters for the `Call`-method are inverted. This is due to a limitation
+of the C#-programming language: If the order should be reversed, the number of parameters has to be limited
+to a fixed number.
 
 You also want to have a detailed help? Just annotate all parameters and call `myapp -h` or `myapp --help`.
 The help flag is added by the `DefaultConfigs...`-call. As you can see later, it is possible to disable the
@@ -332,6 +336,8 @@ namespace Example
     }
 }
 ```
+
+# Example: List parameters
 
 # Example: Async vs Blocking
 Both, async and blocking, calls are supported. An async example:
