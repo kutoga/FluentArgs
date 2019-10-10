@@ -37,7 +37,7 @@ steps:
 
 - script: bash ./build_readme.sh
   displayName: Test building README.md
-  workingDirectory: $(Build.SourceDirectory)
+  workingDirectory: $(Build.SourcesDirectory)
 
 - task: PublishTestResults@2
   displayName: Publish Test Results

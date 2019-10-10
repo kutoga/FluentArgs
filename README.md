@@ -14,25 +14,39 @@ in just a few minutes.
 ![](doc/gif-example/example.gif)
 
 # How to install
-TODO
+Package Manager:
+```
+PM> Install-Package FluentArgs
+```
 
-TODO: Am Anfang beschreiben, dass immer COnfigureWithDefaults gemacht wird und das empfohlen wird
+.NET CLI:
+```
+> dotnet add package FluentArgs
+```
+
+Paket CLI:
+```
+> paket add FluentArgs
+```
+
+# TODO: Write down why ConfigureWithDefaults is recommended (or do not use it)
 
 # Example: Parse simple arguments and flags
 Given you want a program which supports png to jpeg conversion and you want to support calls like these:
 - `myapp -i image.png -o image.jpeg -q 100`
 - `myapp --input image.png --quality 50 --output image.jpeg`
+- `myapp --input=image.png -q=50 --output image.jpeg`
 - etc.
 
 There's the code:
 ```csharp
 namespace Example
 {
-    using FluentArgs;
     using System;
     using System.Threading.Tasks;
+    using FluentArgs;
 
-    class Program
+    public static class Program
     {
         public static void Main(string[] args)
         {
@@ -52,7 +66,6 @@ namespace Example
         }
     }
 }
-
 ```
 
 You might wonder why the order of parameters for the `Call`-method are inverted. This is due to a limitation
@@ -66,11 +79,11 @@ code.
 ```csharp
 namespace Example
 {
-    using FluentArgs;
     using System;
     using System.Threading.Tasks;
+    using FluentArgs;
 
-    class Program
+    public static class Program
     {
         public static Task Main(string[] args)
         {
@@ -99,7 +112,6 @@ namespace Example
         }
     }
 }
-
 ```
 
 # Example: Parse positional and remaining arguments
@@ -111,11 +123,11 @@ Such arguments can be defined after all simple arguments and flags are defined:
 ```csharp
 namespace Example
 {
-    using FluentArgs;
     using System;
     using System.Threading.Tasks;
+    using FluentArgs;
 
-    class Program
+    public static class Program
     {
         public static Task Main(string[] args)
         {
@@ -138,18 +150,17 @@ namespace Example
         }
     }
 }
-
 ```
 
 It is no problem to define multiple positional arguments:
 ```csharp
 namespace Example
 {
-    using FluentArgs;
     using System;
     using System.Threading.Tasks;
+    using FluentArgs;
 
-    class Program
+    public static class Program
     {
         public static Task Main(string[] args)
         {
@@ -170,7 +181,6 @@ namespace Example
         }
     }
 }
-
 ```
 
 It is also possible to parse all remaining arguments. E.g., if calls like `rm -f file1 file2 file` should
@@ -178,11 +188,11 @@ be supported (with an arbitrary number of files), this can be achieved by the fo
 ```csharp
 namespace Example
 {
-    using FluentArgs;
     using System;
     using System.Threading.Tasks;
+    using FluentArgs;
 
-    class Program
+    public static class Program
     {
         public static Task Main(string[] args)
         {
@@ -213,15 +223,15 @@ the following:
   - An optional parameter `-s` (or `--source`) defines the update source
 - Otherwise the program takes it first two positional arguments and prints their sum: `myapp 1 2` should print `1+2=3`
 
-The following code fullfills this specifications:
+The following code fulfills this specifications:
 ```csharp
 namespace Example
 {
-    using FluentArgs;
     using System;
     using System.Threading.Tasks;
+    using FluentArgs;
 
-    class Program
+    public static class Program
     {
         public static void Main(string[] args)
         {
@@ -277,11 +287,11 @@ This parameter parsing specification can be implemented with the following code:
 ```csharp
 namespace Example
 {
-    using FluentArgs;
     using System;
     using System.Threading.Tasks;
+    using FluentArgs;
 
-    class Program
+    public static class Program
     {
         public static Task Main(string[] args)
         {
@@ -344,11 +354,11 @@ Both, async and blocking, calls are supported. An async example:
 ```csharp
 namespace Example
 {
-    using FluentArgs;
     using System;
     using System.Threading.Tasks;
+    using FluentArgs;
 
-    class Program
+    public static class Program
     {
         public static Task Main(string[] args)
         {
@@ -370,11 +380,11 @@ A blocking example:
 ```csharp
 namespace Example
 {
-    using FluentArgs;
     using System;
     using System.Threading.Tasks;
+    using FluentArgs;
 
-    class Program
+    public static class Program
     {
         public static void Main(string[] args)
         {
@@ -393,10 +403,19 @@ namespace Example
 ```
 
 # Example: Help
+TODO:
+- help printer
+- help flag
 
 # Example: Handle errors
+TODO:
+- printers
+- parse return code
 
 # Example: Advanced configuration
+TODO:
+- throw options
+- separators
 
 # Example: Reuse parser
 It might be the case that you want to reuse a parser. In this case it is more efficient to explicit build
@@ -404,11 +423,11 @@ the internal tree with the `.Build()` method and use the resulting parser.
 ```csharp
 namespace Example
 {
-    using FluentArgs;
     using System;
     using System.Threading.Tasks;
+    using FluentArgs;
 
-    class Program
+    public static class Program
     {
         public static async Task Main(string[] args)
         {
@@ -432,5 +451,6 @@ namespace Example
 ```
 
 # Best practices
-E.g. just call one method in `Call`. etc.
+TODO:
+- E.g. just call one method in `Call`. etc.
 
