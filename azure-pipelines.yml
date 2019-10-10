@@ -35,6 +35,10 @@ steps:
   displayName: Test example code snippets
   workingDirectory: $(docDirectory)
 
+- script: bash ./build_readme.sh
+  displayName: Test building README.md
+  workingDirectory: $(Build.SourceDirectory)
+
 - task: PublishTestResults@2
   displayName: Publish Test Results
   condition: succeededOrFailed()
