@@ -119,7 +119,41 @@ A blocking example:
 !INCLUDE:examples/AsyncBlocking02.cs
 ```
 
+# Example: Parsing and validation
+There are already parsers for many data types implemented: all types of `int`, `char`, `bool`,
+`DateTime`, `DateTimeOffset`, `decimal`, `double`, `float`, `byte`, `Uri`, `string` (which is
+trivial) and enums
+
+It might happen that you have to implement your own parser. It is always possible to define a
+parser to any definition. There are even cases where not every value in the parsed domain is
+valid. E.g., if you need a value greater than or equal to 0 and smaller than or equal to 100.
+The int-parser would be a good choice and an additional validation might be used to force the
+value to be in the correct range.
+
+The following application implements a parser that is able to parse binary numbers. This number
+is then validated: It must be greater or equal to 0 and smaller or equal to 100. An example
+call would be `myapp -b=101`.
+```csharp
+!INCLUDE:examples/ParserValidation01.cs
+```
+
 # Example: Help
+It is possible to add descriptive metadata to all elements and, of course, it is also possible
+to print the user what possibilities war available.
+
+To enable a help flag, it is possible to configure the argument parser with the default
+configs (e.g. the first call should be `.DefaultConfigs()` or `DefaultConfigsWithAppDescription(...)).
+This adds the help flags `-h` and `--help`. Independent of the default configs, if you want to define
+a custom help flag, this can be done with `.RegisterHelpFlag(...)`.
+
+To make the help useful, you probably want to add `.WithDescription(...)` and maybe even `.WithExamples(...)`
+to all your parameter definitions.
+
+Here is a simple application that offers help to the user:
+```csharp
+!INCLUDE:examples/Help01.cs
+```
+
 TODO:
 - help printer
 - help flag

@@ -402,7 +402,104 @@ namespace Example
 }
 ```
 
+# Example: Parsing and validation
+There are already parsers for many data types implemented: all types of `int`, `char`, `bool`,
+`DateTime`, `DateTimeOffset`, `decimal`, `double`, `float`, `byte`, `Uri`, `string` (which is
+trivial) and enums
+
+It might happen that you have to implement your own parser. It is always possible to define a
+parser to any definition. There are even cases where not every value in the parsed domain is
+valid. E.g., if you need a value greater than or equal to 0 and smaller than or equal to 100.
+The int-parser would be a good choice and an additional validation might be used to force the
+value to be in the correct range.
+
+The following application implements a parser that is able to parse binary numbers. This number
+is then validated: It must be greater or equal to 0 and smaller or equal to 100. An example
+call would be `myapp -b=101`.
+```csharp
+namespace Example
+{
+    using System;
+    using System.Linq;
+    using FluentArgs;
+
+    public static class Program
+    {
+        private static int BinaryNumberParser(string input)
+        {
+            if (input.Length == 0) { return 0; }
+            var lastDigit = input.Last() == '0' ? 0 : input.Last() == '1' ? 1 : throw new FormatException();
+            return lastDigit + (2 * BinaryNumberParser(input.Substring(0, input.Length - 1)));
+        }
+
+        public static void Main(string[] args)
+        {
+            FluentArgsBuilder.New()
+                .DefaultConfigs()
+                .Parameter<int>("-b", "--binaryNumber")
+                    .WithDescription("A binary number which is greater or equal to 0 and smaller or equal to 100")
+                    .WithParser(BinaryNumberParser)
+                    .WithValidation(n => n >= 0 && n <= 100)
+                    .IsRequired()
+                .Call(n => Console.WriteLine($"Number: {n}"))
+                .Parse(args);
+        }
+    }
+}
+```
+
 # Example: Help
+It is possible to add descriptive metadata to all elements and, of course, it is also possible
+to print the user what possibilities war available.
+
+To enable a help flag, it is possible to configure the argument parser with the default
+configs (e.g. the first call should be `.DefaultConfigs()` or `DefaultConfigsWithAppDescription(...)).
+This adds the help flags `-h` and `--help`. Independent of the default configs, if you want to define
+a custom help flag, this can be done with `.RegisterHelpFlag(...)`.
+
+To make the help useful, you probably want to add `.WithDescription(...)` and maybe even `.WithExamples(...)`
+to all your parameter definitions.
+
+Here is a simple application that offers help to the user:
+```csharp
+namespace Example
+{
+    using System;
+    using FluentArgs;
+
+    public static class Program
+    {
+        public static void Main(string[] args)
+        {
+            FluentArgsBuilder.New()
+                .WithApplicationDescription("This application demonstrates how to use the help-features.")
+                .RegisterHelpFlag("-h", "--help", "--another-help-flag")
+                .Parameter("-n", "--name")
+                    .WithDescription("Your name")
+                    .WithExamples("Peter", "Benjamin")
+                    .IsRequired()
+                .Parameter<int>("-a", "--age")
+                    .WithDescription("Your age")
+                    .WithExamples(23, 56)
+                    .WithValidation(a => a >= 0 && a <= 120, a => $"You are probably not {a} years old")
+                    .IsRequired()
+                .Parameter<string?>("-e", "--email")
+                    .WithDescription("Your email address")
+                    .WithExamples("mrmojito@mymail.com", "me@cookislands.de")
+                    .WithValidation(m => m.Contains('@'), "Your mail must contain an @-sign!")
+                    .IsOptional()
+                .Call(email => age => name =>
+                {
+                    Console.WriteLine($"Name: {name}");
+                    Console.WriteLine($"Age: {age}");
+                    Console.WriteLine($"EMail: {email}");
+                })
+                .Parse(args);
+        }
+    }
+}
+```
+
 TODO:
 - help printer
 - help flag
