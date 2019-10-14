@@ -154,6 +154,11 @@ Here is a simple application that offers help to the user:
 !INCLUDE:examples/Help01.cs
 ```
 
+If this tool is called with the `--help` (or `-h`) flag, the output looks like this:
+```
+!SCRIPT:./scripts/dotnet_call.sh ./examples/Help01.cs --help
+```
+
 TODO:
 - help printer
 - help flag

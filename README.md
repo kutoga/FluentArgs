@@ -475,16 +475,16 @@ namespace Example
                 .WithApplicationDescription("This application demonstrates how to use the help-features.")
                 .RegisterHelpFlag("-h", "--help", "--another-help-flag")
                 .Parameter("-n", "--name")
-                    .WithDescription("Your name")
+                    .WithDescription("Your name.")
                     .WithExamples("Peter", "Benjamin")
                     .IsRequired()
                 .Parameter<int>("-a", "--age")
-                    .WithDescription("Your age")
+                    .WithDescription("Your age.")
                     .WithExamples(23, 56)
                     .WithValidation(a => a >= 0 && a <= 120, a => $"You are probably not {a} years old")
                     .IsRequired()
                 .Parameter<string?>("-e", "--email")
-                    .WithDescription("Your email address")
+                    .WithDescription("Your email address.")
                     .WithExamples("mrmojito@mymail.com", "me@cookislands.de")
                     .WithValidation(m => m.Contains('@'), "Your mail must contain an @-sign!")
                     .IsOptional()
@@ -498,6 +498,17 @@ namespace Example
         }
     }
 }
+```
+
+If this tool is called with the `--help` (or `-h`) flag, the output looks like this:
+```
+This application demonstrates how to use the help-features.
+
+-n|--name  Your name. Examples: Peter, Benjamin
+-a|--age   Your age. Examples: 23, 56
+-e|--email Optional. Your email address. Examples: mrmojito@mymail.com, 
+           me@cookislands.de
+
 ```
 
 TODO:
