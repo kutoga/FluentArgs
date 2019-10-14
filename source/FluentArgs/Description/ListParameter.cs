@@ -5,11 +5,11 @@
     using System.Collections.Immutable;
     using FluentArgs.Validation;
 
-    internal class ParameterList
+    internal class ListParameter
     {
         public static readonly IImmutableSet<string> DefaultSeparators = new[] { ";", "," }.ToImmutableHashSet();
 
-        public ParameterList(Name name, Type type)
+        public ListParameter(Name name, Type type)
         {
             Name = name;
             Type = type;

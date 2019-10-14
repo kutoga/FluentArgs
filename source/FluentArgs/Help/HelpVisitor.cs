@@ -135,18 +135,18 @@
             return Task.CompletedTask;
         }
 
-        public async Task Visit(ParameterListStep step)
+        public async Task Visit(ListParameterStep step)
         {
-            var parameterList = step.Description;
-            await helpPrinter.WriteParameterListInfos(
-                parameterList.Name.Names,
-                parameterList.Description,
-                parameterList.Type,
-                !parameterList.IsRequired,
-                parameterList.Separators,
-                parameterList.HasDefaultValue,
-                parameterList.DefaultValue,
-                parameterList.Examples,
+            var listParameter = step.Description;
+            await helpPrinter.WriteListParameterInfos(
+                listParameter.Name.Names,
+                listParameter.Description,
+                listParameter.Type,
+                !listParameter.IsRequired,
+                listParameter.Separators,
+                listParameter.HasDefaultValue,
+                listParameter.DefaultValue,
+                listParameter.Examples,
                 GetGivenHints()).ConfigureAwait(false);
             await step.GetNextStep().Accept(this).ConfigureAwait(false);
         }

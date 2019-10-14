@@ -1,6 +1,8 @@
 ﻿[![Build Status](https://dev.azure.com/benjaminmeier70/PipelinePlayground/_apis/build/status/kutoga.FluentArgs?branchName=master)](https://dev.azure.com/benjaminmeier70/PipelinePlayground/_build/latest?definitionId=3&branchName=master)
 
 # FluentArgs: Fluent Arguments Parsing for .NET
+Version:
+!SCRIPT:bash ../version.sh
 
 FluentArgs is an easy-to-use library that provides command line argument parsing. For all parameters it is possible
 to provide meta information (description, examples etc.) which might be used to auto-generate a simple help for the
@@ -109,18 +111,18 @@ This parameter parsing specification can be implemented with the following code:
 !INCLUDE:examples/Given02.cs
 ```
 
-# Example: Parameter lists
-Parameters lists can contain multiple values per key. E.g., if a program has to parse a list of
+# Example: List parameter
+List parameters can contain multiple values per key. E.g., if a program has to parse a list of
 names, a call like `myapp --names=Peter;Paul;Kevin` should be used to input these names.
 
 The code:
 ```csharp
-!INCLUDE:examples/ParameterList01.cs
+!INCLUDE:examples/ListParameter01.cs
 ```
 
 Default separators are `;` and `,`, bu they might be overwritten, e.g. by ` `:
 ```csharp
-!INCLUDE:examples/ParameterList02.cs
+!INCLUDE:examples/ListParameter02.cs
 ```
 
 # Example: Async vs Blocking

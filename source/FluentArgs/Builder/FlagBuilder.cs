@@ -67,9 +67,9 @@
             return Build().Parameter<TNextParam>(name, moreNames);
         }
 
-        public IConfigurableParameterList<IFluentArgsBuilder<Func<IReadOnlyList<TNextParam>, Action<bool>>, Func<IReadOnlyList<TNextParam>, Func<bool, Task>>>, TNextParam> ParameterList<TNextParam>(string name, params string[] moreNames)
+        public IConfigurableListParameter<IFluentArgsBuilder<Func<IReadOnlyList<TNextParam>, Action<bool>>, Func<IReadOnlyList<TNextParam>, Func<bool, Task>>>, TNextParam> ListParameter<TNextParam>(string name, params string[] moreNames)
         {
-            return Build().ParameterList<TNextParam>(name, moreNames);
+            return Build().ListParameter<TNextParam>(name, moreNames);
         }
 
         public IFluentArgsBuilder<Action<bool>, Func<bool, Task>> WithDescription(string description)
@@ -144,9 +144,9 @@
             return Build().Parameter<TNextParam>(name, moreNames);
         }
 
-        public IConfigurableParameterList<IFluentArgsBuilder<Func<IReadOnlyList<TNextParam>, Func<bool, TFunc>>, Func<IReadOnlyList<TNextParam>, Func<bool, TFuncAsync>>>, TNextParam> ParameterList<TNextParam>(string name, params string[] moreNames)
+        public IConfigurableListParameter<IFluentArgsBuilder<Func<IReadOnlyList<TNextParam>, Func<bool, TFunc>>, Func<IReadOnlyList<TNextParam>, Func<bool, TFuncAsync>>>, TNextParam> ListParameter<TNextParam>(string name, params string[] moreNames)
         {
-            return Build().ParameterList<TNextParam>(name, moreNames);
+            return Build().ListParameter<TNextParam>(name, moreNames);
         }
 
         public IFluentArgsBuilder<Func<bool, TFunc>, Func<bool, TFuncAsync>> WithDescription(string description)

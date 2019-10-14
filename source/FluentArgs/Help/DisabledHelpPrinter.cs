@@ -32,7 +32,7 @@
             return Task.CompletedTask;
         }
 
-        public Task WriteParameterListInfos(IReadOnlyCollection<string> aliases, string? description, Type type, bool optional, IReadOnlyCollection<string> separators, bool hasDefaultValue, object? defaultValue, IReadOnlyCollection<string> examples, IReadOnlyCollection<(IReadOnlyCollection<string> aliases, string description)> givenHints)
+        public Task WriteListParameterInfos(IReadOnlyCollection<string> aliases, string? description, Type type, bool optional, IReadOnlyCollection<string> separators, bool hasDefaultValue, object? defaultValue, IReadOnlyCollection<string> examples, IReadOnlyCollection<(IReadOnlyCollection<string> aliases, string description)> givenHints)
         {
             return Task.CompletedTask;
         }

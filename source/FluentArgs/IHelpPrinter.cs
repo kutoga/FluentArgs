@@ -23,7 +23,7 @@
             IReadOnlyCollection<string> examples,
             IReadOnlyCollection<(IReadOnlyCollection<string> aliases, string description)> givenHints);
 
-        Task WriteParameterListInfos(
+        Task WriteListParameterInfos(
             IReadOnlyCollection<string> aliases,
             string? description,
             Type type,

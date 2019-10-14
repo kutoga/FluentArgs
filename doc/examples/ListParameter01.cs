@@ -9,7 +9,7 @@ namespace Example
         public static void Main(string[] args)
         {
             FluentArgsBuilder.New()
-                .ParameterList("--names")
+                .ListParameter("--names")
                     .WithDescription("A list of names.")
                     .WithValidation(n => !string.IsNullOrWhiteSpace(n), "A name must not only contain whitespace.")
                     .IsRequired()

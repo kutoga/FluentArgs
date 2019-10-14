@@ -79,7 +79,7 @@
             return Task.CompletedTask;
         }
 
-        public Task WriteParameterListInfos(
+        public Task WriteListParameterInfos(
             IReadOnlyCollection<string> aliases,
             string? description,
             Type type,

@@ -28,13 +28,13 @@
         }
 
         [Fact]
-        public static void GivenExamplesForParameterListsAndRequestingHelp_ShouldListExamples()
+        public static void GivenExamplesForAListParameterAndRequestingHelp_ShouldListExamples()
         {
             var helpPrinter = new ExamplesCollectingHelpPrinter();
             var builder = FluentArgsBuilder.New()
                 .RegisterHelpPrinter(helpPrinter)
                 .RegisterHelpFlag("-h")
-                .ParameterList("-n")
+                .ListParameter("-n")
                     .WithExamples("exampleA", "exampleB")
                     .IsRequired()
                 .Call(a => { });
@@ -105,7 +105,7 @@
                 return Task.CompletedTask;
             }
 
-            public Task WriteParameterListInfos(IReadOnlyCollection<string> aliases, string? description, Type type, bool optional, IReadOnlyCollection<string> separators, bool hasDefaultValue, object? defaultValue, IReadOnlyCollection<string> examples, IReadOnlyCollection<(IReadOnlyCollection<string> aliases, string description)> givenHints)
+            public Task WriteListParameterInfos(IReadOnlyCollection<string> aliases, string? description, Type type, bool optional, IReadOnlyCollection<string> separators, bool hasDefaultValue, object? defaultValue, IReadOnlyCollection<string> examples, IReadOnlyCollection<(IReadOnlyCollection<string> aliases, string description)> givenHints)
             {
                 Examples = examples;
                 return Task.CompletedTask;

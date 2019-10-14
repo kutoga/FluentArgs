@@ -6,15 +6,15 @@
     using FluentArgs.Description;
     using FluentArgs.Parser;
 
-    internal class ParameterListStep : Step
+    internal class ListParameterStep : Step
     {
-        public ParameterListStep(Step previous, ParameterList parameterList)
+        public ListParameterStep(Step previous, ListParameter listParameter)
             : base(previous)
         {
-            this.Description = parameterList;
+            this.Description = listParameter;
         }
 
-        public ParameterList Description { get; } // TODO: rename to "description" (everywhere)
+        public ListParameter Description { get; } // TODO: rename to "description" (everywhere)
 
         public override Task Accept(IStepVisitor visitor)
         {

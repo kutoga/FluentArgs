@@ -20,7 +20,7 @@
 
         Task Visit(InvalidStep step);
 
-        Task Visit(ParameterListStep step);
+        Task Visit(ListParameterStep step);
 
         Task Visit(ParameterStep step);
 

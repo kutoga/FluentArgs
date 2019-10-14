@@ -133,14 +133,14 @@
                 nextBuilder.Step = new ParameterStep(Step, parameter);
         }
 
-        IConfigurableParameterList<IFluentArgsBuilder<Action<IReadOnlyList<TNextParam>>, Func<IReadOnlyList<TNextParam>, Task>>, TNextParam> IFluentArgsBuilder.ParameterList<TNextParam>(string name, params string[] moreNames)
+        IConfigurableListParameter<IFluentArgsBuilder<Action<IReadOnlyList<TNextParam>>, Func<IReadOnlyList<TNextParam>, Task>>, TNextParam> IFluentArgsBuilder.ListParameter<TNextParam>(string name, params string[] moreNames)
         {
             var nextBuilder = new StepBuilder<Action<IReadOnlyList<TNextParam>>, Func<IReadOnlyList<TNextParam>, Task>>();
-            return new ParameterListBuilder<IFluentArgsBuilder<Action<IReadOnlyList<TNextParam>>, Func<IReadOnlyList<TNextParam>, Task>>, TNextParam>(
-                ParameterListBuilt, nextBuilder, Name.ValidateAndBuild(name, moreNames));
+            return new ListParameterBuilder<IFluentArgsBuilder<Action<IReadOnlyList<TNextParam>>, Func<IReadOnlyList<TNextParam>, Task>>, TNextParam>(
+                ListParameterBuilt, nextBuilder, Name.ValidateAndBuild(name, moreNames));
 
-            void ParameterListBuilt(ParameterList parameterList) =>
-                nextBuilder.Step = new ParameterListStep(Step, parameterList);
+            void ListParameterBuilt(ListParameter listParameter) =>
+                nextBuilder.Step = new ListParameterStep(Step, listParameter);
         }
     }
 
@@ -193,12 +193,12 @@
                 s => new StepBuilder<Func<IReadOnlyList<TParam>, TFunc>, Func<IReadOnlyList<TParam>, TFuncAsync>> { Step = s }, Step);
         }
 
-        IConfigurableFlagWithOptionalDescription<TFunc, TFuncAsync> IFluentArgsBuilder<TFunc, TFuncAsync>.Flag(string name, params string[] moreNames)
+        public IConfigurableFlagWithOptionalDescription<TFunc, TFuncAsync> Flag(string name, params string[] moreNames)
         {
             return new FlagBuilder<TFunc, TFuncAsync>(s => new StepBuilder<Func<bool, TFunc>, Func<bool, TFuncAsync>> { Step = s }, Step, new Flag(Name.ValidateAndBuild(name, moreNames)));
         }
 
-        IConfigurableParameter<IFluentArgsBuilder<Func<TNextParam, TFunc>, Func<TNextParam, TFuncAsync>>, TNextParam> IFluentArgsBuilder<TFunc, TFuncAsync>.Parameter<TNextParam>(string name, params string[] moreNames)
+        public IConfigurableParameter<IFluentArgsBuilder<Func<TNextParam, TFunc>, Func<TNextParam, TFuncAsync>>, TNextParam> Parameter<TNextParam>(string name, params string[] moreNames)
         {
             // TODO: TNextParam -> TParam
             var nextBuilder = new StepBuilder<Func<TNextParam, TFunc>, Func<TNextParam, TFuncAsync>>();
@@ -209,14 +209,14 @@
                 nextBuilder.Step = new ParameterStep(Step, parameter);
         }
 
-        IConfigurableParameterList<IFluentArgsBuilder<Func<IReadOnlyList<TNextParam>, TFunc>, Func<IReadOnlyList<TNextParam>, TFuncAsync>>, TNextParam> IFluentArgsBuilder<TFunc, TFuncAsync>.ParameterList<TNextParam>(string name, params string[] moreNames)
+        public IConfigurableListParameter<IFluentArgsBuilder<Func<IReadOnlyList<TNextParam>, TFunc>, Func<IReadOnlyList<TNextParam>, TFuncAsync>>, TNextParam> ListParameter<TNextParam>(string name, params string[] moreNames)
         {
             var nextBuilder = new StepBuilder<Func<IReadOnlyList<TNextParam>, TFunc>, Func<IReadOnlyList<TNextParam>, TFuncAsync>>();
-            return new ParameterListBuilder<IFluentArgsBuilder<Func<IReadOnlyList<TNextParam>, TFunc>, Func<IReadOnlyList<TNextParam>, TFuncAsync>>, TNextParam>(
-                ParameterListBuilt, nextBuilder, Name.ValidateAndBuild(name, moreNames));
+            return new ListParameterBuilder<IFluentArgsBuilder<Func<IReadOnlyList<TNextParam>, TFunc>, Func<IReadOnlyList<TNextParam>, TFuncAsync>>, TNextParam>(
+                ListParameterBuilt, nextBuilder, Name.ValidateAndBuild(name, moreNames));
 
-            void ParameterListBuilt(ParameterList parameterList) =>
-                nextBuilder.Step = new ParameterListStep(Step, parameterList);
+            void ListParameterBuilt(ListParameter listParameter) =>
+                nextBuilder.Step = new ListParameterStep(Step, listParameter);
         }
     }
 }

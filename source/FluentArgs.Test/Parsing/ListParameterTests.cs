@@ -5,19 +5,19 @@
     using FluentAssertions;
     using Xunit;
 
-    public static class ParameterListTests
+    public static class ListParameterTests
     {
         // TODO: pack all parameter configs into a single interface
         // TODO: copy this interface and add:
         //      WithSeparator(...)
         //      IsOptionalWithEmptyDefault()
         [Fact]
-        public static void GivenAParameterList_ShouldBeParsed()
+        public static void GivenAListParameter_ShouldBeParsed()
         {
             var args = new[] { "-n", "1,2,3" };
             IReadOnlyList<int>? parsedN = default;
             var builder = FluentArgsBuilder.New()
-                .ParameterList<int>("-n").IsRequired()
+                .ListParameter<int>("-n").IsRequired()
                 .Call(n => parsedN = n);
 
             var parseSuccess = builder.Parse(args);
@@ -27,12 +27,12 @@
         }
 
         [Fact]
-        public static void GivenARequiredParameterListWhichIsNotPresent_ShouldNotParseSuccessful()
+        public static void GivenARequiredListParameterWhichIsNotPresent_ShouldNotParseSuccessful()
         {
             var args = new[] { "-x" };
             IReadOnlyList<int>? parsedN = default;
             var builder = FluentArgsBuilder.New()
-                .ParameterList<int>("-n").IsRequired()
+                .ListParameter<int>("-n").IsRequired()
                 .Call(n => parsedN = n);
 
             var parseSuccess = builder.Parse(args);
@@ -41,12 +41,12 @@
         }
 
         [Fact]
-        public static void GivenAnOptionalParameterListWhichIsNotPresent_ShouldReturnNull()
+        public static void GivenAnOptionalListParameterWhichIsNotPresent_ShouldReturnNull()
         {
             var args = new[] { "-x" };
             IReadOnlyList<int> parsedN = new int[1];
             var builder = FluentArgsBuilder.New()
-                .ParameterList<int>("-n").IsOptional()
+                .ListParameter<int>("-n").IsOptional()
                 .Call(n => parsedN = n);
 
             var parseSuccess = builder.Parse(args);
@@ -56,12 +56,12 @@
         }
 
         [Fact]
-        public static void GivenAnOptionaldParameterListWithAnEmptyDefaultWhichIsNotPresent_ShouldReturnAnEmptyArray()
+        public static void GivenAnOptionaldListParameterWithAnEmptyDefaultWhichIsNotPresent_ShouldReturnAnEmptyArray()
         {
             var args = new[] { "-x" };
             IReadOnlyList<int>? parsedN = default;
             var builder = FluentArgsBuilder.New()
-                .ParameterList<int>("-n").IsOptionalWithEmptyDefault()
+                .ListParameter<int>("-n").IsOptionalWithEmptyDefault()
                 .Call(n => parsedN = n);
 
             var parseSuccess = builder.Parse(args);
@@ -71,12 +71,12 @@
         }
 
         [Fact]
-        public static void GivenAnOptionaldParameterListWithADefaultWhichIsNotPresent_ShouldReturnDefault()
+        public static void GivenAnOptionaldListParametertWithADefaultWhichIsNotPresent_ShouldReturnDefault()
         {
             var args = new[] { "-x" };
             IReadOnlyCollection<int>? parsedN = default;
             var builder = FluentArgsBuilder.New()
-                .ParameterList<int>("-n").IsOptionalWithDefault(new[] { 1, 2, 4 })
+                .ListParameter<int>("-n").IsOptionalWithDefault(new[] { 1, 2, 4 })
                 .Call(n => parsedN = n);
 
             var parseSuccess = builder.Parse(args);
@@ -86,12 +86,12 @@
         }
 
         [Fact]
-        public static void GivenAParameterList_UsesDefaultSeparators()
+        public static void GivenAListParameter_UsesDefaultSeparators()
         {
             var args = new[] { "-n", "1,2;3;1;44,1337" };
             IReadOnlyList<int>? parsedN = default;
             var builder = FluentArgsBuilder.New()
-                .ParameterList<int>("-n").IsRequired()
+                .ListParameter<int>("-n").IsRequired()
                 .Call(n => parsedN = n);
 
             var parseSuccess = builder.Parse(args);
@@ -105,12 +105,12 @@
         [InlineData("1,2;3", ",", new[] { "1", "2;3" })]
         [InlineData(",", ",", new[] { "", "" })]
         [InlineData("eigenartig", "i", new[] { "e", "genart", "g" })]
-        public static void GivenAParameterListWithCustomSeparators_ShouldBeHandledCorrect(string sArg, string separator, string[] expectedValues)
+        public static void GivenAListParameterWithCustomSeparators_ShouldBeHandledCorrect(string sArg, string separator, string[] expectedValues)
         {
             var args = new[] { "-s", sArg };
             IReadOnlyList<string>? parsedS = default;
             var builder = FluentArgsBuilder.New()
-                .ParameterList("-s")
+                .ListParameter("-s")
                     .WithSeparator(separator)
                     .IsRequired()
                 .Call(s => parsedS = s);
@@ -122,12 +122,12 @@
         }
 
         [Fact]
-        public static void GivenAParameterListWithACustomParser_ShouldBeHandledCorrect()
+        public static void GivenAListParameterWithACustomParser_ShouldBeHandledCorrect()
         {
             var args = new[] { "-s", "a,b" };
             IReadOnlyList<string>? parsedS = default;
             var builder = FluentArgsBuilder.New()
-                .ParameterList("-s")
+                .ListParameter("-s")
                     .WithParser(s => s.ToUpperInvariant())
                     .IsRequired()
                 .Call(s => parsedS = s);
@@ -139,14 +139,14 @@
         }
 
         [Fact]
-        public static void GivenMultipleParameterLists_ShouldBeHandledCorrect()
+        public static void GivenMultipleListParameters_ShouldBeHandledCorrect()
         {
             var args = new[] { "-a", "1,2,3", "-b", "3,4,5" };
             IReadOnlyList<int>? parsedA = default;
             IReadOnlyList<int>? parsedB = default;
             var builder = FluentArgsBuilder.New()
-                .ParameterList<int>("-a").IsRequired()
-                .ParameterList<int>("-b").IsRequired()
+                .ListParameter<int>("-a").IsRequired()
+                .ListParameter<int>("-b").IsRequired()
                 .Call(b => a =>
                 {
                     parsedA = a;
@@ -166,7 +166,7 @@
             var args = new[] { "-a=1,2,3" };
             IReadOnlyList<int>? parsedA = default;
             var builder = FluentArgsBuilder.New()
-                .ParameterList<int>("-a").IsRequired()
+                .ListParameter<int>("-a").IsRequired()
                 .Call(a => parsedA = a);
 
             var parseSuccess = builder.Parse(args);
@@ -181,7 +181,7 @@
             var args = new[] { "-n", "1,2,110" };
             IReadOnlyCollection<int>? parsedN = default;
             var builder = FluentArgsBuilder.New()
-                .ParameterList<int>("-n")
+                .ListParameter<int>("-n")
                     .WithValidation(n => n >= 0 && n <= 100)
                     .IsRequired()
                 .Call(n => parsedN = n);
@@ -198,7 +198,7 @@
             var args = new[] { "-n", "1,2,110" };
             IReadOnlyCollection<int>? parsedN = default;
             var builder = FluentArgsBuilder.New()
-                .ParameterList<int>("-n")
+                .ListParameter<int>("-n")
                     .WithValidation(n => n >= 0 && n <= 100)
                     .IsOptional()
                 .Call(n => parsedN = n);

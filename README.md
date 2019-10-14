@@ -1,6 +1,9 @@
 ﻿[![Build Status](https://dev.azure.com/benjaminmeier70/PipelinePlayground/_apis/build/status/kutoga.FluentArgs?branchName=master)](https://dev.azure.com/benjaminmeier70/PipelinePlayground/_build/latest?definitionId=3&branchName=master)
 
 # FluentArgs: Fluent Arguments Parsing for .NET
+Version:
+0.9.0
+
 
 FluentArgs is an easy-to-use library that provides command line argument parsing. For all parameters it is possible
 to provide meta information (description, examples etc.) which might be used to auto-generate a simple help for the
@@ -350,8 +353,8 @@ namespace Example
 }
 ```
 
-# Example: Parameter lists
-Parameters lists can contain multiple values per key. E.g., if a program has to parse a list of
+# Example: List parameter
+List parameters can contain multiple values per key. E.g., if a program has to parse a list of
 names, a call like `myapp --names=Peter;Paul;Kevin` should be used to input these names.
 
 The code:
@@ -367,7 +370,7 @@ namespace Example
         public static void Main(string[] args)
         {
             FluentArgsBuilder.New()
-                .ParameterList("--names")
+                .ListParameter("--names")
                     .WithDescription("A list of names.")
                     .WithValidation(n => !string.IsNullOrWhiteSpace(n), "A name must not only contain whitespace.")
                     .IsRequired()
@@ -398,7 +401,7 @@ namespace Example
         public static void Main(string[] args)
         {
             FluentArgsBuilder.New()
-                .ParameterList("--names")
+                .ListParameter("--names")
                     .WithDescription("A list of names.")
                     .WithSeparator(" ")
                     .WithValidation(n => !string.IsNullOrWhiteSpace(n), "A name must not only contain whitespace.")

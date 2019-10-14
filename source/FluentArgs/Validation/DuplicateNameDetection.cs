@@ -91,7 +91,7 @@
             return Task.CompletedTask;
         }
 
-        public Task Visit(ParameterListStep step)
+        public Task Visit(ListParameterStep step)
         {
             var newDuplicationDetection = ValidateName(step.Description.Name);
             return step.GetNextStep().Accept(newDuplicationDetection);

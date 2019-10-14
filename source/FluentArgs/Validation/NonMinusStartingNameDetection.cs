@@ -55,7 +55,7 @@
             return Task.CompletedTask;
         }
 
-        public Task Visit(ParameterListStep step)
+        public Task Visit(ListParameterStep step)
         {
             ValidateAliases(step.Description.Name.Names);
             return step.GetNextStep().Accept(this);
