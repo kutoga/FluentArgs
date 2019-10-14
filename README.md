@@ -70,12 +70,15 @@ namespace Example
 
 You might wonder why the order of parameters for the `Call`-method are inverted. This is due to a limitation
 of the C#-programming language: If the order should be reversed, the number of parameters has to be limited
-to a fixed number.
+to a fixed number. At least it is not obvious how something like variadic templates can be implemented.
 
-You also want to have a detailed help? Just annotate all parameters and call `myapp -h` or `myapp --help`.
+You want to have a detailed help? Just annotate all parameters and call `myapp -h` or `myapp --help`.
 The help flag is added by the `DefaultConfigs...`-call. As you can see later, it is possible to disable the
 help flag, to use a different help flag name or to customize the help output. It is also possible use async
 code.
+
+In general it is recommended to add `DefaultConfigs()` to the parser: It adds the help flags (which still
+might be overwritten) and some additional validations (see **Example: Advanced configuration**).
 ```csharp
 namespace Example
 {
@@ -347,7 +350,72 @@ namespace Example
 }
 ```
 
-# Example: List parameters
+# Example: Parameter lists
+Parameters lists can contain multiple values per key. E.g., if a program has to parse a list of
+names, a call like `myapp --names=Peter;Paul;Kevin` should be used to input these names.
+
+The code:
+```csharp
+namespace Example
+{
+    using System;
+
+    using FluentArgs;
+
+    public static class Program
+    {
+        public static void Main(string[] args)
+        {
+            FluentArgsBuilder.New()
+                .ParameterList("--names")
+                    .WithDescription("A list of names.")
+                    .WithValidation(n => !string.IsNullOrWhiteSpace(n), "A name must not only contain whitespace.")
+                    .IsRequired()
+                .Call(names =>
+                {
+                    foreach (var name in names)
+                    {
+                        Console.WriteLine(name);
+                    }
+                })
+                .Parse(args);
+        }
+    }
+}
+
+```
+
+Default separators are `;` and `,`, bu they might be overwritten, e.g. by ` `:
+```csharp
+namespace Example
+{
+    using System;
+
+    using FluentArgs;
+
+    public static class Program
+    {
+        public static void Main(string[] args)
+        {
+            FluentArgsBuilder.New()
+                .ParameterList("--names")
+                    .WithDescription("A list of names.")
+                    .WithSeparator(" ")
+                    .WithValidation(n => !string.IsNullOrWhiteSpace(n), "A name must not only contain whitespace.")
+                    .IsRequired()
+                .Call(names =>
+                {
+                    foreach (var name in names)
+                    {
+                        Console.WriteLine(name);
+                    }
+                })
+                .Parse(args);
+        }
+    }
+}
+
+```
 
 # Example: Async vs Blocking
 Both, async and blocking, calls are supported. An async example:

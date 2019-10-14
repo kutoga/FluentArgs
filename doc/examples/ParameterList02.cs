@@ -1,0 +1,28 @@
+namespace Example
+{
+    using System;
+
+    using FluentArgs;
+
+    public static class Program
+    {
+        public static void Main(string[] args)
+        {
+            FluentArgsBuilder.New()
+                .ParameterList("--names")
+                    .WithDescription("A list of names.")
+                    .WithSeparator(" ")
+                    .WithValidation(n => !string.IsNullOrWhiteSpace(n), "A name must not only contain whitespace.")
+                    .IsRequired()
+                .Call(names =>
+                {
+                    foreach (var name in names)
+                    {
+                        Console.WriteLine(name);
+                    }
+                })
+                .Parse(args);
+        }
+    }
+}
+
