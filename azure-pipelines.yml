@@ -31,12 +31,12 @@ steps:
   displayName: Test
   workingDirectory: $(sourceDirectory)
 
-- script: bash ./test_all_example_codes.sh
+- script: bash ./scripts/test_all_example_codes.sh
   displayName: Test example code snippets
   workingDirectory: $(docDirectory)
 
-- script: bash ./build_readme.sh
-  displayName: Test building README.md
+- script: bash ./doc/scripts/test_readme.sh
+  displayName: Test README.md
   workingDirectory: $(Build.SourcesDirectory)
 
 - task: PublishTestResults@2

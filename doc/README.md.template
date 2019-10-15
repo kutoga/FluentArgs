@@ -2,7 +2,7 @@
 
 # FluentArgs: Fluent Arguments Parsing for .NET
 Version:
-!SCRIPT:bash ../version.sh
+!SCRIPT:bash ./scripts/version.sh
 
 FluentArgs is an easy-to-use library that provides command line argument parsing. For all parameters it is possible
 to provide meta information (description, examples etc.) which might be used to auto-generate a simple help for the
