@@ -6,6 +6,7 @@
     using System.Linq;
     using System.Threading.Tasks;
     using FluentArgs.Description;
+    using FluentArgs.Extensions;
     using FluentArgs.Parser;
 
     internal class GivenCommandStep : Step
@@ -80,7 +81,7 @@
                 throw new ArgumentException("Value type cannot be null.");
             }
 
-            var value = Parse(parameterValue, branch.Parser, branch.ValueType);
+            var value = parameterValue.TryParse(branch.ValueType, branch.Parser, Name);
             if (branch.PossibleValues.Any(p => object.Equals(value, p)))
             {
                 if (then == null)
@@ -101,7 +102,7 @@
                 throw new ArgumentException("Value type cannot be null.");
             }
 
-            var value = Parse(parameterValue, branch.Parser, branch.ValueType);
+            var value = parameterValue.TryParse(branch.ValueType, branch.Parser, Name);
             var matches = branch.Predicate?.Invoke(value) ?? false;
             if (!matches)
             {
@@ -123,22 +124,7 @@
 
         private Task? ExecuteInvalid(State state, string parameterValue, GivenCommandBranch branch, IParsableFromState? then)
         {
-            throw new ArgumentParsingException("Invalid command value.", Name);
-        }
-
-        private object Parse(string parameter, Func<string, object>? parser, Type type)
-        {
-            if (parser != null)
-            {
-                return parser(parameter);
-            }
-
-            if (DefaultStringParsers.TryGetParser(type, out var defaultParser))
-            {
-                return ArgumentParsingException.ParseWrapper(() => defaultParser!(parameter), Name);
-            }
-
-            throw ArgumentParsingException.NoParserFound(Name);
+            throw new InvalidCommandValueException(Name, parameterValue);
         }
     }
 }

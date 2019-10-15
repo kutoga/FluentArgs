@@ -4,6 +4,7 @@
     using System.Linq;
     using System.Threading.Tasks;
     using FluentArgs.Description;
+    using FluentArgs.Extensions;
     using FluentArgs.Parser;
 
     internal class ListParameterStep : Step
@@ -11,7 +12,7 @@
         public ListParameterStep(Step previous, ListParameter listParameter)
             : base(previous)
         {
-            this.Description = listParameter;
+            Description = listParameter;
         }
 
         public ListParameter Description { get; } // TODO: rename to "description" (everywhere)
@@ -31,7 +32,7 @@
             {
                 if (Description.IsRequired)
                 {
-                    throw new ArgumentMissingException("Required (list-)parameter not found!", Description.Name);
+                    throw new ArgumentMissingException("Required (list-)parameter not found!", Description.Type, Description.Name);
                 }
 
                 if (Description.HasDefaultValue)
@@ -50,24 +51,9 @@
         private object Parse(string parameter)
         {
             var splitParameters = parameter.Split(Description.Separators.ToArray(), StringSplitOptions.None);
-
-            if (Description.Parser != null)
-            {
-                return ParseWithParser(Description.Parser); // TODO: parseWithParser sounds stupid
-            }
-
-            if (DefaultStringParsers.TryGetParser(Description.Type, out var parser))
-            {
-                return ArgumentParsingException.ParseWrapper(() => ParseWithParser(parser!), Description.Name);
-            }
-
-            throw ArgumentParsingException.NoParserFound(Description.Name);
-
-            object ParseWithParser(Func<string, object?> parser)
-            {
-                return Reflection.Array.Create(Description.Type, splitParameters.Select(p => parser(p))
-                    .ValidateIfRequired(Description.Validation, Description.Name).ToArray());
-            }
+            return Reflection.Array.Create(Description.Type, splitParameters
+                .Select(a => a.TryParse(Description.Type, Description.Parser))
+                .ValidateIfRequired(Description.Validation).ToArray());
         }
     }
 }

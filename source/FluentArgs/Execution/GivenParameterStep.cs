@@ -2,6 +2,7 @@
 {
     using System.Threading.Tasks;
     using FluentArgs.Description;
+    using FluentArgs.Extensions;
     using FluentArgs.Parser;
 
     internal class GivenParameterStep : Step
@@ -39,7 +40,7 @@
                 {
                     state = newState;
 
-                    if (object.Equals(Parse(value!), Description.RequiredValue))
+                    if (object.Equals(value!.TryParse(Description.Type, Description.Parser, Description.Name), Description.RequiredValue))
                     {
                         return ThenStep.ParseFromState(state);
                     }
@@ -47,22 +48,6 @@
                     return GetNextStep().Execute(state);
                 }
             }
-        }
-
-        // TODO: Remove duplicate code (see parametersetp.cs)
-        private object Parse(string parameter)
-        {
-            if (this.Description.Parser != null)
-            {
-                return this.Description.Parser(parameter);
-            }
-
-            if (DefaultStringParsers.TryGetParser(this.Description.Type, out var parser))
-            {
-                return parser!(parameter);
-            }
-
-            throw new ArgumentParsingException($"No parse for the type '{this.Description.Type.Name}' available!", this.Description.Name);
         }
     }
 }

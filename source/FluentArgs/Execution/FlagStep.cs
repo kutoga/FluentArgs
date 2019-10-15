@@ -8,7 +8,7 @@
         public FlagStep(Step previousStep, Flag flag)
             : base(previousStep)
         {
-            this.Description = flag;
+            Description = flag;
         }
 
         public Flag Description { get; }

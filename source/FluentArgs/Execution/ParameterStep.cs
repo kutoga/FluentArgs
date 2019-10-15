@@ -4,6 +4,7 @@
     using System.Linq;
     using System.Threading.Tasks;
     using FluentArgs.Description;
+    using FluentArgs.Extensions;
     using FluentArgs.Parser;
     using FluentArgs.Reflection;
 
@@ -26,13 +27,15 @@
         {
             if (state.TryExtractNamedArgument(Description.Name.Names, out _, out var value, out var newState))
             {
-                state = newState.AddParameter(Parse(value!).ValidateIfRequired(Description.Validation, Description.Name));
+                state = newState.AddParameter(
+                    value!.TryParse(Description.Type, Description.Parser, Description.Name)
+                        .ValidateIfRequired(Description.Validation, Description.Name));
             }
             else
             {
                 if (Description.IsRequired)
                 {
-                    throw new ArgumentMissingException("Required parameter not found!", Description.Name);
+                    throw new ArgumentMissingException("Required parameter not found!", Description.Type, Description.Name);
                 }
 
                 if (Description.HasDefaultValue)
@@ -46,21 +49,6 @@
             }
 
             return GetNextStep().Execute(state);
-        }
-
-        private object Parse(string parameter)
-        {
-            if (this.Description.Parser != null)
-            {
-                return this.Description.Parser(parameter);
-            }
-
-            if (DefaultStringParsers.TryGetParser(this.Description.Type, out var parser))
-            {
-                return ArgumentParsingException.ParseWrapper(() => parser!(parameter), Description.Name);
-            }
-
-            throw ArgumentParsingException.NoParserFound(Description.Name);
         }
     }
 }

@@ -4,6 +4,7 @@
     using System.Linq;
     using System.Threading.Tasks;
     using FluentArgs.Description;
+    using FluentArgs.Extensions;
     using FluentArgs.Parser;
     using FluentArgs.Reflection;
 
@@ -26,13 +27,15 @@
         {
             if (state.PopArgument(out var argument, out var newState))
             {
-                state = newState.AddParameter(Parse(argument!).ValidateIfRequired(Description.Validation));
+                state = newState.AddParameter(
+                    argument!.TryParse(Description.Type, Description.Parser)
+                        .ValidateIfRequired(Description.Validation));
             }
             else
             {
                 if (Description.IsRequired)
                 {
-                    throw new ArgumentMissingException($"Required positionalArgument not found! Argument description: {Description.Description}");
+                    throw new ArgumentMissingException($"Required positionalArgument not found! Argument description: {Description.Description}", Description.Type);
                 }
 
                 if (Description.HasDefaultValue)
@@ -46,21 +49,6 @@
             }
 
             return GetNextStep().Execute(state);
-        }
-
-        private object Parse(string parameter)
-        {
-            if (this.Description.Parser != null)
-            {
-                return this.Description.Parser(parameter);
-            }
-
-            if (DefaultStringParsers.TryGetParser(this.Description.Type, out var parser))
-            {
-                return parser!(parameter);
-            }
-
-            throw new Exception("TODO: IMPLEMENT MORE DEFAULTS");
         }
     }
 }

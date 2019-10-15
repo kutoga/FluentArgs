@@ -16,12 +16,12 @@
             errorLineWriter = new LineWriter(errorWriter);
         }
 
-        public async Task PrintArgumentMissingError(IReadOnlyCollection<string>? aliases, string description, IReadOnlyCollection<string>? helpFlagAliases)
+        public async Task PrintArgumentMissingError(IReadOnlyCollection<string>? aliases, Type targetType, string description, IReadOnlyCollection<string>? helpFlagAliases)
         {
             if (aliases != null)
             {
                 await errorLineWriter
-                    .WriteLine($"Required argument '{aliases.StringifyAliases()}' not found!")
+                    .WriteLine($"Required argument '{aliases.StringifyAliases()}' of type '{targetType.Name}' not found!")
                     .ConfigureAwait(false);
             }
             else
@@ -33,17 +33,25 @@
             await WriteHelpFlagInfo(helpFlagAliases).ConfigureAwait(false);
         }
 
-        public async Task PrintArgumentParsingError(IReadOnlyCollection<string>? aliases, string description, IReadOnlyCollection<string>? helpFlagAliases)
+        public async Task PrintArgumentParsingError(IReadOnlyCollection<string>? aliases, Type targetType, string description, IReadOnlyCollection<string>? helpFlagAliases)
         {
             if (aliases != null)
             {
                 await errorLineWriter
-                    .WriteLine($"Could not parse argument '{aliases.StringifyAliases()}'!")
+                    .WriteLine($"Could not parse argument '{aliases.StringifyAliases()}' of type '{targetType.Name}'!")
                     .ConfigureAwait(false);
-                await WriteHelpFlagInfo(helpFlagAliases).ConfigureAwait(false);
             }
 
             await errorLineWriter.WriteLine($"Error: {description}").ConfigureAwait(false);
+            await WriteHelpFlagInfo(helpFlagAliases).ConfigureAwait(false);
+        }
+
+        public async Task PrintInvalidCommandValueError(IReadOnlyCollection<string> aliases, string value, IReadOnlyCollection<string>? helpFlagAliases)
+        {
+            await errorLineWriter
+                .WriteLine($"The command '{aliases.StringifyAliases()}' has an invalid / unknown value: {value}")
+                .ConfigureAwait(false);
+            await WriteHelpFlagInfo(helpFlagAliases).ConfigureAwait(false);
         }
 
         private Task WriteHelpFlagInfo(IReadOnlyCollection<string>? helpFlagAliases)

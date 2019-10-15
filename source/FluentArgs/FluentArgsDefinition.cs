@@ -54,6 +54,7 @@
             {
                 await InitialStep.ParserSettings!.ParsingErrorPrinter.PrintArgumentMissingError(
                     ex.ArgumentName?.Names,
+                    ex.Type,
                     ex.Description,
                     InitialStep.ParserSettings.HelpFlag?.Names).ConfigureAwait(false);
                 return false;
@@ -62,7 +63,16 @@
             {
                 await InitialStep.ParserSettings!.ParsingErrorPrinter.PrintArgumentParsingError(
                     ex.ArgumentName?.Names,
+                    ex.TargetType,
                     ex.Description,
+                    InitialStep.ParserSettings.HelpFlag?.Names).ConfigureAwait(false);
+                return false;
+            }
+            catch (InvalidCommandValueException ex)
+            {
+                await InitialStep.ParserSettings!.ParsingErrorPrinter.PrintInvalidCommandValueError(
+                    ex.CommandName.Names,
+                    ex.Value,
                     InitialStep.ParserSettings.HelpFlag?.Names).ConfigureAwait(false);
                 return false;
             }

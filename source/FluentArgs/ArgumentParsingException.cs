@@ -5,22 +5,25 @@
 
     internal class ArgumentParsingException : Exception
     {
-        public ArgumentParsingException(string description, Name? argumentName = null)
+        public ArgumentParsingException(string description, Type targetType, Name? argumentName = null)
         {
             Description = description;
+            TargetType = targetType;
             ArgumentName = argumentName;
         }
 
         public string Description { get; }
 
+        public Type TargetType { get; }
+
         public Name? ArgumentName { get; }
 
-        public static ArgumentParsingException NoParserFound(Name? argumentName = null)
+        public static ArgumentParsingException NoParserFound(Type targetType, Name? argumentName = null)
         {
-            return new ArgumentParsingException("Could not find a suitable parser!", argumentName);
+            return new ArgumentParsingException("Could not find a suitable parser!", targetType, argumentName);
         }
 
-        public static T ParseWrapper<T>(Func<T> parser, Name? argumentName = null)
+        public static object ParseWrapper(Func<object> parser, Type targetType, Name? argumentName = null)
         {
             try
             {
@@ -28,7 +31,7 @@
             }
             catch (Exception ex)
             {
-                throw new ArgumentParsingException(ex.Message, argumentName);
+                throw new ArgumentParsingException(ex.Message, targetType, argumentName);
             }
         }
     }

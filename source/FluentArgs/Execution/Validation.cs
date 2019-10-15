@@ -20,7 +20,7 @@
                     ThrowValidationError($"Validation failed: {errorMessage}");
                 }
 
-                void ThrowValidationError(string message) => throw new ArgumentParsingException(message, argumentName);
+                void ThrowValidationError(string message) => throw new ArgumentParsingException(message, typeof(T), argumentName);
             }
 
             return value;
