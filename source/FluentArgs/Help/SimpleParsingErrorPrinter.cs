@@ -58,10 +58,11 @@
         {
             if (helpFlagAliases != null)
             {
+                var currentApplicationName = Path.GetFileNameWithoutExtension(Environment.GetCommandLineArgs()[0]);
                 return errorLineWriter.WriteLines(
                     string.Empty,
                     "Show help for more information:",
-                    $"  {Environment.GetCommandLineArgs()[0]} {helpFlagAliases.AliasesOrdering().FirstOrDefault()}");
+                    $"  {currentApplicationName} {helpFlagAliases.AliasesOrdering().FirstOrDefault()}");
             }
 
             return Task.CompletedTask;

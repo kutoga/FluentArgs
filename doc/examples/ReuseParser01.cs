@@ -12,9 +12,9 @@ namespace Example
                 .Parameter<int>("-n").IsRequired()
                 .Call(n =>
                 {
-                    /*...*/
+                    /* ... */
                     Console.WriteLine($"n={n}");
-                    /*...*/
+                    /* ... */
                     return Task.CompletedTask;
                 })
                 .Build();

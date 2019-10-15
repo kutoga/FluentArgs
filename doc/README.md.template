@@ -176,14 +176,58 @@ If this tool is called with the `--help` (or `-h`) flag, the output looks like t
 !SCRIPT:bash ./scripts/dotnet_call.sh ./examples/Help01.cs --help
 ```
 
-TODO:
-- help printer
-- help flag
+There might be reasons why the output of the help printer is not optimal for some use-cases. To handle this,
+it is possible to use a custom help printer: It just has to implement `FluentArgs.Help.IHelpPrinter`. The
+default help printer is `FluentArgs.Help.SimpleHelpPrinter`. It can be configured to use another output
+stream.
+
+The following code shows how a help printer can be defined:
+```csharp
+!INCLUDE:examples/Help02.cs
+```
 
 # Example: Handle errors
+Errors? Yes, parsing errors. It might happen that users
+- do not input required parameters
+- do input invalid values (e.g. a text instead of a number)
+- do input values that fail in the validation step
+
+How to handle these cases? They are all automatically handled by FluentArgs. To give the user optimal help
+it is recommended to annotate all parameters with a description and examples.
+
+The following code is used to demonstarte how error outputs look like:
+```csharp
+!INCLUDE:examples/HandleErrors01.cs
+```
+
+Given the call `myapp` (missing parameter) produces this output:
+```
+!SCRIPT:bash ./scripts/dotnet_call.sh examples/HandleErrors01.cs | sed -r 's/DummyProject/myapp/g'
+```
+
+Given the call `myapp -n X` (invalid parameter type) produces this output:
+```
+!SCRIPT:bash ./scripts/dotnet_call.sh examples/HandleErrors01.cs -n X | sed -r 's/DummyProject/myapp/g'
+```
+
+Given the call `myapp -n 0` (validation fails) produces this output:
+```
+!SCRIPT:bash ./scripts/dotnet_call.sh examples/HandleErrors01.cs -n 0 | sed -r 's/DummyProject/myapp/g'
+```
+
+
 TODO:
 - printers
 - parse return code
+
+# Example: Parser definition sections
+Any parser definition with FluentArgs contains some natural definition sections. They describe different stages
+of the parsing process. In general, parsing is done in the same order as the description is given. All sections
+except the final `Call` are **optional**.
+The flow is shown in the following example:
+```csharp
+!INCLUDE:examples/ParserSections01.cs
+```
 
 # Example: Advanced configuration
 TODO:
@@ -200,4 +244,3 @@ the internal tree with the `.Build()` method and use the resulting parser.
 # Best practices
 TODO:
 - E.g. just call one method in `Call`. etc.
-

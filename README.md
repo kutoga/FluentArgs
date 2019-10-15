@@ -245,9 +245,9 @@ namespace Example
                 .WithApplicationDescription("A simple calculator: add two numbers")
                 .Given.Flag("-v", "--version").Then(() =>
                 {
-                    /*...*/
+                    /* ... */
                     Console.WriteLine("Program version: 2.0");
-                    /*...*/
+                    /* ... */
                 })
                 .Given.Flag("-u", "--update").Then(b => b
                     .Parameter<Uri>("-s", "--source")
@@ -255,9 +255,9 @@ namespace Example
                         .IsOptionalWithDefault(new Uri("http://my-update-server.com/update.zip"))
                     .Call(uri =>
                     {
-                        /*...*/
+                        /* ... */
                         Console.WriteLine($"Install update from {uri}...");
-                        /*...*/
+                        /* ... */
                     }))
                 .PositionalArgument<int>()
                     .WithDescription("The first number")
@@ -267,9 +267,9 @@ namespace Example
                     .IsRequired()
                 .Call(n2 => n1 =>
                 {
-                    /*...*/
+                    /* ... */
                     Console.WriteLine($"{n1}+{n2}={n1 + n2}");
-                    /*...*/
+                    /* ... */
                 })
                 .Parse(args);
         }
@@ -331,23 +331,23 @@ namespace Example
 
         private static async Task Init(string apiKey, uint timeout)
         {
-            /*...*/
+            /* ... */
             await Console.Out.WriteAsync($"Init: {nameof(apiKey)}={apiKey}, {nameof(timeout)}={timeout}").ConfigureAwait(false);
-            /*...*/
+            /* ... */
         }
 
         private static async Task Delete(string apiKey, string file, uint timeout)
         {
-            /*...*/
+            /* ... */
             await Console.Out.WriteAsync($"Delete: {nameof(apiKey)}={apiKey}, {nameof(file)}={file}, {nameof(timeout)}={timeout}").ConfigureAwait(false);
-            /*...*/
+            /* ... */
         }
 
         private static async Task Move(string apiKey, string source, string target, uint timeout)
         {
-            /*...*/
+            /* ... */
             await Console.Out.WriteAsync($"Move: {nameof(apiKey)}={apiKey}, {nameof(source)}={source}, {nameof(target)}={target}, {nameof(timeout)}={timeout}").ConfigureAwait(false);
-            /*...*/
+            /* ... */
         }
     }
 }
@@ -582,14 +582,183 @@ This application demonstrates how to use the help-features.
 
 ```
 
-TODO:
-- help printer
-- help flag
+There might be reasons why the output of the help printer is not optimal for some use-cases. To handle this,
+it is possible to use a custom help printer: It just has to implement `FluentArgs.Help.IHelpPrinter`. The
+default help printer is `FluentArgs.Help.SimpleHelpPrinter`. It can be configured to use another output
+stream.
+
+The following code shows how a help printer can be defined:
+```csharp
+namespace Example
+{
+    using System;
+    using FluentArgs;
+    using FluentArgs.Help;
+
+    public static class Program
+    {
+        public static void Main(string[] args)
+        {
+            FluentArgsBuilder.New()
+                .WithApplicationDescription("This application demonstrates how to use the help-features.")
+                .RegisterHelpFlag("-h", "--help", "--another-help-flag")
+
+                /* Inject a custom IHelpPrinter or use the pre-defined SimpleHelpPrinter */
+                .RegisterHelpPrinter(new SimpleHelpPrinter(Console.Error))
+
+                .Parameter("-n", "--name")
+                    .WithDescription("Your name.")
+                    .WithExamples("Peter", "Benjamin")
+                    .IsRequired()
+                .Parameter<int>("-a", "--age")
+                    .WithDescription("Your age.")
+                    .WithExamples(23, 56)
+                    .WithValidation(a => a >= 0 && a <= 120, a => $"You are probably not {a} years old")
+                    .IsRequired()
+                .Parameter<string?>("-e", "--email")
+                    .WithDescription("Your email address.")
+                    .WithExamples("mrmojito@mymail.com", "me@cookislands.de")
+                    .WithValidation(m => m.Contains('@'), "Your mail must contain an @-sign!")
+                    .IsOptional()
+                .Call(email => age => name =>
+                {
+                    Console.WriteLine($"Name: {name}");
+                    Console.WriteLine($"Age: {age}");
+                    Console.WriteLine($"EMail: {email}");
+                })
+                .Parse(args);
+        }
+    }
+}
+
+```
 
 # Example: Handle errors
+Errors? Yes, parsing errors. It might happen that users
+- do not input required parameters
+- do input invalid values (e.g. a text instead of a number)
+- do input values that fail in the validation step
+
+How to handle these cases? They are all automatically handled by FluentArgs. To give the user optimal help
+it is recommended to annotate all parameters with a description and examples.
+
+The following code is used to demonstarte how error outputs look like:
+```csharp
+namespace Example
+{
+    using System;
+    using FluentArgs;
+
+    public static class Program
+    {
+        public static void Main(string[] args)
+        {
+            FluentArgsBuilder.New()
+                .WithApplicationDescription("This applications shows how errors look like.")
+                .RegisterHelpFlag("-h", "--help")
+                .Parameter<int>("-n")
+                    .WithDescription("A positive number.")
+                    .WithExamples(1, 2, 100)
+                    .WithValidation(n => n > 0, n => $"A positive number is required, but {n} is <= 0!")
+                    .IsRequired()
+                .Call(n => Console.WriteLine($"n={n}"))
+                .Parse(args);
+        }
+    }
+}
+
+```
+
+Given the call `myapp` (missing parameter) produces this output:
+```
+Required argument '-n' of type 'Int32' not found!
+Description: Required parameter not found!
+
+Show help for more information:
+  myapp -h
+
+```
+
+Given the call `myapp -n X` (invalid parameter type) produces this output:
+```
+Could not parse argument '-n' of type 'Int32'!
+Error: Input string was not in a correct format.
+
+Show help for more information:
+  myapp -h
+
+```
+
+Given the call `myapp -n 0` (validation fails) produces this output:
+```
+Could not parse argument '-n' of type 'Object'!
+Error: Validation failed: A positive number is required, but 0 is <= 0!
+
+Show help for more information:
+  myapp -h
+
+```
+
+
 TODO:
 - printers
 - parse return code
+
+# Example: Parser definition sections
+Any parser definition with FluentArgs contains some natural definition sections. They describe different stages
+of the parsing process. In general, parsing is done in the same order as the description is given. All sections
+except the final `Call` are **optional**.
+The flow is shown in the following example:
+```csharp
+namespace Example
+{
+    using System;
+    using FluentArgs;
+    using FluentArgs.Help;
+
+    public static class Program
+    {
+        public static void Main(string[] args)
+        {
+            FluentArgsBuilder.New()
+
+                /* 1) General parser configurations: The ordering does not matter */
+                .DefaultConfigs()
+                .WithApplicationDescription("My app.")
+                .WithAssignmentOperators("=", ":")
+                .ThrowOnNonMinusStartingNames()
+                .ThrowOnDuplicateNames()
+                .ThrowIfUnusedArgumentsArePresent()
+                .RegisterHelpFlag("-h")
+                .RegisterHelpPrinter(new SimpleHelpPrinter(Console.Error))
+                .RegisterParsingErrorPrinter(new SimpleParsingErrorPrinter(Console.Error))
+
+                /* 2) Parse parameters, list-parameters, flags and commands. Parsing is done in the defined ordering. */
+                .Parameter<int>("-n").IsRequired()
+                .ListParameter<DateTimeOffset?>("-d").IsOptional()
+                .Given.Command("-x")
+                    .HasValue("y").Then(d => n => { })
+                    .ElseIgnore()
+                .Parameter("-o").IsOptional()
+
+                /* 3) Positional parameters. Parsing is done in the defined ordering. */
+                .PositionalArgument<int>().IsRequired()
+                .PositionalArgument<float?>().IsOptional()
+
+                /* 4) Load remaining arguments */
+                .LoadRemainingArguments()
+
+                /* 5) Callback */
+                .Call(remainingArgs => floatArg => intArg => o => d => n =>
+                {
+                    Console.WriteLine("Hello World!");
+                })
+                .Parse(args);
+        }
+    }
+}
+
+```
 
 # Example: Advanced configuration
 TODO:
@@ -614,9 +783,9 @@ namespace Example
                 .Parameter<int>("-n").IsRequired()
                 .Call(n =>
                 {
-                    /*...*/
+                    /* ... */
                     Console.WriteLine($"n={n}");
-                    /*...*/
+                    /* ... */
                     return Task.CompletedTask;
                 })
                 .Build();
@@ -632,4 +801,3 @@ namespace Example
 # Best practices
 TODO:
 - E.g. just call one method in `Call`. etc.
-
