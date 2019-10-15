@@ -5,7 +5,7 @@ cd "$(dirname "$0")/../.."
 mv README.md .README.md.org
 
 echo "Build README..."
-./build_readme.sh
+bash ./build_readme.sh
 
 echo "Compare built README with existing README (their contet should be equivalent)..."
 if ! diff README.md .README.md.org; then
