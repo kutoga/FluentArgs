@@ -1,9 +1,11 @@
 ﻿[![Build Status](https://dev.azure.com/benjaminmeier70/PipelinePlayground/_apis/build/status/kutoga.FluentArgs?branchName=master)](https://dev.azure.com/benjaminmeier70/PipelinePlayground/_build/latest?definitionId=3&branchName=master)
 
-# FluentArgs: Fluent Arguments Parsing for .NET
+# FluentArgs: Fluent Argument Parsing for .NET
+<strong>
 Version:
 0.9.0
 
+</strong>
 
 FluentArgs is an easy-to-use library that provides command line argument parsing. For all parameters it is possible
 to provide meta information (description, examples etc.) which might be used to auto-generate a simple help for the
@@ -34,7 +36,7 @@ Paket CLI:
 
 # TODO: Write down why ConfigureWithDefaults is recommended (or do not use it)
 
-# Example: Parse simple arguments and flags
+# 💡 Example: Parse simple arguments and flags
 Given you want a program which supports png to jpeg conversion and you want to support calls like these:
 - `myapp -i image.png -o image.jpeg -q 100`
 - `myapp --input image.png --quality 50 --output image.jpeg`
@@ -120,12 +122,15 @@ namespace Example
 }
 ```
 
-# Example: Parse positional and remaining arguments
+# 💡 Example: Parse positional and remaining arguments
 Positional arguments without an explicit name might be used if the context defines their meaning. E.g.
 `find --type f ./my_directory` shall be parsed. An equivalent call is `find ./my_directory --type f`. The
 source directory is a positional argument.
 
 Such arguments can be defined after all simple arguments and flags are defined:
+<details>
+    <summary>📃 Click here to see the code</summary>
+
 ```csharp
 namespace Example
 {
@@ -158,7 +163,12 @@ namespace Example
 }
 ```
 
+</details>
+
 It is no problem to define multiple positional arguments:
+<details>
+    <summary>📃 Click here to see the code</summary>
+
 ```csharp
 namespace Example
 {
@@ -189,8 +199,13 @@ namespace Example
 }
 ```
 
+</details>
+
 It is also possible to parse all remaining arguments. E.g., if calls like `rm -f file1 file2 file` should
 be supported (with an arbitrary number of files), this can be achieved by the following code:
+<details>
+    <summary>📃 Click here to see the code</summary>
+
 ```csharp
 namespace Example
 {
@@ -221,7 +236,9 @@ namespace Example
 }
 ```
 
-# Example: Parse conditional arguments / commands
+</details>
+
+# 💡 Example: Parse conditional arguments / commands
 Conditional arguments allow to control the argument parsing flow. E.g., the reuqirements for our CLI is
 the following:
 - If the flag `-v` (or `--version`) is given, the program version should be print (independent of all other parameters)
@@ -230,6 +247,9 @@ the following:
 - Otherwise the program takes it first two positional arguments and prints their sum: `myapp 1 2` should print `1+2=3`
 
 The following code fulfills this specifications:
+<details>
+    <summary>📃 Click here to see the code</summary>
+
 ```csharp
 namespace Example
 {
@@ -277,6 +297,8 @@ namespace Example
 }
 ```
 
+</details>
+
 Assuming you want to create an application to do some file system actions on a remote system. It is required
 to use a key to access this remote system. There are "commands" for this file system which lead to the following
 calls:
@@ -290,6 +312,9 @@ defined calls.
 If `--command` has an unknown value or does not exsit, the program call is invalid.
 
 This parameter parsing specification can be implemented with the following code:
+<details>
+    <summary>📃 Click here to see the code</summary>
+
 ```csharp
 namespace Example
 {
@@ -353,11 +378,16 @@ namespace Example
 }
 ```
 
-# Example: List parameter
+</details>
+
+# 💡 Example: List parameter
 List parameters can contain multiple values per key. E.g., if a program has to parse a list of
 names, a call like `myapp --names=Peter;Paul;Kevin` should be used to input these names.
 
 The code:
+<details>
+    <summary>📃 Click here to see the code</summary>
+
 ```csharp
 namespace Example
 {
@@ -388,7 +418,12 @@ namespace Example
 
 ```
 
+</details>
+
 Default separators are `;` and `,`, bu they might be overwritten, e.g. by ` `:
+<details>
+    <summary>📃 Click here to see the code</summary>
+
 ```csharp
 namespace Example
 {
@@ -420,8 +455,13 @@ namespace Example
 
 ```
 
-# Example: Async vs Blocking
+</details>
+
+# 💡 Example: Async vs Blocking
 Both, async and blocking, calls are supported. An async example:
+<details>
+    <summary>📃 Click here to see the code</summary>
+
 ```csharp
 namespace Example
 {
@@ -447,7 +487,12 @@ namespace Example
 }
 ```
 
+</details>
+
 A blocking example:
+<details>
+    <summary>📃 Click here to see the code</summary>
+
 ```csharp
 namespace Example
 {
@@ -473,7 +518,9 @@ namespace Example
 }
 ```
 
-# Example: Parsing and validation
+</details>
+
+# 💡 Example: Parsing and validation
 There are already parsers for many data types implemented: all types of `int`, `char`, `bool`,
 `DateTime`, `DateTimeOffset`, `decimal`, `double`, `float`, `byte`, `Uri`, `string` (which is
 trivial) and enums
@@ -487,6 +534,9 @@ value to be in the correct range.
 The following application implements a parser that is able to parse binary numbers. This number
 is then validated: It must be greater or equal to 0 and smaller or equal to 100. An example
 call would be `myapp -b=101`.
+<details>
+    <summary>📃 Click here to see the code</summary>
+
 ```csharp
 namespace Example
 {
@@ -519,12 +569,14 @@ namespace Example
 }
 ```
 
-# Example: Help
+</details>
+
+# 💡 Example: Help
 It is possible to add descriptive metadata to all elements and, of course, it is also possible
 to print the user what possibilities war available.
 
 To enable a help flag, it is possible to configure the argument parser with the default
-configs (e.g. the first call should be `.DefaultConfigs()` or `DefaultConfigsWithAppDescription(...)).
+configs (e.g. the first call should be `.DefaultConfigs()` or `DefaultConfigsWithAppDescription(...)`).
 This adds the help flags `-h` and `--help`. Independent of the default configs, if you want to define
 a custom help flag, this can be done with `.RegisterHelpFlag(...)`.
 
@@ -532,6 +584,9 @@ To make the help useful, you probably want to add `.WithDescription(...)` and ma
 to all your parameter definitions.
 
 Here is a simple application that offers help to the user:
+<details>
+    <summary>📃 Click here to see the code</summary>
+
 ```csharp
 namespace Example
 {
@@ -571,6 +626,8 @@ namespace Example
 }
 ```
 
+</details>
+
 If this tool is called with the `--help` (or `-h`) flag, the output looks like this:
 ```
 This application demonstrates how to use the help-features.
@@ -588,6 +645,9 @@ default help printer is `FluentArgs.Help.SimpleHelpPrinter`. It can be configure
 stream.
 
 The following code shows how a help printer can be defined:
+<details>
+    <summary>📃 Click here to see the code</summary>
+
 ```csharp
 namespace Example
 {
@@ -633,7 +693,9 @@ namespace Example
 
 ```
 
-# Example: Handle errors
+</details>
+
+# 💡 Example: Handle errors
 Errors? Yes, parsing errors. It might happen that users
 - do not input required parameters
 - do input invalid values (e.g. a text instead of a number)
@@ -643,6 +705,9 @@ How to handle these cases? They are all automatically handled by FluentArgs. To 
 it is recommended to annotate all parameters with a description and examples.
 
 The following code is used to demonstarte how error outputs look like:
+<details>
+    <summary>📃 Click here to see the code</summary>
+
 ```csharp
 namespace Example
 {
@@ -668,6 +733,11 @@ namespace Example
 }
 
 ```
+
+</details>
+
+<details>
+    <summary>📃 Click here to see the different outputs</summary>
 
 Given the call `myapp` (missing parameter) produces this output:
 ```
@@ -699,16 +769,90 @@ Show help for more information:
 
 ```
 
+</details>
 
-TODO:
-- printers
-- parse return code
+Actually, it might happen that the success information is relevant. For this reason all `Parse*(...)`-calls
+return a `bool` (or `Task<bool>`). An example:
 
-# Example: Parser definition sections
+<details>
+    <summary>📃 Click here to see the code</summary>
+
+```csharp
+!INLCUDE:example/HandleErrors02.cs
+```
+
+</details>
+
+Finally, it might be the case that the predefined error-printers are not optimal for some use-cases. For
+this reason it is possible to define custom parsing error printers. This can be done by implementing the
+`IParsingErrorPrinter` and by assigning it with `RegisterParsingErrorPrinter`. It is also possible to
+create a custom instance of the predefined parsing error printer (e.g. if you do not want to write the
+error messages to stderr).
+
+The following coe shows how to do these things:
+<details>
+    <summary>📃 Click here to see the code</summary>
+
+```csharp
+namespace Example
+{
+    using System;
+    using System.Collections.Generic;
+    using System.Threading.Tasks;
+    using FluentArgs;
+    using FluentArgs.Help;
+
+    public static class Program
+    {
+        public static void Main(string[] args)
+        {
+            FluentArgsBuilder.New()
+
+                .RegisterParsingErrorPrinter(new SimpleParsingErrorPrinter(Console.Out))
+                /* or */
+                .RegisterParsingErrorPrinter(new MyParsingErrorPrinter())
+
+                .PositionalArgument<int>().IsRequired()
+                .Call(_ => { })
+                .Parse(args);
+        }
+
+        private class MyParsingErrorPrinter : IParsingErrorPrinter
+        {
+            public Task PrintArgumentMissingError(IReadOnlyCollection<string>? aliases, Type targetType, string description, IReadOnlyCollection<string>? helpFlagAliases)
+            {
+                throw new NotImplementedException();
+            }
+
+            public Task PrintArgumentParsingError(IReadOnlyCollection<string>? aliases, Type targetType, string description, IReadOnlyCollection<string>? helpFlagAliases)
+            {
+                throw new NotImplementedException();
+            }
+
+            public Task PrintInvalidCommandValueError(IReadOnlyCollection<string> aliases, string value, IReadOnlyCollection<string>? helpFlagAliases)
+            {
+                throw new NotImplementedException();
+            }
+        }
+    }
+}
+
+```
+
+</details>
+
+Finally, one might ask what happens with application errors: Actually nothing special. If inside of the
+`Call...(...)`-method an exception is thrown, it is not handled by FluentArgs. This must be done by the
+called application code.
+
+# 💡 Example: Parser definition sections
 Any parser definition with FluentArgs contains some natural definition sections. They describe different stages
 of the parsing process. In general, parsing is done in the same order as the description is given. All sections
 except the final `Call` are **optional**.
 The flow is shown in the following example:
+<details>
+    <summary>📃 Click here to see the code</summary>
+
 ```csharp
 namespace Example
 {
@@ -760,14 +904,33 @@ namespace Example
 
 ```
 
-# Example: Advanced configuration
-TODO:
-- throw options
-- separators
+</details>
 
-# Example: Reuse parser
+# 💡 Example: Advanced configuration
+As described in the parser definition section, it is possible to configure several general parser options.
+In the following table, all advanced configuration options are described:
+
+|Configuration-Code|Description|
+|-|-|
+|`.RegisterParsingErrorPrinter(...)`            |Register a custom parsing error printer (see: **Example: Handle errors**).|
+|`.RegisterHelpPrinter(...)`                    |Register a custom help printer (see: **Example: Help**).|
+|`.RegisterHelpFlag("-h", "--help-flag")`       |Register help flags (default case: no help flags are defined).|
+|`.WithApplicationDescription("my app is cool")`|A description of the application (see: **Example: Help**).|
+|`.WithAssignmentOperators("=")`                |Define (one or more) custom assignment operators; they are used to optionally separate values for parameters. E.g. `--name=Karl`. The default is just "=".|
+|`.WithoutAssignmentOperators()`                |Remove all assignment operators. Especially disable the default assignment operator "="|
+|`.ThrowIfUnusedArgumentsArePresent()`          |Given all specified parameters are parsed at runtime, but there are still some program arguments left: throw an Exception|
+|`.ThrowOnDuplicateNames()`                     |Throw if a parameter name is twice defined in the same flow. Otherwise it is valid to use the same name twice.|
+|`.ThrowOnNonMinusStartingNames()`              |Throw if there is a parameter name which does not start with "-".|
+|`.RegisterDefaultHelpFlags()`                  |Equivalent to `.RegisterHelpFlag("-h", "--help")`.|
+|`.DefaultConfigs()`                            |Equivalent to `.RegisterDefaultHelpFlags().ThrowOnDuplicateNames().ThrowOnNonMinusStartingNames().ThrowIfUnusedArgumentsArePresent()`.|
+|`.DefaultConfigsWithAppDescription(...)`       |Equivalent to `.DefaultConfigs().WithApplicationDescription(...)`.|
+
+# 💡 Example: Reuse parser
 It might be the case that you want to reuse a parser. In this case it is more efficient to explicit build
 the internal tree with the `.Build()` method and use the resulting parser.
+<details>
+    <summary>📃 Click here to see the code</summary>
+
 ```csharp
 namespace Example
 {
@@ -798,6 +961,46 @@ namespace Example
 }
 ```
 
+</details>
+
+# 💡 Example: Untyped call
+As shown, there is a `Call`-method on the parser which is used to finally call the application code. This
+method uses static typed arguments. It is also possible to get all arguments as a single collection of
+`object?`s.
+
+An example is shown in the following code:
+<details>
+    <summary>📃 Click here to see the code</summary>
+
+```csharp
+namespace Example
+{
+    using System;
+    using FluentArgs;
+
+    public static class Program
+    {
+        public static void Main(string[] args)
+        {
+            FluentArgsBuilder.New()
+                .Parameter("-a").IsRequired()
+                .Parameter<int>("-b").IsRequired()
+                .CallUntyped(args =>
+                {
+                    /* args is of the type IReadOnlyCollection<object?> */
+                    /* args[0] is the value of the parameter "-a" */
+                    /* args[1] is the value of the parameter "-b" */
+                })
+                .Parse(args);
+        }
+    }
+}
+
+```
+
+</details>
+
 # Best practices
 TODO:
 - E.g. just call one method in `Call`. etc.
+
