@@ -34,8 +34,6 @@ Paket CLI:
 > paket add FluentArgs
 ```
 
-# TODO: Write down why ConfigureWithDefaults is recommended (or do not use it)
-
 # 💡 Example: Parse simple arguments and flags
 Given you want a program which supports png to jpeg conversion and you want to support calls like these:
 - `myapp -i image.png -o image.jpeg -q 100`
@@ -1000,7 +998,10 @@ namespace Example
 
 </details>
 
-# Best practices
-TODO:
-- E.g. just call one method in `Call`. etc.
-
+# 💡 Best practices
+Just some best practices:
+- Try to describe all your parameters with `.WithDescription(...)`.
+- Use `.DefaultConfigs()` to enable help flags and to use restrictive rules (`.Throw...()`).
+- Do not write too much code in `.Call(...)`: Just call your application code.
+    - This separates parameter parsing from application logic and makes your application better testable.
+- Write an issue if something does not work as expected or if you are missing a feature. Thank you 😉!
