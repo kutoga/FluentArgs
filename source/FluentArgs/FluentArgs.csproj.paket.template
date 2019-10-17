@@ -1,0 +1,11 @@
+type project
+
+title FluentArgs
+authors Benjamin Bruno Meier
+projectUrl https://github.com/kutoga/FluentArgs
+licenseurl https://github.com/kutoga/FluentArgs/blob/master/LICENSE
+description Fluent command line argument parsing library which focus on a very simple API
+
+excludedgroups
+    Build
+
