@@ -1,0 +1,64 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.28803.156
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FluentArgs", "FluentArgs\FluentArgs.csproj", "{7085426C-F533-4E9B-A152-3A55AA0C9ED2}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FluentArgs.Test.Quality", "FluentArgs.Test.Quality\FluentArgs.Test.Quality.csproj", "{33ED20E2-2826-4DF4-B8D6-08C79FFF618F}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FluentArgs.Test", "FluentArgs.Test\FluentArgs.Test.csproj", "{4B7B23EC-7445-49FA-B08D-BDA731A65250}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{60AE99DE-AA20-42CF-8ECE-5B4C78C90FEA}"
+	ProjectSection(SolutionItems) = preProject
+		azure-pipelines.yml = azure-pipelines.yml
+		code.ruleset = code.ruleset
+		paket.dependencies = paket.dependencies
+		README.md = README.md
+	EndProjectSection
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FluentArgs.Playground", "FluentArgs.Playground\FluentArgs.Playground.csproj", "{D13B0894-EBC4-4BDA-9037-43A0B253DA3E}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FluentArgs.Test.Helpers", "FluentArgs.Test.Helpers\FluentArgs.Test.Helpers.csproj", "{CA2DC929-1330-4A22-B476-9BEBCC46F8B7}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Test", "Test", "{24D63926-46AC-4AC8-9D98-04159D5DF258}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{7085426C-F533-4E9B-A152-3A55AA0C9ED2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7085426C-F533-4E9B-A152-3A55AA0C9ED2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7085426C-F533-4E9B-A152-3A55AA0C9ED2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7085426C-F533-4E9B-A152-3A55AA0C9ED2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{33ED20E2-2826-4DF4-B8D6-08C79FFF618F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{33ED20E2-2826-4DF4-B8D6-08C79FFF618F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{33ED20E2-2826-4DF4-B8D6-08C79FFF618F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{33ED20E2-2826-4DF4-B8D6-08C79FFF618F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4B7B23EC-7445-49FA-B08D-BDA731A65250}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4B7B23EC-7445-49FA-B08D-BDA731A65250}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4B7B23EC-7445-49FA-B08D-BDA731A65250}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4B7B23EC-7445-49FA-B08D-BDA731A65250}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D13B0894-EBC4-4BDA-9037-43A0B253DA3E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D13B0894-EBC4-4BDA-9037-43A0B253DA3E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D13B0894-EBC4-4BDA-9037-43A0B253DA3E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D13B0894-EBC4-4BDA-9037-43A0B253DA3E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CA2DC929-1330-4A22-B476-9BEBCC46F8B7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CA2DC929-1330-4A22-B476-9BEBCC46F8B7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CA2DC929-1330-4A22-B476-9BEBCC46F8B7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CA2DC929-1330-4A22-B476-9BEBCC46F8B7}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{33ED20E2-2826-4DF4-B8D6-08C79FFF618F} = {24D63926-46AC-4AC8-9D98-04159D5DF258}
+		{4B7B23EC-7445-49FA-B08D-BDA731A65250} = {24D63926-46AC-4AC8-9D98-04159D5DF258}
+		{CA2DC929-1330-4A22-B476-9BEBCC46F8B7} = {24D63926-46AC-4AC8-9D98-04159D5DF258}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {E7BD06D7-EA3B-4F25-B621-59CE75E61602}
+	EndGlobalSection
+EndGlobal

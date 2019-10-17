@@ -1,27 +1,43 @@
 pool:
-  vmImage: 'Ubuntu 16.04'
+  vmImage: 'Ubuntu 18.04'
 
 trigger:
   batch: true
   branches:
-    include: ['master']
-  
+    include: ['master', 'feature/*', 'fix/*']
+
 variables:
   buildConfiguration: 'Release'
-  workingDirectory: '$(Build.SourcesDirectory)'
+  sourceDirectory: '$(Build.SourcesDirectory)/source'
+  docDirectory: '$(Build.SourcesDirectory)/doc'
+  major: '0'
+  minor: '9'
+  patch: '0'
 
 steps:
-- script: dotnet restore ./FluentArgs.sln
+- script: dotnet tool install --global Paket --version 5.203.0
+  displayName: Install Paket
+  workingDirectory: $(sourceDirectory)
+
+- script: dotnet restore ./FluentArgs.sln; echo ''
   displayName: Restore
-  workingDirectory: $(workingDirectory)
+  workingDirectory: $(sourceDirectory)
 
 - script: dotnet build ./FluentArgs.sln --configuration $(buildConfiguration)
   displayName: Build
-  workingDirectory: $(workingDirectory)
+  workingDirectory: $(sourceDirectory)
 
 - script: dotnet test ./FluentArgs.sln --configuration $(buildConfiguration) --logger trx
   displayName: Test
-  workingDirectory: $(workingDirectory)
+  workingDirectory: $(sourceDirectory)
+
+- script: bash ./scripts/test_all_example_codes.sh
+  displayName: Test example code snippets
+  workingDirectory: $(docDirectory)
+
+- script: bash ./doc/scripts/test_readme.sh
+  displayName: Test README.md
+  workingDirectory: $(Build.SourcesDirectory)
 
 - task: PublishTestResults@2
   displayName: Publish Test Results
@@ -30,8 +46,12 @@ steps:
     testRunner: VSTest
     testResultsFiles: '**/*.trx'
 
-- script: dotnet publish ./FluentArgs --configuration $(buildConfiguration) --output $(Build.ArtifactStagingDirectory)
-  displayName: Publish
-  workingDirectory: $(workingDirectory)
-  
+#- script: dotnet publish ./FluentArgs --configuration $(buildConfiguration) --output $(Build.ArtifactStagingDirectory)
+#  displayName: Publish
+#  workingDirectory: $(sourceDirectory)
+
+- script: dotnet pack ./FluentArgs/FluentArgs.csproj -p:PackageVersion=$(major).$(minor).$(patch) --output $(Build.ArtifactStagingDirectory)
+  displayName: Create Package
+  workingDirectory: $(sourceDirectory)
+
 - task: PublishBuildArtifacts@1
