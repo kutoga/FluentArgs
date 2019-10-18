@@ -97,7 +97,7 @@ be supported (with an arbitrary number of files), this can be achieved by the fo
 </details>
 
 # 💡 Example: Parse conditional arguments / commands
-Conditional arguments allow to control the argument parsing flow. E.g., the reuqirements for our CLI is
+Conditional arguments allow to control the argument parsing flow. E.g., the requirements for our CLI is
 the following:
 - If the flag `-v` (or `--version`) is given, the program version should be print (independent of all other parameters)
 - If the flag `-u` (or `--update`) is given, an update should be downloaded and installed
@@ -150,7 +150,7 @@ The code:
 
 </details>
 
-Default separators are `;` and `,`, bu they might be overwritten, e.g. by ` `:
+Default separators are `;` and `,`, but they might be overwritten, e.g. by ` `:
 <details>
     <summary>📃 Click here to see the code</summary>
 
@@ -209,7 +209,7 @@ It is possible to add descriptive metadata to all elements and, of course, it is
 to print the user what possibilities war available.
 
 To enable a help flag, it is possible to configure the argument parser with the default
-configs (e.g. the first call should be `.DefaultConfigs()` or `DefaultConfigsWithAppDescription(...)`).
+configs (e.g., the first call should be `.DefaultConfigs()` or `DefaultConfigsWithAppDescription(...)`).
 This adds the help flags `-h` and `--help`. Independent of the default configs, if you want to define
 a custom help flag, this can be done with `.RegisterHelpFlag(...)`.
 
@@ -249,7 +249,7 @@ The following code shows how a help printer can be defined:
 # 💡 Example: Handle errors
 Errors? Yes, parsing errors. It might happen that users
 - do not input required parameters
-- do input invalid values (e.g. a text instead of a number)
+- do input invalid values (e.g., a text instead of a number)
 - do input values that fail in the validation step
 
 How to handle these cases? They are all automatically handled by FluentArgs. To give the user optimal help
@@ -292,15 +292,15 @@ return a `bool` (or `Task<bool>`). An example:
     <summary>📃 Click here to see the code</summary>
 
 ```csharp
-!INLCUDE:example/HandleErrors02.cs
+!INCLUDE:examples/HandleErrors02.cs
 ```
 
 </details>
 
 Finally, it might be the case that the predefined error-printers are not optimal for some use-cases. For
 this reason it is possible to define custom parsing error printers. This can be done by implementing the
-`IParsingErrorPrinter` and by assigning it with `RegisterParsingErrorPrinter`. It is also possible to
-create a custom instance of the predefined parsing error printer (e.g. if you do not want to write the
+`IParsingErrorPrinter` and by assigning it with `RegisterParsingErrorPrinter(...)`. It is also possible to
+create a custom instance of the predefined parsing error printer (e.g., if you do not want to write the
 error messages to stderr).
 
 The following coe shows how to do these things:
