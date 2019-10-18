@@ -3,7 +3,7 @@
 # FluentArgs: Fluent Argument Parsing for .NET
 <strong>
 Version:
-0.9.1
+0.9.2
 
 </strong>
 
