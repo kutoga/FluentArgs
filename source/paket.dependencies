@@ -1,6 +1,6 @@
 source https://www.nuget.org/api/v2
 nuget FluentAssertions
-nuget System.Collections.Immutable
+nuget System.Collections.Immutable >= 1.1.36
 nuget Xunit.Core
 nuget Xunit.Runner.VisualStudio
 nuget Xbehave
