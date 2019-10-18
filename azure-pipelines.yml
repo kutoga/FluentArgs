@@ -50,8 +50,8 @@ steps:
 #  displayName: Publish
 #  workingDirectory: $(sourceDirectory)
 
-- script: dotnet pack ./FluentArgs/FluentArgs.csproj -p:PackageVersion=$(major).$(minor).$(patch) --output $(Build.ArtifactStagingDirectory)
+- script: ~/.dotnet/tools/paket pack --version $(major).$(minor).$(patch) $(Build.ArtifactStagingDirectory)
   displayName: Create Package
-  workingDirectory: $(sourceDirectory)
+  workingDirectory: $(sourceDirectory)/FluentArgs
 
 - task: PublishBuildArtifacts@1

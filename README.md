@@ -628,9 +628,12 @@ namespace Example
 
 If this tool is called with the `--help` (or `-h`) flag, the output looks like this:
 ```
-/mnt/c/Users/benjamin.meier/source/repos/FluentArgs/source/.paket/Paket.Restore.targets(138,5): error MSB3073: The command "mono --runtime=v4.0.30319 "/mnt/c/Users/benjamin.meier/source/repos/FluentArgs/source/.paket/paket.exe" restore" exited with code 127. [/mnt/c/Users/benjamin.meier/source/repos/FluentArgs/source/FluentArgs/FluentArgs.csproj]
+This application demonstrates how to use the help-features.
 
-The build failed. Please fix the build errors and run again.
+-n|--name  Your name. Examples: Peter, Benjamin
+-a|--age   Your age. Examples: 23, 56
+-e|--email Optional. Your email address. Examples: mrmojito@mymail.com, 
+           me@cookislands.de
 
 ```
 
@@ -736,25 +739,31 @@ namespace Example
 
 Given the call `myapp` (missing parameter) produces this output:
 ```
-/mnt/c/Users/benjamin.meier/source/repos/FluentArgs/source/.paket/Paket.Restore.targets(138,5): error MSB3073: The command "mono --runtime=v4.0.30319 "/mnt/c/Users/benjamin.meier/source/repos/FluentArgs/source/.paket/paket.exe" restore" exited with code 127. [/mnt/c/Users/benjamin.meier/source/repos/FluentArgs/source/FluentArgs/FluentArgs.csproj]
+Required argument '-n' of type 'Int32' not found!
+Description: Required parameter not found!
 
-The build failed. Please fix the build errors and run again.
+Show help for more information:
+  myapp -h
 
 ```
 
 Given the call `myapp -n X` (invalid parameter type) produces this output:
 ```
-/mnt/c/Users/benjamin.meier/source/repos/FluentArgs/source/.paket/Paket.Restore.targets(138,5): error MSB3073: The command "mono --runtime=v4.0.30319 "/mnt/c/Users/benjamin.meier/source/repos/FluentArgs/source/.paket/paket.exe" restore" exited with code 127. [/mnt/c/Users/benjamin.meier/source/repos/FluentArgs/source/FluentArgs/FluentArgs.csproj]
+Could not parse argument '-n' of type 'Int32'!
+Error: Input string was not in a correct format.
 
-The build failed. Please fix the build errors and run again.
+Show help for more information:
+  myapp -h
 
 ```
 
 Given the call `myapp -n 0` (validation fails) produces this output:
 ```
-/mnt/c/Users/benjamin.meier/source/repos/FluentArgs/source/.paket/Paket.Restore.targets(138,5): error MSB3073: The command "mono --runtime=v4.0.30319 "/mnt/c/Users/benjamin.meier/source/repos/FluentArgs/source/.paket/paket.exe" restore" exited with code 127. [/mnt/c/Users/benjamin.meier/source/repos/FluentArgs/source/FluentArgs/FluentArgs.csproj]
+Could not parse argument '-n' of type 'Object'!
+Error: Validation failed: A positive number is required, but 0 is <= 0!
 
-The build failed. Please fix the build errors and run again.
+Show help for more information:
+  myapp -h
 
 ```
 
