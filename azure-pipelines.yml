@@ -12,7 +12,7 @@ variables:
   docDirectory: '$(Build.SourcesDirectory)/doc'
   major: '0'
   minor: '9'
-  patch: '2'
+  patch: '3'
 
 steps:
 - script: dotnet tool install --global Paket --version 5.203.0
