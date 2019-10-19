@@ -12,3 +12,9 @@
 - Add tags
   - Maybe even more metadata for the package?
 
+# Ideas
+- Add a "bind"-API: This bind parameter values to a config object
+  - Add for all parameter definition types a ".BindingName(...)" method which defined a target property name
+  - Instead of the final "Call"-call, add a "Bind(targetObj)"-call which binds all extracted parameters to an object.
+
+
