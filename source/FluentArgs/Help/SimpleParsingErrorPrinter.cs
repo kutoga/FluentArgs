@@ -54,6 +54,17 @@
             await WriteHelpFlagInfo(helpFlagAliases).ConfigureAwait(false);
         }
 
+        public async Task PrintNotAllArgumentsAreUsedError(IReadOnlyCollection<string> remainingArguments, IReadOnlyCollection<string>? helpFlagAliases)
+        {
+            await errorLineWriter
+                .WriteLine("There must not be any unused arguments, but the following parameters are not parsed / used:")
+                .ConfigureAwait(false);
+            await errorLineWriter
+                .WriteLines(remainingArguments.Select(a => $" {a}"))
+                .ConfigureAwait(false);
+            await WriteHelpFlagInfo(helpFlagAliases).ConfigureAwait(false);
+        }
+
         private Task WriteHelpFlagInfo(IReadOnlyCollection<string>? helpFlagAliases)
         {
             if (helpFlagAliases != null)

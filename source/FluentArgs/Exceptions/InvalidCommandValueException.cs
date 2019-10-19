@@ -1,4 +1,4 @@
-﻿namespace FluentArgs
+﻿namespace FluentArgs.Exceptions
 {
     using System;
     using FluentArgs.Description;

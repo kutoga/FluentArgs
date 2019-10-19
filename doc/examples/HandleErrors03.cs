@@ -33,6 +33,11 @@ namespace Example
                 throw new NotImplementedException();
             }
 
+            public Task PrintNotAllArgumentsAreUsedError(IReadOnlyCollection<string> remainingArguments, IReadOnlyCollection<string>? helpFlagAliases)
+            {
+                throw new NotImplementedException();
+            }
+
             public Task PrintInvalidCommandValueError(IReadOnlyCollection<string> aliases, string value, IReadOnlyCollection<string>? helpFlagAliases)
             {
                 throw new NotImplementedException();
@@ -40,4 +45,3 @@ namespace Example
         }
     }
 }
-

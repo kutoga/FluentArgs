@@ -16,7 +16,7 @@ namespace Example
                 .WithAssignmentOperators("=", ":")
                 .ThrowOnNonMinusStartingNames()
                 .ThrowOnDuplicateNames()
-                .ThrowIfUnusedArgumentsArePresent()
+                .DisallowUnusedArguments()
                 .RegisterHelpFlag("-h")
                 .RegisterHelpPrinter(new SimpleHelpPrinter(Console.Error))
                 .RegisterParsingErrorPrinter(new SimpleParsingErrorPrinter(Console.Error))
@@ -45,4 +45,3 @@ namespace Example
         }
     }
 }
-

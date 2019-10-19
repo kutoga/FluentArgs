@@ -2,6 +2,7 @@
 {
     using System;
     using FluentArgs.Description;
+    using FluentArgs.Exceptions;
     using FluentArgs.Parser;
 
     internal static class ParsingExtensions

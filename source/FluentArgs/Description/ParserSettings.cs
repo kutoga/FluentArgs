@@ -26,6 +26,6 @@
 
         public bool ThrowOnNonMinusStartingNames { get; set; }
 
-        public bool ThrowIfUnusedArgumentsArePresent { get; set; }
+        public bool DisallowUnusedArguments { get; set; }
     }
 }
