@@ -8,4 +8,7 @@
 - If examples are given and a validation is available: apply the validation to all examples
   - If this fails, the examples are crap!
 - Use FakeItEasy
+- Add an icon (for NuGet)
+- Add tags
+  - Maybe even more metadata for the package?
 
