@@ -6,6 +6,7 @@
     using System.Runtime.ExceptionServices;
     using System.Threading.Tasks;
     using FluentArgs.Description;
+    using FluentArgs.Exceptions;
     using FluentArgs.Execution;
     using FluentArgs.Validation;
 
@@ -68,6 +69,13 @@
                     InitialStep.ParserSettings.HelpFlag?.Names).ConfigureAwait(false);
                 return false;
             }
+            catch (NotAllArgumentsUsedException ex)
+            {
+                await InitialStep.ParserSettings!.ParsingErrorPrinter.PrintNotAllArgumentsAreUsedError(
+                    ex.UnusedArguments,
+                    InitialStep.ParserSettings.HelpFlag?.Names).ConfigureAwait(false);
+                return false;
+            }
             catch (InvalidCommandValueException ex)
             {
                 await InitialStep.ParserSettings!.ParsingErrorPrinter.PrintInvalidCommandValueError(
@@ -85,14 +93,14 @@
                 yield break;
             }
 
-            if (settings.ThrowIfUnusedArgumentsArePresent)
+            if (settings.DisallowUnusedArguments)
             {
                 yield return state =>
                 {
                     var remainingArguments = state.GetRemainingArguments(out _).ToArray();
                     if (remainingArguments.Any())
                     {
-                        throw new Exception($"Not all arguments are used / parsed: {string.Join(" ", remainingArguments)}");
+                        throw new NotAllArgumentsUsedException(remainingArguments);
                     }
                 };
             }

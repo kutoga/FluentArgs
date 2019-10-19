@@ -18,6 +18,10 @@
             string description,
             IReadOnlyCollection<string>? helpFlagAliases);
 
+        Task PrintNotAllArgumentsAreUsedError(
+            IReadOnlyCollection<string> remainingArguments,
+            IReadOnlyCollection<string>? helpFlagAliases);
+
         Task PrintInvalidCommandValueError(
             IReadOnlyCollection<string> aliases,
             string value,

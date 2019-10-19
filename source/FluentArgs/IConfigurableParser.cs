@@ -19,7 +19,7 @@
 
         TArgsParser ThrowOnNonMinusStartingNames(bool enable = true);
 
-        TArgsParser ThrowIfUnusedArgumentsArePresent(bool enable = true);
+        TArgsParser DisallowUnusedArguments(bool enable = true);
     }
 
     public static class IConfigurableParserExtensions
@@ -39,7 +39,7 @@
                 .RegisterDefaultHelpFlags()
                 .ThrowOnDuplicateNames()
                 .ThrowOnNonMinusStartingNames()
-                .ThrowIfUnusedArgumentsArePresent();
+                .DisallowUnusedArguments();
         }
 
         public static TArgsParser DefaultConfigsWithAppDescription<TArgsParser>(

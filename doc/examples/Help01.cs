@@ -22,7 +22,7 @@ namespace Example
                 .Parameter<string?>("-e", "--email")
                     .WithDescription("Your email address.")
                     .WithExamples("mrmojito@mymail.com", "me@cookislands.de")
-                    .WithValidation(m => m.Contains('@'), "Your mail must contain an @-sign!")
+                    .WithValidation(m => m.Contains('@', StringComparison.InvariantCulture), "Your mail must contain an @-sign!")
                     .IsOptional()
                 .Call(email => age => name =>
                 {

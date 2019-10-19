@@ -100,9 +100,9 @@
             return this;
         }
 
-        public IInitialFluentArgsBuilder ThrowIfUnusedArgumentsArePresent(bool enable = true)
+        public IInitialFluentArgsBuilder DisallowUnusedArguments(bool enable = true)
         {
-            ((InitialStep)Step).ParserSettings!.ThrowIfUnusedArgumentsArePresent = enable;
+            ((InitialStep)Step).ParserSettings!.DisallowUnusedArguments = enable;
             return this;
         }
 

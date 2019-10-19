@@ -9,6 +9,7 @@ namespace Example
         {
             FluentArgsBuilder.New()
                 .WithApplicationDescription("This applications shows how errors look like.")
+                .DisallowUnusedArguments()
                 .RegisterHelpFlag("-h", "--help")
                 .Parameter<int>("-n")
                     .WithDescription("A positive number.")
@@ -20,4 +21,3 @@ namespace Example
         }
     }
 }
-

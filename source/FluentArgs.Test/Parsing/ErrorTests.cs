@@ -27,6 +27,7 @@
             dummyParsingErrorPrinter.ArgumentMissingErrors.First().aliases.Should().BeEquivalentTo("-x");
             dummyParsingErrorPrinter.ArgumentMissingErrors.First().helpFlagAliases.Should().BeNull();
             dummyParsingErrorPrinter.InvalidCommandValueErrors.Should().BeEmpty();
+            dummyParsingErrorPrinter.NotAllArgumentsAreUsedErrors.Should().BeEmpty();
         }
 
         [Fact]
@@ -64,6 +65,7 @@
             dummyParsingErrorPrinter.ArgumentParsingErrors.Count.Should().Be(1);
             dummyParsingErrorPrinter.ArgumentParsingErrors.First().aliases.Should().BeEquivalentTo("-n");
             dummyParsingErrorPrinter.InvalidCommandValueErrors.Should().BeEmpty();
+            dummyParsingErrorPrinter.NotAllArgumentsAreUsedErrors.Should().BeEmpty();
         }
 
         [Fact]
@@ -87,6 +89,7 @@
             dummyParsingErrorPrinter.ArgumentParsingErrors.Count.Should().Be(1);
             dummyParsingErrorPrinter.ArgumentParsingErrors.First().aliases.Should().BeEquivalentTo("-n");
             dummyParsingErrorPrinter.InvalidCommandValueErrors.Should().BeEmpty();
+            dummyParsingErrorPrinter.NotAllArgumentsAreUsedErrors.Should().BeEmpty();
         }
 
         [Fact]
@@ -129,6 +132,7 @@
             dummyParsingErrorPrinter.ArgumentParsingErrors.First().aliases.Should().BeNull();
             dummyParsingErrorPrinter.ArgumentParsingErrors.First().helpFlagAliases.Should().BeEquivalentTo("-h", "--help");
             dummyParsingErrorPrinter.InvalidCommandValueErrors.Should().BeEmpty();
+            dummyParsingErrorPrinter.NotAllArgumentsAreUsedErrors.Should().BeEmpty();
         }
 
         [Fact]
@@ -155,6 +159,7 @@
             dummyParsingErrorPrinter.ArgumentParsingErrors.First().aliases.Should().BeNull();
             dummyParsingErrorPrinter.ArgumentParsingErrors.First().helpFlagAliases.Should().BeEquivalentTo("-h", "--help");
             dummyParsingErrorPrinter.InvalidCommandValueErrors.Should().BeEmpty();
+            dummyParsingErrorPrinter.NotAllArgumentsAreUsedErrors.Should().BeEmpty();
         }
 
         [Fact]
@@ -180,6 +185,45 @@
             dummyParsingErrorPrinter.InvalidCommandValueErrors.Count.Should().Be(1);
             dummyParsingErrorPrinter.InvalidCommandValueErrors.First().aliases.Should().BeEquivalentTo("-n");
             dummyParsingErrorPrinter.InvalidCommandValueErrors.First().helpFlagAliases.Should().BeEquivalentTo("-h", "--help");
+            dummyParsingErrorPrinter.NotAllArgumentsAreUsedErrors.Should().BeEmpty();
+        }
+
+        [Fact]
+        public static void IfTooManyArgumentsAreGiven_ShouldBeParsable()
+        {
+            var args = new[] { "a", "b" };
+            var called = false;
+            var builder = FluentArgsBuilder.New()
+                .Call(() => called = true);
+
+            var parseSuccess = builder.Parse(args);
+
+            parseSuccess.Should().BeTrue();
+            called.Should().BeTrue();
+        }
+
+        [Fact]
+        public static void IfTooManyArgumentsAreGivenAndItisDisallows_ShouldRecommendHelp()
+        {
+            var args = new[] { "a", "b" };
+            var dummyParsingErrorPrinter = new DummyParsingErrorPrinter();
+            var called = false;
+            var builder = FluentArgsBuilder.New()
+                .RegisterDefaultHelpFlags()
+                .RegisterParsingErrorPrinter(dummyParsingErrorPrinter)
+                .DisallowUnusedArguments()
+                .Call(() => called = true);
+
+            var parseSuccess = builder.Parse(args);
+
+            parseSuccess.Should().BeFalse();
+            called.Should().BeFalse();
+            dummyParsingErrorPrinter.ArgumentMissingErrors.Should().BeEmpty();
+            dummyParsingErrorPrinter.ArgumentParsingErrors.Should().BeEmpty();
+            dummyParsingErrorPrinter.InvalidCommandValueErrors.Should().BeEmpty();
+            dummyParsingErrorPrinter.NotAllArgumentsAreUsedErrors.Count.Should().Be(1);
+            dummyParsingErrorPrinter.NotAllArgumentsAreUsedErrors.First().remainingArguments.Should().BeEquivalentWithSameOrdering("a", "b");
+            dummyParsingErrorPrinter.NotAllArgumentsAreUsedErrors.First().helpFlagAliases.Should().BeEquivalentTo("-h", "--help");
         }
     }
 }

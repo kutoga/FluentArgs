@@ -17,6 +17,9 @@
         private readonly ConcurrentBag<(IReadOnlyCollection<string> aliases, string value, IReadOnlyCollection<string>? helpFlagAliases)> invalidCommandValueErrors =
             new ConcurrentBag<(IReadOnlyCollection<string> aliases, string value, IReadOnlyCollection<string>? helpFlagAliases)>();
 
+        private readonly ConcurrentBag<(IReadOnlyCollection<string> remainingArguments, IReadOnlyCollection<string>? helpFlagAliases)> notAllArgumentsAreUsedErrors =
+            new ConcurrentBag<(IReadOnlyCollection<string> remainingArguments, IReadOnlyCollection<string>? helpFlagAliases)>();
+
         public IReadOnlyCollection<(IReadOnlyCollection<string>? aliases, Type targetType, string description, IReadOnlyCollection<string>? helpFlagAliases)> ArgumentMissingErrors =>
             argumentMissingErrors;
 
@@ -25,6 +28,9 @@
 
         public IReadOnlyCollection<(IReadOnlyCollection<string> aliases, string value, IReadOnlyCollection<string>? helpFlagAliases)> InvalidCommandValueErrors =>
             invalidCommandValueErrors;
+
+        public IReadOnlyCollection<(IReadOnlyCollection<string> remainingArguments, IReadOnlyCollection<string>? helpFlagAliases)> NotAllArgumentsAreUsedErrors =>
+            notAllArgumentsAreUsedErrors;
 
         public Task PrintArgumentMissingError(IReadOnlyCollection<string>? aliases, Type targetType, string description, IReadOnlyCollection<string>? helpFlagAliases)
         {
@@ -35,6 +41,12 @@
         public Task PrintArgumentParsingError(IReadOnlyCollection<string>? aliases, Type targetType, string description, IReadOnlyCollection<string>? helpFlagAliases)
         {
             argumentParsingErrors.Add((aliases, targetType, description, helpFlagAliases));
+            return Task.CompletedTask;
+        }
+
+        public Task PrintNotAllArgumentsAreUsedError(IReadOnlyCollection<string> remainingArguments, IReadOnlyCollection<string>? helpFlagAliases)
+        {
+            notAllArgumentsAreUsedErrors.Add((remainingArguments, helpFlagAliases));
             return Task.CompletedTask;
         }
 

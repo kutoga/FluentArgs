@@ -251,6 +251,7 @@ Errors? Yes, parsing errors. It might happen that users
 - do not input required parameters
 - do input invalid values (e.g., a text instead of a number)
 - do input values that fail in the validation step
+- do input too many arguments (with the default config this is allowed, but it can be disabled by using `.DisallowUnusedArguments()`)
 
 How to handle these cases? They are all automatically handled by FluentArgs. To give the user optimal help
 it is recommended to annotate all parameters with a description and examples.
@@ -281,6 +282,11 @@ Given the call `myapp -n X` (invalid parameter type) produces this output:
 Given the call `myapp -n 0` (validation fails) produces this output:
 ```
 !SCRIPT:bash ./scripts/dotnet_call.sh examples/HandleErrors01.cs -n 0 | sed -r 's/DummyProject/myapp/g'
+```
+
+Given the call `myapp -n 1 unused_argument` (unused arguments) produces this output:
+```
+!SCRIPT:bash ./scripts/dotnet_call.sh examples/HandleErrors01.cs -n 1 unused_argument | sed -r 's/DummyProject/myapp/g'
 ```
 
 </details>
@@ -343,11 +349,11 @@ In the following table, all advanced configuration options are described:
 |`.WithApplicationDescription("my app is cool")`|A description of the application (see: **Example: Help**).|
 |`.WithAssignmentOperators("=")`                |Define (one or more) custom assignment operators; they are used to optionally separate values for parameters. E.g. `--name=Karl`. The default is just "=".|
 |`.WithoutAssignmentOperators()`                |Remove all assignment operators. Especially disable the default assignment operator "="|
-|`.ThrowIfUnusedArgumentsArePresent()`          |Given all specified parameters are parsed at runtime, but there are still some program arguments left: throw an Exception|
-|`.ThrowOnDuplicateNames()`                     |Throw if a parameter name is twice defined in the same flow. Otherwise it is valid to use the same name twice.|
-|`.ThrowOnNonMinusStartingNames()`              |Throw if there is a parameter name which does not start with "-".|
+|`.ThrowOnDuplicateNames()`                     |Throw if a parameter name is twice defined in the same flow. Otherwise it is valid to use the same name twice. This parameter is independent of the given CLI arguments and only depends on the parser specification.|
+|`.ThrowOnNonMinusStartingNames()`              |Throw if there is a parameter name which does not start with "-". This parameter is independent of the given CLI arguments and only depends on the parser specification.|
+|`.DisallowUnusedArguments()`                   |Given all specified parameters are parsed at runtime, but there are still some program arguments left: Print an error (and do not continue)|
 |`.RegisterDefaultHelpFlags()`                  |Equivalent to `.RegisterHelpFlag("-h", "--help")`.|
-|`.DefaultConfigs()`                            |Equivalent to `.RegisterDefaultHelpFlags().ThrowOnDuplicateNames().ThrowOnNonMinusStartingNames().ThrowIfUnusedArgumentsArePresent()`.|
+|`.DefaultConfigs()`                            |Equivalent to `.RegisterDefaultHelpFlags().ThrowOnDuplicateNames().ThrowOnNonMinusStartingNames().DisallowUnusedArguments()`.|
 |`.DefaultConfigsWithAppDescription(...)`       |Equivalent to `.DefaultConfigs().WithApplicationDescription(...)`.|
 
 # 💡 Example: Reuse parser

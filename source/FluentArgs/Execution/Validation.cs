@@ -3,6 +3,7 @@
     using System.Collections.Generic;
     using System.Linq;
     using FluentArgs.Description;
+    using FluentArgs.Exceptions;
     using FluentArgs.Validation;
 
     internal static class Validation
