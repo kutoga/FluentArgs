@@ -6,7 +6,7 @@ namespace Example
     using System.Linq;
     using FluentArgs;
 
-    class Program
+    public class Program
     {
         public static void Main(string[] args)
         {
