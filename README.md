@@ -7,6 +7,8 @@ Version:
 
 </strong>
 
+![FluentArgs Logo](doc/misc/logo_small.svg)
+
 FluentArgs is an easy-to-use library that provides command line argument parsing. For all parameters it is possible
 to provide meta information (description, examples etc.) which might be used to auto-generate a simple help for the
 final application.
