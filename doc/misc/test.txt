@@ -1,5 +1,0 @@
-HEY
-!INCLUDE:Program.txt
-DU
-!INCLUDE:Program.txt
-LOL
