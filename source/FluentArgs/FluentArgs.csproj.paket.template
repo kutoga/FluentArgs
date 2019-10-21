@@ -4,8 +4,8 @@ title FluentArgs
 authors Benjamin Bruno Meier
 projectUrl https://github.com/kutoga/FluentArgs
 licenseUrl https://github.com/kutoga/FluentArgs/blob/master/LICENSE
-iconUrl https://raw.githubusercontent.com/kutoga/FluentArgs/master/doc/misc/logo_small.svg
-tags fluent cli argument parser argparse fluentargs commandline parameter
+iconUrl https://raw.githubusercontent.com/kutoga/FluentArgs/master/doc/misc/logo_small.png
+tags fluent cli argument parser argparse fluentargs commandline parameter commandlineparser
 description Fluent command line argument parsing library with a focus on a very simple API
 
 excludedgroups
