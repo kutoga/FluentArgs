@@ -2,6 +2,7 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.IO;
     using System.Threading.Tasks;
     using FluentAssertions;
     using Xunit;
@@ -292,6 +293,42 @@
         {
             ParseValueWithDefaultParser<Uri?>(value)
                 .Should().Be(new Uri(value));
+        }
+
+        [Theory]
+        [InlineData("file.txt")]
+        [InlineData("directory/file.txt")]
+        public static void DefaultFileInfoParser_ShouldExist(string value)
+        {
+            ParseValueWithDefaultParser<FileInfo>(value)
+                .Should().NotBeNull();
+        }
+
+        [Theory]
+        [InlineData("file.txt")]
+        [InlineData("directory/file.txt")]
+        public static void DefaultNullableFileInfoParser_ShouldExist(string value)
+        {
+            ParseValueWithDefaultParser<FileInfo?>(value)
+                .Should().NotBeNull();
+        }
+
+        [Theory]
+        [InlineData("./")]
+        [InlineData("directoryA/directoryB")]
+        public static void DefaultDirectoryInfoParser_ShouldExist(string value)
+        {
+            ParseValueWithDefaultParser<DirectoryInfo>(value)
+                .Should().NotBeNull();
+        }
+
+        [Theory]
+        [InlineData("./")]
+        [InlineData("directoryA/directoryB")]
+        public static void DefaultNullableDirectoryInfoParser_ShouldExist(string value)
+        {
+            ParseValueWithDefaultParser<DirectoryInfo?>(value)
+                .Should().NotBeNull();
         }
 
         [Theory]
