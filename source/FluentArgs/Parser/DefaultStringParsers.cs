@@ -4,6 +4,7 @@
     using System.Collections.Generic;
     using System.Collections.Immutable;
     using System.Globalization;
+    using System.IO;
     using System.Linq;
 
     internal static class DefaultStringParsers
@@ -33,7 +34,10 @@
             [typeof(DateTimeOffset)] = s => DateTimeOffset.Parse(s, CultureInfo.InvariantCulture),
             [typeof(TimeSpan)] = s => TimeSpan.Parse(s, CultureInfo.InvariantCulture),
 
-            [typeof(Uri)] = s => new Uri(s)
+            [typeof(Uri)] = s => new Uri(s),
+
+            [typeof(FileInfo)] = s => new FileInfo(s),
+            [typeof(DirectoryInfo)] = s => new DirectoryInfo(s)
         };
 
         private delegate T ParseNumberFunc<out T>(string input);

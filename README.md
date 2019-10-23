@@ -520,8 +520,8 @@ namespace Example
 
 # 💡 Example: Parsing and validation
 There are already parsers for many data types implemented: all types of `int`, `char`, `bool`,
-`DateTime`, `DateTimeOffset`, `decimal`, `double`, `float`, `byte`, `Uri`, `string` (which is
-trivial) and enums
+`DateTime`, `DateTimeOffset`, `decimal`, `double`, `float`, `byte`, `Uri`, `FileInfo`,
+`DirectoryInfo`, `string` (which is trivial) and enums
 
 It might happen that you have to implement your own parser. It is always possible to define a
 parser to any definition. There are even cases where not every value in the parsed domain is
