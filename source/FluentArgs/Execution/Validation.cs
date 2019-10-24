@@ -8,9 +8,9 @@
 
     internal static class Validation
     {
-        public static T ValidateIfRequired<T>(this T value, IValidation? validation, Name? argumentName = null)
+        public static T ValidateIfRequired<T>(this T value, ValidationFunc<T>? validation, Name? argumentName = null)
         {
-            if (validation != null && !validation.IsValid(value!, out var errorMessage))
+            if (validation != null && !validation(value!, out var errorMessage))
             {
                 if (string.IsNullOrEmpty(errorMessage))
                 {
@@ -27,7 +27,7 @@
             return value;
         }
 
-        public static IEnumerable<T> ValidateIfRequired<T>(this IEnumerable<T> values, IValidation? validation, Name? argumentName = null)
+        public static IEnumerable<T> ValidateIfRequired<T>(this IEnumerable<T> values, ValidationFunc<T>? validation, Name? argumentName = null)
         {
             return values.Select(ValidatedValue);
 

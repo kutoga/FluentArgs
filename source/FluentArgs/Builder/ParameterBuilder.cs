@@ -61,9 +61,9 @@
             return this;
         }
 
-        public IConfigurableParameter<TArgsBuilder, TParam> WithValidation(IValidation<TParam> validation)
+        public IConfigurableParameter<TArgsBuilder, TParam> WithValidation(ValidationFunc<TParam> validation)
         {
-            parameter.Validation = validation.ToObjectValidation();
+            parameter.Validation = validation.ToObjectInput();
             return this;
         }
 

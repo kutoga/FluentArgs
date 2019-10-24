@@ -8,15 +8,15 @@
     public interface IDefaultValidatons
     {
         /* General */
-        IValidation<T> OnlyContain<T, TElement>(params TElement[] values)
+        ValidationFunc<T> OnlyContain<T, TElement>(params TElement[] values)
             where T : IEnumerable<TElement>;
 
-        IValidation<T> OnlyContain<T, TElement>(IEnumerable<TElement> values)
+        ValidationFunc<T> OnlyContain<T, TElement>(IEnumerable<TElement> values)
             where T : IEnumerable<TElement>;
 
-        IValidation<T> BeOneOf<T>(params T[] values);
+        ValidationFunc<T> BeOneOf<T>(params T[] values);
 
-        IValidation<T> BeOneOf<T>(IEnumerable<T> values);
+        ValidationFunc<T> BeOneOf<T>(IEnumerable<T> values);
 
         /* FileSystem */
 
@@ -34,39 +34,39 @@
 
         bool BeNegative(int x, out string? errorMessage);
 
-        IValidation<int> BeInRange(int minInclusive, int maxExclusive);
+        ValidationFunc<int> BeInRange(int minInclusive, int maxExclusive);
 
         /* Text */
 
         bool BeAnEmail(string text, out string? errorMessage);
 
-        IValidation<string> OnlyContain(params char[] characters);
+        ValidationFunc<string> OnlyContain(params char[] characters);
 
-        IValidation<string> Contain(string subString);
+        ValidationFunc<string> Contain(string subString);
 
         bool BeUppercase(string text, out string? errorMessage);
 
         bool BeLowercase(string text, out string? errorMessage);
 
-        IValidation<string> Match(string regex);
+        ValidationFunc<string> Match(string regex);
 
-        IValidation<string> Match(Regex regex);
+        ValidationFunc<string> Match(Regex regex);
 
         /* Date */
 
-        IValidation<DateTimeOffset> BeBefore(DateTimeOffset reference);
+        ValidationFunc<DateTimeOffset> BeBefore(DateTimeOffset reference);
 
-        IValidation<DateTimeOffset> BeAfter(DateTimeOffset reference);
+        ValidationFunc<DateTimeOffset> BeAfter(DateTimeOffset reference);
 
-        IValidation<DateTimeOffset> BeBetween(DateTimeOffset beginInclusive, DateTimeOffset endExclusive);
+        ValidationFunc<DateTimeOffset> BeBetween(DateTimeOffset beginInclusive, DateTimeOffset endExclusive);
 
         bool BeInThePast(DateTimeOffset date, out string? errorMessage);
 
         bool BeInTheFuture(DateTimeOffset date, out string? errorMessage);
 
-        IValidation<TimeSpan> BeShorterThan(TimeSpan reference);
+        ValidationFunc<TimeSpan> BeShorterThan(TimeSpan reference);
 
-        IValidation<TimeSpan> BeLongerThan(TimeSpan reference);
+        ValidationFunc<TimeSpan> BeLongerThan(TimeSpan reference);
 
         /* etc. */
 

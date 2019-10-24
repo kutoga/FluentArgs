@@ -21,7 +21,7 @@
 
         public Type Type { get; }
 
-        public IValidation? Validation { get; set; }
+        public ValidationFunc<object>? Validation { get; set; }
 
         public IReadOnlyCollection<string> Examples { get; set; }
 

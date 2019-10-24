@@ -65,9 +65,9 @@
             return Finalize().CallUntyped(callback);
         }
 
-        public IConfigurableRemainingArguments<TFunc, TFuncAsync, TParam> WithValidation(IValidation<TParam> validation)
+        public IConfigurableRemainingArguments<TFunc, TFuncAsync, TParam> WithValidation(ValidationFunc<TParam> validation)
         {
-            remainingArguments.Validation = validation.ToObjectValidation();
+            remainingArguments.Validation = validation.ToObjectInput();
             return this;
         }
 
