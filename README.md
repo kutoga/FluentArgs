@@ -3,7 +3,7 @@
 # FluentArgs: Fluent Argument Parsing for .NET
 <strong>
 Version:
-0.9.6
+0.9.7
 
 </strong>
 
@@ -859,6 +859,11 @@ namespace Example
             }
 
             public Task PrintInvalidCommandValueError(IReadOnlyCollection<string> aliases, string value, IReadOnlyCollection<string>? helpFlagAliases)
+            {
+                throw new NotImplementedException();
+            }
+
+            public Task PrintInvalidStateError(IReadOnlyCollection<string>? helpFlagAliases)
             {
                 throw new NotImplementedException();
             }
