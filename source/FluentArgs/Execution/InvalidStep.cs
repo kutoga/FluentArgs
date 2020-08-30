@@ -1,10 +1,10 @@
 ﻿namespace FluentArgs.Execution
 {
-    using FluentArgs.Exceptions;
     using System;
     using System.Collections.Generic;
     using System.Text;
     using System.Threading.Tasks;
+    using FluentArgs.Exceptions;
 
     internal class InvalidStep : Step
     {

@@ -253,3 +253,4 @@
             dummyParsingErrorPrinter.InvalidStateErrors.Should().Be(1);
         }
     }
+}
