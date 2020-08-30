@@ -42,6 +42,11 @@ namespace Example
             {
                 throw new NotImplementedException();
             }
+
+            public Task PrintInvalidStateError(IReadOnlyCollection<string>? helpFlagAliases)
+            {
+                throw new NotImplementedException();
+            }
         }
     }
 }

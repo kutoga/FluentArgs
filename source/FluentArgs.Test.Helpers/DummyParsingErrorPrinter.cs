@@ -32,6 +32,8 @@
         public IReadOnlyCollection<(IReadOnlyCollection<string> remainingArguments, IReadOnlyCollection<string>? helpFlagAliases)> NotAllArgumentsAreUsedErrors =>
             notAllArgumentsAreUsedErrors;
 
+        public int InvalidStateErrors { get; private set; } = 0;
+
         public Task PrintArgumentMissingError(IReadOnlyCollection<string>? aliases, Type targetType, string description, IReadOnlyCollection<string>? helpFlagAliases)
         {
             argumentMissingErrors.Add((aliases, targetType, description, helpFlagAliases));
@@ -53,6 +55,12 @@
         public Task PrintInvalidCommandValueError(IReadOnlyCollection<string> aliases, string value, IReadOnlyCollection<string>? helpFlagAliases)
         {
             invalidCommandValueErrors.Add((aliases, value, helpFlagAliases));
+            return Task.CompletedTask;
+        }
+
+        public Task PrintInvalidStateError(IReadOnlyCollection<string>? helpFlagAliases)
+        {
+            ++InvalidStateErrors;
             return Task.CompletedTask;
         }
     }

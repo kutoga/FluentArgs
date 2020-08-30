@@ -4,6 +4,7 @@
     using System.Collections.Generic;
     using System.Text;
     using System.Threading.Tasks;
+    using FluentArgs.Exceptions;
 
     internal class InvalidStep : Step
     {
@@ -19,7 +20,7 @@
 
         public override Task Execute(State state)
         {
-            throw new Exception("TODO: Invalid state: show helP");
+            throw new InvalidStateException();
         }
     }
 }
