@@ -84,6 +84,12 @@
                     InitialStep.ParserSettings.HelpFlag?.Names).ConfigureAwait(false);
                 return false;
             }
+            catch (InvalidStateException)
+            {
+                await InitialStep.ParserSettings!.ParsingErrorPrinter.PrintInvalidStateError(
+                    InitialStep.ParserSettings.HelpFlag?.Names).ConfigureAwait(false);
+                return false;
+            }
         }
 
         private static IEnumerable<Action<State>> GetPostValidations(ParserSettings? settings)

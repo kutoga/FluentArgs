@@ -26,5 +26,8 @@
             IReadOnlyCollection<string> aliases,
             string value,
             IReadOnlyCollection<string>? helpFlagAliases);
+
+        Task PrintInvalidStateError(
+            IReadOnlyCollection<string>? helpFlagAliases);
     }
 }

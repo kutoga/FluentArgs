@@ -1,5 +1,6 @@
 ﻿namespace FluentArgs.Execution
 {
+    using FluentArgs.Exceptions;
     using System;
     using System.Collections.Generic;
     using System.Text;
@@ -19,7 +20,7 @@
 
         public override Task Execute(State state)
         {
-            throw new Exception("TODO: Invalid state: show helP");
+            throw new InvalidStateException();
         }
     }
 }

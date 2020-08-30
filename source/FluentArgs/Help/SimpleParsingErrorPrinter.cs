@@ -54,6 +54,14 @@
             await WriteHelpFlagInfo(helpFlagAliases).ConfigureAwait(false);
         }
 
+        public async Task PrintInvalidStateError(IReadOnlyCollection<string>? helpFlagAliases)
+        {
+            await errorLineWriter
+                .WriteLine("The used parameter combination is invalid.")
+                .ConfigureAwait(false);
+            await WriteHelpFlagInfo(helpFlagAliases).ConfigureAwait(false);
+        }
+
         public async Task PrintNotAllArgumentsAreUsedError(IReadOnlyCollection<string> remainingArguments, IReadOnlyCollection<string>? helpFlagAliases)
         {
             await errorLineWriter
